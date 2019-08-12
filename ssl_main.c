@@ -4,10 +4,18 @@
 
 int main(int argc, char **argv)
 {
-	if(argc >= 2)
+	unsigned int a = 10;
+
+	int fd;
+	if(argc >= 1)
 	{
-		const int k;
-		printf("%x\n", s[0]);
+		fd = open(argv[1], O_RDWR);
+		if(fd != -1)
+		{
+			write(fd, "test", 5);
+		}
+		// const int k;
+		printf("%d\n", fd);
 		return (0);
 	}
 }
