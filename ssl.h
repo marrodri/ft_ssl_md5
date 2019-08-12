@@ -15,8 +15,10 @@
 # include "Includes/libft/libft.h"
 # include "Includes/ft_printf/ft_printf.h"
 # include <fcntl.h>
-# define FLAG {'p','q','r','s'}
-# define FlAG_SZ 4
+# define CI_COM {'p','q','r','s'}
+# define HS_COM {"md5", "sha256"}
+# define HS_SZ 2
+# define CI_SZ 4
 
 typedef struct	s_flag
 {
