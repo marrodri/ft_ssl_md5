@@ -2,6 +2,7 @@
 #include "ssl.h"
 #include "stdio.h"
 
+//TODO IMPORTANT CHANGE ALL FUNCTIONS TO FT_FUNCTIONS
 int	cmmnd_checker(char *str)
 {
 	int			i;

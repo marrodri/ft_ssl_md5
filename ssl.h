@@ -57,3 +57,17 @@ typedef struct	s_flag
 // s[48..63] := { 6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21 }
 
 #endif
+
+//TODO files to keep for printf
+//ft_llitoa_base;
+//ft_ullitoa_base;
+//ft_strupper;
+//ft_strsub;
+//ft_strjoin;
+//ft_swap_charstr;
+//ft_strnewc;
+//ft_strlen;
+//ft_atoi;
+//ft_ldtoa;
+
+//inside printf libft, files to keep
