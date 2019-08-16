@@ -49,34 +49,52 @@ t_uint get_str_sum(char *str)
 	return val;
 }
 
+t_uint bit_length(t_uint val)
+{
+
+}
+
 t_uint	padded_mod(t_uint val)
 {
+	t_uint pad_val;
+
 	//first add 1 bit to the message padded
+	pad_val = val << 1;
+	pad_val += 1;
+	if(pad_val % 512 == 448)
+		return pad_val;
+
 	//if the added 1 bit doesn't return the exact val mod 512
 	//then padd the value with 0 bits until getting the value mod 512
-	return 0;
+	while(pad_val % 512 != 448)
+	{
+		pad_val << 1;
+	}
+	return pad_val;
 }
 
 void	md5v_init(t_md5v **md5Vr)
 {
-	(*md5Vr)->A = A0;
-	(*md5Vr)->B = B0;
-	(*md5Vr)->C = C0;
-	(*md5Vr)->D = D0;
+	(*md5Vr)->a0 = A0;
+	(*md5Vr)->b0 = B0;
+	(*md5Vr)->c0 = C0;
+	(*md5Vr)->d0 = D0;
 }
 
 void	md5_hash(char *mssg, t_flag *flags)
 {
 	t_md5v *md5Vr;
 	t_uint	val;
+	t_uint pad_val;
 
 	md5Vr = malloc(sizeof(t_md5v));
 	md5v_init(&md5Vr);
+	//get the value of the str
 	val = get_str_sum(mssg);
-
 	//modify the value by padding
-
+	pad_val = padded_mod(val);
 	//apped original length in bits mod 2^64 to message TRY OR LEARN HOW TO
+
 
 	//proccess the message in successive 512-bit chunks 2 while loops
 }

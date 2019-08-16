@@ -44,6 +44,11 @@ typedef struct		s_md5v
 	unsigned int	B;
 	unsigned int	C;
 	unsigned int	D;
+	unsigned int	a0;
+	unsigned int	b0;
+	unsigned int	c0;
+	unsigned int	d0;
+	
 }					t_md5v;
 
 // typedef		*hash_funct();
