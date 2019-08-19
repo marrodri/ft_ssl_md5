@@ -23,10 +23,10 @@
 # define B0	0xefcdab89
 # define C0 0x98badcfe
 # define D0 0x10325476
-# define F(B,C,D) ((B & C) | (~B & D))
-# define G(B,C,D) ((B & D) | (C & ~D))
-# define H(B,C,D) (B ^ C ^ D)
-# define I(B,C,D) (C ^ (B | ~D))
+# define F_DIG(B,C,D) ((B & C) | ((~B) & D))
+# define G_DIG(B,C,D) ((B & D) | (C & (~D)))
+# define H_DIG(B,C,D) (B ^ C ^ D)
+# define I_DIG(B,C,D) (C ^ (B | (~D)))
 # define R_LEFT(F,S) ((F << S) | (S >> (32 - S)))
 
 
