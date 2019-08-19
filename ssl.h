@@ -12,8 +12,8 @@
 
 #ifndef SSL_H
 # define SSL_H
-# include "Includes/libft/libft.h"
-# include "Includes/ft_printf/ft_printf.h"
+# include "./libft/libft.h"
+// # include "Includes/ft_printf/ft_printf.h"
 # include <fcntl.h>
 # define CI_COM {'p','q','r','s'}
 # define HS_COM {"md5", "sha256"}

@@ -34,8 +34,6 @@
 
 #include "ssl.h"
 
-
-
 t_uint get_str_sum(char *str)
 {
 	t_uint val;
@@ -49,19 +47,20 @@ t_uint get_str_sum(char *str)
 	return val;
 }
 
-t_uint bit_length(t_uint val)
-{
-
-}
-
-t_uint	padded_mod(t_uint val)
+void	*padded_msg(char *mssg)
 {
 	t_uint pad_val;
+	t_uint val;
+	char *pad_mssg;
+
 
 	//first add 1 bit to the message padded
 	pad_val = ((val << 1) | 1);
+
+
 	//if the added 1 bit doesn't return the exact val mod 512
 	//then padd the value with 0 bits until getting the value mod 512
+
 	while(pad_val % 512 != 448)
 	{
 		pad_val << 1;
@@ -69,6 +68,10 @@ t_uint	padded_mod(t_uint val)
 	return pad_val;
 }
 
+t_uint bit_length(t_uint val)
+{
+
+}
 void	md5v_init(t_md5v **md5Vr)
 {
 	(*md5Vr)->a0 = A0;
@@ -80,9 +83,7 @@ void	md5v_init(t_md5v **md5Vr)
 void	md5_hash(char *mssg, t_flag *flags)
 {
 	t_md5v *md5Vr;
-	t_uint	val;
-	t_uint pad_val;
-
+	char *mod_mssg;
 	t_uint a;
 	t_uint b;
 	t_uint c;
@@ -92,61 +93,64 @@ void	md5_hash(char *mssg, t_flag *flags)
 	t_uint f;
 	t_uint g;
 	t_uint s[64];
+
 	j = 0;
 	i =0;
 	md5Vr = malloc(sizeof(t_md5v));
 	md5v_init(&md5Vr);
-	//get the value of the str
-	val = get_str_sum(mssg);
+	
+	// val = get_str_sum(mssg);
 	//modify the value by padding
-	pad_val = padded_mod(val);
+	mod_mssg = padded_mag(mssg);
+	printf("testing here\n");
 	//apped original length in bits mod 2^64 to message TRY OR LEARN HOW TO
-
 
 	//proccess the message in successive 512-bit chunks 2 while loops
 	//t_uint M[j] M[16]
-	while(j < 16)
-	{
-		//here it should 
-		a = a0;
-		b = b0;
-		c = c0;
-		d = d0;
-		i = 0;
-		while(i < 64)
-		{
-			if(i >= 0 && i < 16)
-			{
-				f = F_DIG(b,c,d);
-				g = i;
-			}
-			else if(i >= 16 && i < 32)
-			{
-				f = G_DIG(b,c,d);
-				g = i;
-			}
-			else if(i >= 32 && i < 48)
-			{
-				f = H_DIG(b,c,d);
-				g = i;
-			}
-			else if(i >= 48 && i < 64)
-			{
-				f = I_DIG(b,c,d);
-				g = i;
-			}
-			i++;
-			f = f + a + k[i] = m[g];
-			a = d;
-			d = c;
-			c = b;
-			b = b + R_LEFT(f, s[i]);
-		}
-		a0 = a0 + a;
-		b0 = b0 + b;
-		c0 = c0 + c;
-		d0 = d0 + d;
-	}
+
+
+	// while(j < 16) //while chunks of message still 512bits
+	// {
+	// 	//here it should 
+	// 	a = a0;
+	// 	b = b0;
+	// 	c = c0;
+	// 	d = d0;
+	// 	i = 0;
+	// 	while(i < 64)
+	// 	{
+	// 		if(i >= 0 && i < 16)
+	// 		{
+	// 			f = F_DIG(b,c,d);
+	// 			g = i;
+	// 		}
+	// 		else if(i >= 16 && i < 32)
+	// 		{
+	// 			f = G_DIG(b,c,d);
+	// 			g = i;
+	// 		}
+	// 		else if(i >= 32 && i < 48)
+	// 		{
+	// 			f = H_DIG(b,c,d);
+	// 			g = i;
+	// 		}
+	// 		else if(i >= 48 && i < 64)
+	// 		{
+	// 			f = I_DIG(b,c,d);
+	// 			g = i;
+	// 		}
+	// 		i++;
+	// 		f = f + a + k[i] = m[g];
+	// 		a = d;
+	// 		d = c;
+	// 		c = b;
+	// 		b = b + R_LEFT(f, s[i]);
+	// 	}
+	// 	a0 = a0 + a;
+	// 	b0 = b0 + b;
+	// 	c0 = c0 + c;
+	// 	d0 = d0 + d;
+	// }
 }
 
 // unsigned int digest[16] = a0 append b0 append c0 append d0;
