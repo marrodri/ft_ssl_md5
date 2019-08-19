@@ -91,6 +91,7 @@ void	md5_hash(char *mssg, t_flag *flags)
 	t_uint j;
 	t_uint f;
 	t_uint g;
+	t_uint s[64];
 	j = 0;
 	i =0;
 	md5Vr = malloc(sizeof(t_md5v));
@@ -121,20 +122,25 @@ void	md5_hash(char *mssg, t_flag *flags)
 			}
 			else if(i >= 16 && i < 32)
 			{
-				f = F_DIG(b,c,d);
+				f = G_DIG(b,c,d);
 				g = i;
 			}
 			else if(i >= 32 && i < 48)
 			{
-				f = F_DIG(b,c,d);
+				f = H_DIG(b,c,d);
 				g = i;
 			}
 			else if(i >= 48 && i < 64)
 			{
-				f = F_DIG(b,c,d);
+				f = I_DIG(b,c,d);
 				g = i;
 			}
 			i++;
+			f = f + a + k[i] = m[g];
+			a = d;
+			d = c;
+			c = b;
+			b = b + R_LEFT(f, s[i]);
 		}
 		a0 = a0 + a;
 		b0 = b0 + b;
@@ -142,4 +148,8 @@ void	md5_hash(char *mssg, t_flag *flags)
 		d0 = d0 + d;
 	}
 }
+
+// unsigned int digest[16] = a0 append b0 append c0 append d0;
+
+// return digest;
 
