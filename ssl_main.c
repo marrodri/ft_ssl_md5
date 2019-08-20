@@ -20,35 +20,38 @@ int	cmmnd_checker(char *str)
 	return (0);
 }
 
+int flag_checker(char *str, int j, t_flag **flags)
+{
+	return 1;
+}
+
 int	main(int argc, char **argv)
 {
-	int fd;
-	char buffer[20];
+	int		fd;
+	char	buffer[20];
+	int		j;
+	t_flag	*flags;
 
+	j = 2;
+	flags = malloc(sizeof(t_flag));
 	if(argc == 1)
-	{
-		//change to ft_printf
 		printf("usage: ft_ssl command [command opts] [command args]\n");
-	}
-	else if(cmmnd_checker(argv[1]))
+
+	else if(cmmnd_checker(argv[1]) && flag_checker(argv, j, &flags))
 	{
-		// fd = open(argv[1], O_RDWR);
-		// if(fd != -1)
-		// {
-		// 	write(fd, "wsdfsdfsfdf hello", 20);
-		// }
-		// // const int k;
 		while(read(STDIN_FILENO, buffer, 10))
 		{
 			printf("buffer |%s|\n", buffer);
 		}
 		printf("Command found '%s'\n", argv[1]);
 	}
+
 	else
 	{
 		printf("ft_ssl: Error: '%s' is an invalid command.\n\n\
 			Standard commands:\n\nMessage Digest commands:\nmd5\
 			\nsha256\n\nCipher commands:\n", argv[1]);
 	}
+
 	return (0);
 }

@@ -32,10 +32,7 @@
 
 typedef struct		s_flag
 {
-	unsigned int	p;
-	unsigned int	q;
-	unsigned int	r;
-	unsigned int	s;
+	unsigned int	flags[4];
 }					t_flag;
 
 typedef struct		s_md5v
@@ -44,12 +41,13 @@ typedef struct		s_md5v
 	unsigned int	B;
 	unsigned int	C;
 	unsigned int	D;
-	unsigned int	a0;
-	unsigned int	b0;
-	unsigned int	c0;
-	unsigned int	d0;
-	
 }					t_md5v;
+
+typedef struct		s_hash
+{
+	int		chunks;
+	uint8_t	*ch;
+}					t_hash;
 
 // typedef		*hash_funct();
 
