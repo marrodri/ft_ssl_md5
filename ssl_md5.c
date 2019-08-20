@@ -72,6 +72,7 @@ t_uint bit_length(t_uint val)
 {
 
 }
+
 void	md5v_init(t_md5v **md5Vr)
 {
 	(*md5Vr)->a0 = A0;

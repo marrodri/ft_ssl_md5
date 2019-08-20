@@ -1,10 +1,18 @@
 
 #include "ssl.h"
 #include <stdio.h>
-long long int bit_str_len(char *mssg)
+
+t_uint append_byte(t_uint val, t_uint b)
+{
+	val = (val << 8) | b;
+	return val;
+}
+
+t_uint bit_str_len(char *mssg)
 {
 	unsigned int bit_str;
-	int i;
+	unsigned int bitstr_len;
+	unsigned int i;
 
 	i = 0;
 	bit_str = 0;
@@ -17,8 +25,15 @@ long long int bit_str_len(char *mssg)
 		bit_str = (bit_str | mssg[i]);
 		i++;
 	}
-	printf(" _a is |%u|\n", bit_str);
-	return 0;
+	printf("%s is |%x|\n", mssg, bit_str);
+	bit_str = ((bit_str << 1) | 1);
+	printf("after append 1 bit is |%x|\n", bit_str);
+	// while(bit_str % 512 != 448)
+	// {
+	// 	bit_str = bit_str << 1;
+	// }
+	// printf("after while loop bit is |%x|\n", bit_str);
+	return bit_str;
 }
 
 // void	*padded_msg(char *mssg)
@@ -44,7 +59,7 @@ long long int bit_str_len(char *mssg)
 int main(int ac, char **av)
 {
 	char *str;
-	long long int test;
+	t_uint test;
 	test = bit_str_len(av[1]);
 
 }
