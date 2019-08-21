@@ -31,6 +31,7 @@ int	main(int argc, char **argv)
 	char	buffer[20];
 	int		j;
 	t_flag	*flags;
+	t_hash	*hash;
 
 	j = 2;
 	flags = malloc(sizeof(t_flag));
@@ -39,11 +40,14 @@ int	main(int argc, char **argv)
 
 	else if(cmmnd_checker(argv[1]) && flag_checker(argv, j, &flags))
 	{
+		flags = malloc(sizeof(t_flag));
+		hash = malloc(sizeof(t_hash));
 		while(read(STDIN_FILENO, buffer, 10))
 		{
 			printf("buffer |%s|\n", buffer);
 		}
 		printf("Command found '%s'\n", argv[1]);
+		
 	}
 
 	else
