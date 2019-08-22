@@ -25,15 +25,7 @@ int		read_chunks(char *str, int bytes)
 	return len;
 }
 
-void	preprocess(t_hash **hash, int bytes)
+void	preprocess(t_hash **hash, int bytes, int fd)
 {
-
-}
-
-int main(int ac, char **av)
-{
-	char *str;
-	t_uint test;
-	test = bit_str_len(av[1]);
-
+	uint8_t *chunk;
 }

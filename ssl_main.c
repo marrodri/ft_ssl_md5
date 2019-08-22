@@ -20,7 +20,7 @@ int	cmmnd_checker(char *str)
 	return (0);
 }
 
-int flag_checker(char *str, int j, t_flag **flags)
+int flag_checker(char **str, int j, t_flag **flags)
 {
 	return 1;
 }
@@ -30,9 +30,12 @@ int	main(int argc, char **argv)
 	int		fd;
 	char	buffer[20];
 	int		j;
+	int		ret;
+	int		byte_found = 0;
 	t_flag	*flags;
 	t_hash	*hash;
-
+	t_list	*list;
+	int bytes = 4;
 	j = 2;
 	flags = malloc(sizeof(t_flag));
 	if(argc == 1)
@@ -40,14 +43,18 @@ int	main(int argc, char **argv)
 
 	else if(cmmnd_checker(argv[1]) && flag_checker(argv, j, &flags))
 	{
+		printf("Command found '%s'\n", argv[1]);
+		fd = 0;
 		flags = malloc(sizeof(t_flag));
 		hash = malloc(sizeof(t_hash));
-		while(read(STDIN_FILENO, buffer, 10))
+		hash->chunks = ft_set_bytes(fd, bytes, &list);
+		printf("we have |%d| chunks of %d bytes\n", hash->chunks, bytes);
+		while((ret = read(fd, buffer, 5)) > 0)
 		{
+			byte_found =  byte_found + ret;
+			printf("ret is |%d|\n", ret);
 			printf("buffer |%s|\n", buffer);
 		}
-		printf("Command found '%s'\n", argv[1]);
-		
 	}
 
 	else
