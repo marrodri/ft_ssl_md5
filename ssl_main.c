@@ -49,12 +49,17 @@ int	main(int argc, char **argv)
 		hash = malloc(sizeof(t_hash));
 		hash->chunks = ft_set_bytes(fd, bytes, &list);
 		printf("we have |%d| chunks of %d bytes\n", hash->chunks, bytes);
-		while((ret = read(fd, buffer, 5)) > 0)
-		{
-			byte_found =  byte_found + ret;
-			printf("ret is |%d|\n", ret);
-			printf("buffer |%s|\n", buffer);
-		}
+		// while((ret = read(fd, buffer, 5)) > 0)
+		// {
+		// 	byte_found =  byte_found + ret;
+		// 	printf("ret is |%d|\n", ret);
+		// 	printf("buffer |%s|\n", buffer);
+		// }
+			printf("chunk |%s|\n", list->content);
+		// while(list->content)
+		// {
+		// 	list = list->next;
+		// }
 	}
 
 	else
