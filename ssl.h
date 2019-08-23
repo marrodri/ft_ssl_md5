@@ -47,7 +47,7 @@ typedef struct		s_md5v
 typedef struct		s_hash
 {
 	int		chunks;
-	uint8_t	**msg_chunk;
+	uint8_t	*msg_chunk;
 }					t_hash;
 
 // typedef		*hash_funct();

@@ -34,7 +34,7 @@ int	main(int argc, char **argv)
 	int		j;
 	int		ret;
 	int		byte_found = 0;
-	int bytes = 4;
+	int bytes = 5;
 	j = 2;
 	if(argc == 1)
 		printf("usage: ft_ssl command [command opts] [command args]\n");
