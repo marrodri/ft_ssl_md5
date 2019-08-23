@@ -24,20 +24,21 @@ void	add_new_chunk(t_list **list, uint8_t *chunk, int bytes)
 	new_chunk = (t_list *)malloc(sizeof(t_list));
 	new_chunk->content = chunk;
 	new_chunk->content_size = bytes;
-	printf("chunk is |%s|\n", new_chunk->content);
-	printf("bytes are|%d|\n", new_chunk->content_size);
-	printf("setting new chunk\n");
+	new_chunk->next = NULL;
+	printf("+++++chunk is |%s|\n", new_chunk->content);
+	// printf("------bytes are|%d|\n", new_chunk->content_size);
+	// printf("setting new chunk\n");
 	if(*list == NULL)
 	{
-		printf("list is null, adding first node\n");
+		// printf("list is null, adding first node\n");
 		*list = new_chunk;
 	}
 	else
 	{
-		printf("!!!!!!!!!!!!!!!!!adding next node\n");
+		// printf("!!!!!!!!!!!!!!!!!adding next node\n");
 		ft_lstaddend(list, new_chunk);
 	}
-	printf("EXITING NEW_CHUNKS SET\n");
+	// printf("EXITING NEW_CHUNKS SET\n");
 }
 
 int		ft_set_bytes(const int fd, int bytes, t_list **list)

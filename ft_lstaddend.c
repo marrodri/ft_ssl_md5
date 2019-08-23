@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "./libft/libft.h"
+#include "ssl.h"
 
 void ft_lstaddend(t_list **alst, t_list *new)
 {
@@ -22,4 +23,5 @@ void ft_lstaddend(t_list **alst, t_list *new)
 		tmp = tmp->next;
 	}
 	tmp->next = new;
+	// printf("NEW NODE ADDED AT THE END!++++++");
 }

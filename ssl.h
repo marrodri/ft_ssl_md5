@@ -30,8 +30,7 @@
 # define H_DIG(B,C,D) (B ^ C ^ D)
 # define I_DIG(B,C,D) (C ^ (B | (~D)))
 # define R_LEFT(F,S) ((F << S) | (S >> (32 - S)))
-
-
+#include <stdio.h>
 typedef struct		s_flag
 {
 	unsigned int	flags[4];

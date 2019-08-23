@@ -38,8 +38,7 @@ int	main(int argc, char **argv)
 	j = 2;
 	if(argc == 1)
 		printf("usage: ft_ssl command [command opts] [command args]\n");
-	if(list == NULL)
-		printf("list is NULL\n");
+
 	else if(cmmnd_checker(argv[1]) && flag_checker(argv, j, &flags))
 	{
 		printf("Command found '%s'\n", argv[1]);
@@ -49,10 +48,14 @@ int	main(int argc, char **argv)
 		hash->chunks = ft_set_bytes(fd, bytes, &list);
 		printf("we have |%d| chunks of %d bytes\n", hash->chunks, bytes);
 		printf("chunk |%s|\n", list->content);
-		// while(list->content)
-		// {
-		// 	list = list->next;
-		// }
+		
+		int i = 0;
+		while(list)
+		{
+			printf("chunk No.%d |%s|\n", i, list->content);
+			list = list->next;
+			i++;
+		}
 	}
 
 	else
