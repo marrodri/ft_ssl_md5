@@ -49,3 +49,7 @@ fclean: clean
 	@make -C libft fclean
 
 re: fclean all
+
+
+# use this for windows
+# gcc -lft -L./libft ssl_main.c get_next_bytes.c ft_lstaddend.c ./libft/ft_lstnew.c ./libft/ft_memcpy.c

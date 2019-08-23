@@ -10,12 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "ssl.h"
+#include <stdio.h>
 
 uint8_t		*ft_append_byte(uint8_t *chunk)
 {
 	return 0;
+}
+
+void	add_new_chunk(t_list **list, uint8_t *chunk, int bytes)
+{
+	t_list *new_chunk;
+	new_chunk = (t_list *)malloc(sizeof(t_list));
+	new_chunk->content = chunk;
+	new_chunk->content_size = bytes;
+	printf("chunk is |%s|\n", new_chunk->content);
+	printf("bytes are|%d|\n", new_chunk->content_size);
+	printf("setting new chunk\n");
+	if(*list == NULL)
+	{
+		printf("list is null, adding first node\n");
+		*list = new_chunk;
+	}
+	else
+	{
+		printf("!!!!!!!!!!!!!!!!!adding next node\n");
+		ft_lstaddend(list, new_chunk);
+	}
+	printf("EXITING NEW_CHUNKS SET\n");
 }
 
 int		ft_set_bytes(const int fd, int bytes, t_list **list)
@@ -54,7 +76,7 @@ int		ft_set_bytes(const int fd, int bytes, t_list **list)
 			//if not set another 64 byte chunk with the bit length of the message
 			//in the last 8 bytes
 		}
-			*list = ft_lstnew((char*)buff, (size_t)bytes);
+		add_new_chunk(list, buff, bytes);
 	}
 	return (chunk);
 }

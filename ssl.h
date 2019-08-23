@@ -15,6 +15,8 @@
 # include "./libft/libft.h"
 // # include "Includes/ft_printf/ft_printf.h"
 # include <fcntl.h>
+# include <stdint.h>
+# include <string.h>
 # define CI_COM {'p','q','r','s'}
 # define HS_COM {"md5", "sha256"}
 # define HS_SZ 2
@@ -54,6 +56,8 @@ typedef struct		s_hash
 typedef unsigned int t_uint;
 void	md5_hash(char *mssg, t_flag *flags);
 int		ft_set_bytes(const int fd, int bytes, t_list **list);
+
+void ft_lstaddend(t_list **alst, t_list *new);
 
 #endif
 
