@@ -13,35 +13,40 @@
 #include "ssl.h"
 #include <stdio.h>
 
-uint8_t		*ft_append_byte(uint8_t *chunk, int ret, int bytes, uint64_t bit_len)
-{
-	int i;
-
-	i = ret;
-
-	while(i < bytes)
-	{
-		chunk[i] = 0;
-		i++;
-	}
-	bit_len = 0;
-	return 0;
-}
-
 void	print_list(t_list **list)
 {
 	t_list *tmp;
-	static int i =0;
+	static int i = 0;
 	tmp = *list;
 	printf("######session %d########\n",i);
 	while(tmp)
 	{
 		printf("chunk is |%s|\n", tmp->content);
-		// printf("memory address NEXT |%p|\n", &tmp->next);
 		tmp = tmp->next;
 	}
 	i++;
 	printf("^^^^^EXIT CHECK^^^^^^^\n");
+}
+
+// int check_last8bytes(uint8_t *chunk, int bytes)
+// {
+
+// }
+
+
+uint8_t		*ft_append_byte(uint8_t *chunk, int ret, int bytes, uint64_t bit_len)
+{
+	int i;
+
+	i = ret + 1;
+	chunk[ret] = (chunk[ret] << 8) | 0x80;
+	while(i < bytes)
+	{
+		chunk[i] = (chunk[ret] << 8) | 0x00;
+		i++;
+	}
+	bit_len = 0;
+	return chunk;
 }
 
 t_list	*set_new_node(uint8_t *chunk, int bytes)
@@ -69,13 +74,10 @@ void	add_new_chunk(t_list **list, uint8_t *chunk, int bytes)
 	t_list *new_chunk;
 
 	new_chunk = set_new_node(chunk, bytes);
-	// printf("$$$$set new memory address |%p|\n", &new_chunk);
-	// printf("$$$$check next memory address |%p|\n", &new_chunk->next);
 	if(*list == NULL)
 		*list = new_chunk;
 	else
 		ft_lstaddend(list, new_chunk);
-	// free(new_chunk);
 	print_list(list);
 }
 
@@ -108,11 +110,7 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 			bit_len = byte_len * 8;
 
 			printf("ret is less than %d bytes appending!!!\n", bytes);
-			if(ft_append_byte(tmp, bytes, bit_len))
-			{
-				//set chunk to current tmp and c
-			}
-			// printf("!!!!!last buff for chunk is |%s|\n", buff);
+			tmp = ft_append_byte(tmp, ret, bytes, bit_len);
 			//append then check if it the last 8 bytes are 0s or not
 			//if not set another 64 byte chunk with the bit length of the message
 			//in the last 8 bytes

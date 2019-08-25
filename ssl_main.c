@@ -35,7 +35,7 @@ int	main(int argc, char **argv)
 	t_hash	*hash;
 	t_list	*list;
 	int		j;
-	int bytes = 5;
+	int bytes = 64;
 	j = 2;
 	if(argc == 1)
 		printf("usage: ft_ssl command [command opts] [command args]\n");
