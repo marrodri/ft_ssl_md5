@@ -22,6 +22,9 @@ int	cmmnd_checker(char *str)
 
 int flag_checker(char **str, int j, t_flag **flags)
 {
+	str = NULL;
+	j = 0;
+	flags = NULL;
 	return 1;
 }
 
@@ -32,8 +35,6 @@ int	main(int argc, char **argv)
 	t_hash	*hash;
 	t_list	*list;
 	int		j;
-	int		ret;
-	int		byte_found = 0;
 	int bytes = 5;
 	j = 2;
 	if(argc == 1)
@@ -46,9 +47,7 @@ int	main(int argc, char **argv)
 		flags = malloc(sizeof(t_flag));
 		hash = malloc(sizeof(t_hash));
 		hash->chunks = ft_set_bytes(fd, bytes, &list);
-		printf("we have |%d| chunks of %d bytes\n", hash->chunks, bytes);
-		printf("chunk |%s|\n", list->content);
-		
+		printf("we have |%d| chunks of %d bytes\n", hash->chunks, bytes);		
 		int i = 0;
 		while(list)
 		{
