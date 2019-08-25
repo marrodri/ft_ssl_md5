@@ -13,13 +13,21 @@
 #include "ssl.h"
 #include <stdio.h>
 
-uint8_t		*ft_append_byte(uint8_t *chunk)
+uint8_t		*ft_append_byte(uint8_t *chunk, int ret, int bytes, uint64_t bit_len)
 {
-	chunk = NULL;
+	int i;
+
+	i = ret;
+
+	while(i < bytes)
+	{
+		chunk[i] = 0;
+		i++;
+	}
+	bit_len = 0;
 	return 0;
 }
 
-//save this function for debugging
 void	print_list(t_list **list)
 {
 	t_list *tmp;
@@ -29,7 +37,7 @@ void	print_list(t_list **list)
 	while(tmp)
 	{
 		printf("chunk is |%s|\n", tmp->content);
-		printf("memory address NEXT |%p|\n", &tmp->next);
+		// printf("memory address NEXT |%p|\n", &tmp->next);
 		tmp = tmp->next;
 	}
 	i++;
@@ -87,6 +95,8 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 	{
 		printf("ret is %d\n", ret);
 		printf("buff is |%s|\n", buff);
+		tmp = ft_memalloc(bytes);
+		tmp = ft_memcpy(tmp, buff, bytes);
 		byte_len = byte_len + ret;
 		if (ret == bytes)
 		{
@@ -96,23 +106,17 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 		{
 			chunk++;
 			bit_len = byte_len * 8;
-			// printf("ret is less than %d bytes appending!!!\n", bytes);
-			// printf("byte len is|%d|, bit len is|%llu|\n", byte_len, bit_len);
-			// ret--;
-			// ret += 5;
-			// while(ret < bytes)
-			// {
-				buff[ret - 1] = '\0';
-				buff[ret + 1] = '\0';
-				// ret++;
-			// }
+
+			printf("ret is less than %d bytes appending!!!\n", bytes);
+			if(ft_append_byte(tmp, bytes, bit_len))
+			{
+				//set chunk to current tmp and c
+			}
 			// printf("!!!!!last buff for chunk is |%s|\n", buff);
 			//append then check if it the last 8 bytes are 0s or not
 			//if not set another 64 byte chunk with the bit length of the message
 			//in the last 8 bytes
 		}
-		tmp = ft_memalloc(bytes);
-		tmp = ft_memcpy(tmp, buff, bytes);
 		add_new_chunk(list, tmp, bytes);
 	}
 	return (chunk);
