@@ -34,18 +34,25 @@ void	print_list(t_list **list)
 // }
 
 
-uint8_t		*ft_append_byte(uint8_t *chunk, int ret, int bytes, uint64_t bit_len)
+uint8_t		*ft_append_byte(uint8_t *chunk, int ret, int bytes, uint8_t bit_len)
 {
 	int i;
-
+	int dif;
 	i = ret + 1;
+	dif = bytes - 8;
 	chunk[ret] = (chunk[ret] << 8) | 0x80;
 	while(i < bytes)
 	{
-		chunk[i] = (chunk[ret] << 8) | 0x00;
+		chunk[i] = (chunk[i] << 8) | 0x00;
 		i++;
 	}
-	bit_len = 0;
+	//set this part for a function
+	i--;
+	while(i >= dif)
+	{
+		chunk[i] = (chunk[i] << 8) | bit_len;
+		i--;
+	}
 	return chunk;
 }
 
