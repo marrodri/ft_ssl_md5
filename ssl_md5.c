@@ -34,42 +34,74 @@
 
 #include "ssl.h"
 
-void	md5v_init(t_md5v **md5Vr)
+// void	md5v_init(t_md5v **md5Vr)
+// {
+// 	(*md5Vr)->a0 = A0;
+// 	(*md5Vr)->b0 = B0;
+// 	(*md5Vr)->c0 = C0;
+// 	(*md5Vr)->d0 = D0;
+// }
+
+uint32_t ft_32bitpad(uint8_t *chunk, int *j)
 {
-	(*md5Vr)->a0 = A0;
-	(*md5Vr)->b0 = B0;
-	(*md5Vr)->c0 = C0;
-	(*md5Vr)->d0 = D0;
+	int i;
+	uint32_t word;
+	i = 0;
+	word = 0;
+	while(i < 4)
+	{
+		word = (word << 8) | chunk[*j];
+		*j+= 1;
+		i++;
+	}
+	return word;
+}
+
+uint32_t *split_32bitwords(uint32_t *words, uint8_t *chunk)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (i < 16)
+	{
+		words[i] = (chunk, &j);
+		printf("dec is|%u| hex is|%x|\n", words[i]);
+		i++;
+	}
+	return words;
 }
 
 void	md5_hash(t_list *chunks, t_hash *hash)
 {
 	t_md5v *md5Vr;
-	char *mod_mssg;
-	t_uint a;
-	t_uint b;
-	t_uint c;
-	t_uint d;
-	t_uint i;
-	t_uint j;
-	t_uint f;
-	t_uint g;
-	t_uint s[64];
-
+	uint32_t words[16];
+	int j;
 	j = 0;
-	i = 0;
 	md5Vr = malloc(sizeof(t_md5v));
-	md5v_init(&md5Vr);
-	
-	// val = get_str_sum(mssg);
-	//modify the value by padding
-	printf("testing here\n");
-	//apped original length in bits mod 2^64 to message TRY OR LEARN HOW TO
+	// md5v_init(&md5Vr);
+	uint8_t *chunk = chunks->content;
+	words = split_32bitwords(words, chunk);
+	for(int i = 0; i < 16; i++)
+	{
+
+	}
+}
+	// while(1)
+	// {
+	// 	j = 0;
+	// 	while(j < 16)
+	// 	{
+
+	// 	}
+	// 	if(!chunks->next)
+	// 		break;
+	// 	chunks = chunks->next;
+	// }
 
 	//proccess the message in successive 512-bit chunks 2 while loops
 	//t_uint M[j] M[16]
-
-
 	// while(j < 16) //while chunks of message still 512bits
 	// {
 	// 	//here it should 
@@ -112,7 +144,7 @@ void	md5_hash(t_list *chunks, t_hash *hash)
 	// 	c0 = c0 + c;
 	// 	d0 = d0 + d;
 	// }
-}
+
 
 // unsigned int digest[16] = a0 append b0 append c0 append d0;
 
