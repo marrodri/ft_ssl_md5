@@ -19,8 +19,8 @@
 
 // # define K8	{ 0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c }
 // # define K9	{ 0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70 }
-// # define K10	{ 0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x04881d05 }
-// # define K11	{ 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665 }
+// # define K10{ 0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x04881d05 }
+// # define K11{ 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665 }
 
 // # define K12 { 0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039 }
 // # define K13 { 0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1 }
@@ -77,7 +77,9 @@ void	md5_hash(t_list *chunks, t_hash *hash)
 {
 	t_md5v *md5Vr;
 	uint32_t words[16];
+	uint8_t md[16];
 	int j;
+
 	j = 0;
 	md5Vr = malloc(sizeof(t_md5v));
 	// md5v_init(&md5Vr);

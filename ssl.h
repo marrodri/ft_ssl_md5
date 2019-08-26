@@ -31,6 +31,7 @@
 # define I_DIG(B,C,D) (C ^ (B | (~D)))
 # define R_LEFT(F,S) ((F << S) | (S >> (32 - S)))
 #include <stdio.h>
+
 typedef struct		s_flag
 {
 	unsigned int	flags[4];
@@ -52,6 +53,7 @@ typedef struct		s_hash
 
 // typedef		*hash_funct();
 
+typedef __uint128_t t_uint128_t;
 void	md5_hash(t_list *chunks, t_hash *hash);
 int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list);
 
