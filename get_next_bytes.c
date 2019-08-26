@@ -28,39 +28,56 @@ void	print_list(t_list **list)
 	printf("^^^^^EXIT CHECK^^^^^^^\n");
 }
 
-// int check_last8bytes(uint8_t *chunk, int bytes)
-// {
+int check_last8bytes(uint8_t *chunk, int bytes)
+{
+	int i;
+	int dif;
 
-// }
+	dif = bytes - 8; // 64-8 = 56
+	i = bytes - 1; //63
+	while (i >= dif)
+	{
+		if (chunk[i] != 0x00)
+			return 0;
+		i--;
+	}
+	return 1;
+}
 
 
-uint8_t		*ft_append_byte(uint8_t *chunk, int ret, int bytes, uint8_t bit_len)
+uint8_t		*ft_append_bytes(uint8_t *chunk, int ret, int bytes, uint8_t bit_len)
 {
 	int i;
 	int dif;
 	i = ret + 1;
 	dif = bytes - 8;
 	chunk[ret] = (chunk[ret] << 8) | 0x80;
-	while(i < bytes)
+		while (i < bytes)
+		{
+			chunk[i] = (chunk[i] << 8) | 0x00;
+			i++;
+		}
+	if (check_last8bytes(chunk, bytes))
 	{
-		chunk[i] = (chunk[i] << 8) | 0x00;
-		i++;
-	}
-	//set this part for a function
-	i--;
-	while(i >= dif)
-	{
-		chunk[i] = (chunk[i] << 8) | bit_len;
 		i--;
+		while (i >= dif)
+		{
+			chunk[i] = (chunk[i] << 8) | bit_len;
+			i--;
+		}
 	}
-	return chunk;
+	else
+	{
+		printf("    (((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
+	}
+	return (chunk);
 }
 
 t_list	*set_new_node(uint8_t *chunk, int bytes)
 {
 	t_list *new;
 
-	if((new = (t_list *)malloc(sizeof(t_list))) == NULL)
+	if ((new = (t_list *)malloc(sizeof(t_list))) == NULL)
 		return NULL;
 	if (chunk)
 	{
@@ -81,7 +98,7 @@ void	add_new_chunk(t_list **list, uint8_t *chunk, int bytes)
 	t_list *new_chunk;
 
 	new_chunk = set_new_node(chunk, bytes);
-	if(*list == NULL)
+	if (*list == NULL)
 		*list = new_chunk;
 	else
 		ft_lstaddend(list, new_chunk);
@@ -115,12 +132,20 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 		{
 			chunk++;
 			bit_len = byte_len * 8;
-
 			printf("ret is less than %d bytes appending!!!\n", bytes);
-			tmp = ft_append_byte(tmp, ret, bytes, bit_len);
+			// tmp = ft_append_bytes(tmp, ret, bytes, bit_len);
+
 			//append then check if it the last 8 bytes are 0s or not
+			if(!check_last8bytes(tmp, bytes))
+			{
+				printf("    (((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
+				// add_new_chunk(list, tmp, bytes);
+			}
+			else
+			{
+				tmp = ft_append_bytes(tmp, ret, bytes, bit_len);
+			}
 			//if not set another 64 byte chunk with the bit length of the message
-			//in the last 8 bytes
 		}
 		add_new_chunk(list, tmp, bytes);
 	}
