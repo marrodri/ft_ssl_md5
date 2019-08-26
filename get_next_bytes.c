@@ -128,6 +128,7 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 	uint64_t bit_len; //unsigned long long
 	int chunk;
 	uint8_t *tmp;
+	uint8_t *extra;
 
 	bit_len = 0;
 	chunk = 0;
@@ -148,20 +149,21 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 			chunk++;
 			bit_len = byte_len * 8;
 			printf("ret is less than %d bytes appending!!!\n", bytes);
-			// tmp = ft_append_bytes(tmp, ret, bytes, bit_len);
-
 			//append then check if it the last 8 bytes are 0s or not
 			tmp = ft_append_bytes(tmp, ret, bytes);
 			if(!check_last8bytes(tmp, bytes))
 			{
-				printf("    (((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
-				// add_new_chunk(list, tmp, bytes);
+				printf("(((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
+				add_new_chunk(list, tmp, bytes);
+				//tmp modded affects everyones node
+				extra = ft_memalloc(bytes);
+				ft_bzero(extra, bytes);
+				extra = ft_append_bitlen(extra, bytes, bit_len);
+				add_new_chunk(list, extra, bytes);
+				return chunk;
 			}
 			else
-			{
 				tmp = ft_append_bitlen(tmp, bytes, bit_len);
-			}
-			//if not set another 64 byte chunk with the bit length of the message
 		}
 		add_new_chunk(list, tmp, bytes);
 	}
