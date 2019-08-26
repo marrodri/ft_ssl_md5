@@ -33,8 +33,8 @@ int check_last8bytes(uint8_t *chunk, int bytes)
 	int i;
 	int dif;
 
-	dif = bytes - 8; // 64-8 = 56
 	i = bytes - 1; //63
+	dif = bytes - 8; // 64-8 = 56
 	while (i >= dif)
 	{
 		if (chunk[i] != 0x00)
@@ -44,32 +44,47 @@ int check_last8bytes(uint8_t *chunk, int bytes)
 	return 1;
 }
 
-
-uint8_t		*ft_append_bytes(uint8_t *chunk, int ret, int bytes, uint8_t bit_len)
+uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint8_t bit_len)
 {
 	int i;
 	int dif;
+
+	i = bytes - 1;
+	dif = bytes - 8;
+	while (i >= dif)
+	{
+		chunk[i] = (chunk[i] << 8) | bit_len;
+		i--;
+	}
+	return (chunk);
+}
+
+uint8_t		*ft_append_bytes(uint8_t *chunk, int ret, int bytes)
+{
+	int i;
+	int dif;
+
 	i = ret + 1;
 	dif = bytes - 8;
 	chunk[ret] = (chunk[ret] << 8) | 0x80;
-		while (i < bytes)
-		{
-			chunk[i] = (chunk[i] << 8) | 0x00;
-			i++;
-		}
-	if (check_last8bytes(chunk, bytes))
+	while (i < bytes)
 	{
-		i--;
-		while (i >= dif)
-		{
-			chunk[i] = (chunk[i] << 8) | bit_len;
-			i--;
-		}
+		chunk[i] = (chunk[i] << 8) | 0x00;
+		i++;
 	}
-	else
-	{
-		printf("    (((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
-	}
+	// if (check_last8bytes(chunk, bytes))
+	// {
+		// i--;
+		// while (i >= dif)
+		// {
+		// 	chunk[i] = (chunk[i] << 8) | bit_len;
+		// 	i--;
+		// }
+	// }
+	// else
+	// {
+	// 	printf("    (((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
+	// }
 	return (chunk);
 }
 
@@ -136,6 +151,7 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 			// tmp = ft_append_bytes(tmp, ret, bytes, bit_len);
 
 			//append then check if it the last 8 bytes are 0s or not
+			tmp = ft_append_bytes(tmp, ret, bytes);
 			if(!check_last8bytes(tmp, bytes))
 			{
 				printf("    (((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
@@ -143,7 +159,7 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 			}
 			else
 			{
-				tmp = ft_append_bytes(tmp, ret, bytes, bit_len);
+				tmp = ft_append_bitlen(tmp, bytes, bit_len);
 			}
 			//if not set another 64 byte chunk with the bit length of the message
 		}
