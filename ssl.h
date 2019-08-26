@@ -38,10 +38,10 @@ typedef struct		s_flag
 
 typedef struct		s_md5v
 {
-	unsigned int	A;
-	unsigned int	B;
-	unsigned int	C;
-	unsigned int	D;
+	uint32_t	A;
+	uint32_t	B;
+	uint32_t	C;
+	uint32_t	D;
 }					t_md5v;
 
 typedef struct		s_hash
