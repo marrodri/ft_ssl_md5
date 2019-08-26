@@ -53,7 +53,7 @@ typedef struct		s_hash
 // typedef		*hash_funct();
 
 typedef unsigned int t_uint;
-void	md5_hash(char *mssg, t_flag *flags);
+void	md5_hash(t_list *chunks, t_hash *hash);
 int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list);
 
 void ft_lstaddend(t_list **alst, t_list *new);

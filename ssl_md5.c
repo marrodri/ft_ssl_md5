@@ -34,45 +34,6 @@
 
 #include "ssl.h"
 
-t_uint get_str_sum(char *str)
-{
-	t_uint val;
-
-	val = 0;
-	while(*str)
-	{
-		val += *str;
-		*str++;
-	}
-	return val;
-}
-
-void	*padded_msg(char *mssg)
-{
-	t_uint pad_val;
-	t_uint val;
-	char *pad_mssg;
-
-
-	//first add 1 bit to the message padded
-	pad_val = ((val << 1) | 1);
-
-
-	//if the added 1 bit doesn't return the exact val mod 512
-	//then padd the value with 0 bits until getting the value mod 512
-
-	while(pad_val % 512 != 448)
-	{
-		pad_val << 1;
-	}
-	return pad_val;
-}
-
-t_uint bit_length(t_uint val)
-{
-
-}
-
 void	md5v_init(t_md5v **md5Vr)
 {
 	(*md5Vr)->a0 = A0;
@@ -81,7 +42,7 @@ void	md5v_init(t_md5v **md5Vr)
 	(*md5Vr)->d0 = D0;
 }
 
-void	md5_hash(char *mssg, t_flag *flags)
+void	md5_hash(t_list *chunks, t_hash *hash)
 {
 	t_md5v *md5Vr;
 	char *mod_mssg;
@@ -96,13 +57,12 @@ void	md5_hash(char *mssg, t_flag *flags)
 	t_uint s[64];
 
 	j = 0;
-	i =0;
+	i = 0;
 	md5Vr = malloc(sizeof(t_md5v));
 	md5v_init(&md5Vr);
 	
 	// val = get_str_sum(mssg);
 	//modify the value by padding
-	mod_mssg = padded_mag(mssg);
 	printf("testing here\n");
 	//apped original length in bits mod 2^64 to message TRY OR LEARN HOW TO
 

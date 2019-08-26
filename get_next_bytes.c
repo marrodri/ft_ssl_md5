@@ -33,15 +33,15 @@ int check_last8bytes(uint8_t *chunk, int bytes)
 	int i;
 	int dif;
 
-	i = bytes - 1; //63
-	dif = bytes - 8; // 64-8 = 56
+	i = bytes - 1;
+	dif = bytes - 8;
 	while (i >= dif)
 	{
 		if (chunk[i] != 0x00)
-			return 0;
+			return (0);
 		i--;
 	}
-	return 1;
+	return (1);
 }
 
 uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint8_t bit_len)
@@ -72,19 +72,6 @@ uint8_t		*ft_append_bytes(uint8_t *chunk, int ret, int bytes)
 		chunk[i] = (chunk[i] << 8) | 0x00;
 		i++;
 	}
-	// if (check_last8bytes(chunk, bytes))
-	// {
-		// i--;
-		// while (i >= dif)
-		// {
-		// 	chunk[i] = (chunk[i] << 8) | bit_len;
-		// 	i--;
-		// }
-	// }
-	// else
-	// {
-	// 	printf("    (((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
-	// }
 	return (chunk);
 }
 
@@ -135,8 +122,8 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 	byte_len = 0;
 	while((ret = read(fd, buff, bytes)) > 0)
 	{
-		printf("ret is %d\n", ret);
-		printf("buff is |%s|\n", buff);
+		// printf("ret is %d\n", ret);
+		// printf("buff is |%s|\n", buff);
 		tmp = ft_memalloc(bytes);
 		tmp = ft_memcpy(tmp, buff, bytes);
 		byte_len = byte_len + ret;
@@ -148,12 +135,12 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 		{
 			chunk++;
 			bit_len = byte_len * 8;
-			printf("ret is less than %d bytes appending!!!\n", bytes);
+			// printf("ret is less than %d bytes appending!!!\n", bytes);
 			//append then check if it the last 8 bytes are 0s or not
 			tmp = ft_append_bytes(tmp, ret, bytes);
 			if(!check_last8bytes(tmp, bytes))
 			{
-				printf("(((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
+				// printf("(((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
 				add_new_chunk(list, tmp, bytes);
 				//tmp modded affects everyones node
 				extra = ft_memalloc(bytes);
