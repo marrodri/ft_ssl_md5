@@ -34,6 +34,8 @@ int	main(int argc, char **argv)
 	t_flag	*flags;
 	t_hash	*hash;
 	t_list	*list;
+	
+	
 	int		j;
 	int bytes = 64;
 	j = 2;
