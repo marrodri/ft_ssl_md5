@@ -39,9 +39,14 @@
 
 int main()
 {
-	uint8_t tst[4];
+	const char *src = "dsdbcd";
+	char *dst = "vcdf";
+
+	if(src > dst)
+		printf("tst is higher than tst2\n");
+	else
+	printf("tst2 is higher than tst\n");
 	// tst = ft_memalloc(8);
-	tst[1] = K0;
 
 
 	// uint8_t tst2[4] = "efgh";

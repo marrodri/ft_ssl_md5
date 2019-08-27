@@ -76,7 +76,7 @@ uint32_t *split_32bitwords(uint32_t *words, uint8_t *chunk)
 void	md5_hash(t_list *chunks, t_hash *hash)
 {
 	t_md5v *md5Vr;
-	uint32_t words[16];
+	uint32_t *words;
 	uint8_t md[16];
 	int j;
 
@@ -84,6 +84,7 @@ void	md5_hash(t_list *chunks, t_hash *hash)
 	md5Vr = malloc(sizeof(t_md5v));
 	// md5v_init(&md5Vr);
 	uint8_t *chunk = chunks->content;
+	//memory allocate for 16 spaces of 32 bits
 	words = split_32bitwords(words, chunk);
 	for(int i = 0; i < 16; i++)
 	{

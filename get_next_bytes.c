@@ -44,7 +44,7 @@ int check_last8bytes(uint8_t *chunk, int bytes)
 	return (1);
 }
 
-uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint8_t bit_len)
+uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 {
 	int i;
 	int dif;
@@ -53,7 +53,9 @@ uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint8_t bit_len)
 	dif = bytes - 8;
 	while (i >= dif)
 	{
-		chunk[i] = (chunk[i] << 8) | bit_len;
+		printf("bit len is |%llx|\n", bit_len);
+		chunk[i] = chunk[i] | bit_len;
+		bit_len = bit_len >> 8;
 		i--;
 	}
 	return (chunk);
