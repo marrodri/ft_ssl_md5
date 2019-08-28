@@ -69,71 +69,121 @@ uint32_t		*split_32bitwords(uint8_t *chunk)
 	return words;
 }
 
+uint8_t		*ft_append_128bit(uint32_t a0, uint32_t b0, uint32_t c0, uint32_t d0)
+{
+	static uint8_t	output[16];
+	int i;
+
+	i = 0;
+	while(i < 4)
+	{
+		output[i] = output[i] | a0;
+		a0 = a0 >> 8;
+		i++;	
+	}
+	while(i < 8)
+	{
+		output[i] = output[i] | b0;
+		b0 = b0 >> 8;
+		i++;	
+	}
+	while(i < 12)
+	{
+		output[i] = output[i] | c0;
+		c0 = c0 >> 8;
+		i++;	
+	}
+	while(i < 32)
+	{
+		output[i] = output[i] | d0;
+		d0 = d0 >> 8;
+		i++;	
+	}
+	return output;
+}
+
 t_uint128_t		md5_hash(t_list *chunks)
 {
 	t_md5v		*md5Vr;
 	uint32_t	*words;
-	int j;
-	uint8_t *chunk;
-	// uint8_t md[16];
-	// t_uint128_t crypt;
+	int			i;
+	uint32_t	g;
+	uint32_t	F;
+	uint8_t		*chunk;
+	
+
+	uint32_t	a0 = A0;
+	uint32_t	b0 = B0;
+	uint32_t	c0 = C0;
+	uint32_t	d0 = D0;
+	uint32_t	A = a0;
+	uint32_t	B = b0;
+	uint32_t	C = c0;
+	uint32_t	D = d0;
 	chunk = chunks->content;
-	j = 0;
 	printf("1st chunk is |%s|\n", chunk);
 	md5Vr = malloc(sizeof(t_md5v));
-	// memory allocate for 16 spaces of 32 bits
-	words = split_32bitwords(chunk);
+
+	while(1)
+	{
+		i = 0;
+		words = split_32bitwords(chunk);
+		while(i < 64)
+		{
+			if(i < 15)
+			{
+				F= F_DIG(B,C,D);
+				g = i;
+			}
+			else if(i >= 15 && i < 32)
+			{
+				F= G_DIG(B,C,D);
+				g = i;
+			}
+			else if(i >= 32 && i < 48)
+			{
+				F= H_DIG(B,C,D);
+				g = i;
+			}
+			else if(i >= 48 && i < 64)
+			{
+				F= I_DIG(B,C,D);
+				g = i;
+			}
+			F = F + A + g_md5_key[i] + words[g];
+			A = D;
+			D = C;
+			C = B;
+			B = B + R_LEFT(F, g_md5_s[i]);
+			i++;
+		}
+		a0 = a0 + A;
+		b0 = b0 + B;
+		c0 = c0 + C;
+		d0 = d0 + D;
+		if(!chunks->next)
+			break;
+		chunks = chunks->next;
+	}
+	uint8_t *digest;
+	digest = ft_append_128bit(a0, b0, c0, b0);
+	printf("output is|");
 	for(int i = 0; i < 16; i++)
 	{
-		printf("word[%d] are in hex |%x|\n", i, words[i]);
+		printf("%x",digest[i]);
 	}
+	printf("|\n");
 	return 0;
-
-	// while(1)
-	// {
-	// 	j = 0;
-	// 	while(j < 16)
-	// 	{
-		// 	here it should 
-		// 	a = a0;
-		// 	b = b0;
-		// 	c = c0;
-		// 	d = d0;
-		// 	i = 0;
-		// 	while(i < 64)
-		// 	{
-		// 		if(i >= 0 && i < 16)
-		// 		{
-		// 			f = F_DIG(b,c,d);
-		// 			g = i;
-		// 		}
-		// 		else if(i >= 16 && i < 32)
-		// 		{
-		// 			f = G_DIG(b,c,d);
-		// 			g = i;
-		// 		}
-		// 		else if(i >= 32 && i < 48)
-		// 		{
-		// 			f = H_DIG(b,c,d);
-		// 			g = i;
-		// 		}
-		// 		else if(i >= 48 && i < 64)
-		// 		{
-		// 			f = I_DIG(b,c,d);
-		// 			g = i;
-		// 		}
-		// 		i++;
-		// 		f = f + a + k[i] = m[g];
-		// 		a = d;
-		// 		d = c;
-		// 		c = b;
-		// 		b = b + R_LEFT(f, s[i]);
-	// 	}
-	// 	if(!chunks->next)
-	// 		break;
-	// 	chunks = chunks->next;
-	// }
 }
+
+	// memory allocate for 16 spaces of 32 bits
+	
+	// for(int i = 0; i < 16; i++)
+	// {
+	// 	printf("word[%d] are in hex |%x|\n", i, words[i]);
+	// }
+	// return 0;
+
 
 	// proccess the message in successive 512-bit chunks 2 while loops
 	// t_uint M[j] M[16]

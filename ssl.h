@@ -50,6 +50,7 @@ typedef struct		s_hash
 typedef struct		s_md5v
 {
 	uint32_t		a0;
+	uint8_t			output[16]; //this is 128bit all together
 }					t_md5v;
 
 t_uint128_t			md5_hash(t_list *chunks);

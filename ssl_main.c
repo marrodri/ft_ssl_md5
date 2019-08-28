@@ -46,7 +46,7 @@ int	main(int argc, char **argv)
 	{
 		printf("Command found '%s'\n", argv[1]);
 		fd = 0;
-		bytes = 64;
+		bytes = MD5_BYTES;
 		flags = malloc(sizeof(t_flag));
 		hash = malloc(sizeof(t_hash));
 		hash->chunk_len = ft_set_bytes(fd, bytes, &list);

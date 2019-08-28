@@ -2,6 +2,7 @@
 	"files.associations": {
 		"stdio.h": "c",
 		"ssl.h": "c",
-		"ft_printf.h": "c"
+		"ft_printf.h": "c",
+		"string.h": "c"
 	}
 }
