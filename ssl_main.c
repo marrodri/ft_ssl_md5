@@ -58,7 +58,7 @@ int	main(int argc, char **argv)
 		// 	list = list->next;
 		// 	i++;
 		// }
-		// hash->md_128bit = md5_hash(list);
+		hash->md_128bit = md5_hash(list);
 	}
 
 	else
