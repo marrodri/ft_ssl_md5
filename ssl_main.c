@@ -34,10 +34,10 @@ int	main(int argc, char **argv)
 	t_flag	*flags;
 	t_hash	*hash;
 	t_list	*list;
-	
-	
+	int bytes;
 	int		j;
-	int bytes = 64;
+	
+	
 	j = 2;
 	if(argc == 1)
 		printf("usage: ft_ssl command [command opts] [command args]\n");
@@ -46,17 +46,19 @@ int	main(int argc, char **argv)
 	{
 		printf("Command found '%s'\n", argv[1]);
 		fd = 0;
+		bytes = 64;
 		flags = malloc(sizeof(t_flag));
 		hash = malloc(sizeof(t_hash));
-		hash->chunks = ft_set_bytes(fd, bytes, &list);
-		printf("we have |%d| chunks of %d bytes\n", hash->chunks, bytes);		
-		int i = 0;
-		while(list)
-		{
-			printf("chunk No.%d |%s|\n", i, list->content);
-			list = list->next;
-			i++;
-		}
+		hash->chunk_len = ft_set_bytes(fd, bytes, &list);
+		// printf("we have |%d| chunks of %d bytes\n", hash->chunks, bytes);		
+		// int i = 0;
+		// while(list)
+		// {
+		// 	printf("chunk No.%d |%s|\n", i, list->content);
+		// 	list = list->next;
+		// 	i++;
+		// }
+		// hash->md_128bit = md5_hash(list);
 	}
 
 	else
