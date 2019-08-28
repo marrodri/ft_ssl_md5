@@ -30,7 +30,7 @@
 # define G_DIG(B,C,D) ((B & D) | (C & (~D)))
 # define H_DIG(B,C,D) (B ^ C ^ D)
 # define I_DIG(B,C,D) (C ^ (B | (~D)))
-# define R_LEFT(F,S) ((F << S) | (S >> (32 - S)))
+# define R_LEFT(F,S) ((F << S) | (F >> (32 - S)))
 # include <stdio.h>
 
 typedef __uint128_t	t_uint128_t;
@@ -56,4 +56,6 @@ typedef struct		s_md5v
 t_uint128_t			md5_hash(t_list *chunks);
 int					ft_set_bytes(const int fd, uint32_t bytes, t_list **list);
 void				ft_lstaddend(t_list **alst, t_list *new);
+uint32_t			ft_32bitpad(uint8_t *chunk, int *j);
+uint32_t			*split_32bitwords(uint8_t *chunk);
 #endif

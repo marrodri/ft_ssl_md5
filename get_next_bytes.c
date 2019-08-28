@@ -124,8 +124,8 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 	byte_len = 0;
 	while((ret = read(fd, buff, bytes)) > 0)
 	{
-		// printf("ret is %d\n", ret);
-		// printf("buff is |%s|\n", buff);
+		printf("ret is %d\n", ret);
+		printf("buff is |%s|\n", buff);
 		tmp = ft_memalloc(bytes);
 		tmp = ft_memcpy(tmp, buff, bytes);
 		byte_len = byte_len + ret;
@@ -137,6 +137,7 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 		{
 			chunk++;
 			bit_len = byte_len * 8;
+			printf("bit_len is |%llu|\n", bit_len);
 			// printf("ret is less than %d bytes appending!!!\n", bytes);
 			//append then check if it the last 8 bytes are 0s or not
 			tmp = ft_append_bytes(tmp, ret, bytes);
