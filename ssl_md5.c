@@ -41,7 +41,7 @@ uint8_t		*ft_append_128bit(uint32_t a0, uint32_t b0, uint32_t c0, uint32_t d0)
 	static uint8_t	output[16];
 	int i;
 
-	i = 16;
+	i = 0;
 	while(i < 4)
 	{
 		output[i] = output[i] | a0;
@@ -73,12 +73,12 @@ t_uint128_t		md5_hash(t_list *chunks)
 {
 	t_md5v		*md5Vr;
 	uint32_t	*words;
-	uint32_t	i;
-	uint32_t	g;
-	uint32_t	F;
 	uint8_t		*chunk;
 	
 
+	uint32_t	i;
+	uint32_t	g;
+	uint32_t	F;
 	uint32_t	a0 = A0;
 	uint32_t	b0 = B0;
 	uint32_t	c0 = C0;
@@ -87,6 +87,7 @@ t_uint128_t		md5_hash(t_list *chunks)
 	uint32_t	B = b0;
 	uint32_t	C = c0;
 	uint32_t	D = d0;
+	uint32_t	R;
 	chunk = NULL;
 	md5Vr = malloc(sizeof(t_md5v));
 
@@ -104,29 +105,37 @@ t_uint128_t		md5_hash(t_list *chunks)
 		{
 			if(i <= 15)
 			{
-				F= F_DIG(B,C,D);
+				F = F_DIG(B,C,D);
+				printf("F i.%d is |%x|\n", i, F);
 				g = i;
 			}
 			else if(i >= 16 && i <= 31)
 			{
-				F= G_DIG(B,C,D);
+				F = G_DIG(B,C,D);
 				g = (0x05 * i + 0x01) % 0x10;
 			}
 			else if(i >= 32 && i <= 47)
 			{
-				F= H_DIG(B,C,D);
+				F = H_DIG(B,C,D);
 				g = (0x03 * i + 0x05) % 0x10;
 			}
 			else if(i >= 48 && i <= 63)
 			{
-				F= I_DIG(B,C,D);
+				F = I_DIG(B,C,D);
 				g = (0x07 * i) % 0x10;
 			}
 			F = F + A + g_md5_key[i] + words[g];
 			A = D;
 			D = C;
 			C = B;
-			B = B + R_LEFT(F, g_md5_s[i]);
+			R = R_LEFT(F, g_md5_s[i]);
+			B = B + R;
+			printf("hasshed F|%x|\n", F);
+			printf("A|%x|\n", A);
+			printf("D|%x|\n", D);
+			printf("C|%x|\n", C);
+			printf("rotation left|%x|\n", R);
+			printf("Rotated B|%x|\n", B);
 			i++;
 		}
 		a0 = a0 + A;
@@ -140,6 +149,7 @@ t_uint128_t		md5_hash(t_list *chunks)
 	uint8_t *digest;
 	digest = ft_append_128bit(a0, b0, c0, b0);
 	printf("output is|");
+	//TO FIX OUTPUT IS BAD ASK FOR ALGO HELP
 	for(int i = 0; i < 16; i++)
 	{
 		printf("%x",digest[i]);
