@@ -6,7 +6,7 @@
 int	cmmnd_checker(char *str)
 {
 	int			i;
-	const char	*hash_algo[] = HS_COM;
+	const char	*hash_algo[HS_SZ] = HS_COM;
 
 	i = 0;
 	while(i < HS_SZ)
@@ -20,12 +20,38 @@ int	cmmnd_checker(char *str)
 	return (0);
 }
 
-int flag_checker(char **str, int j, t_flag **flags)
+int ci_checker(char **str, int lim ,int *i, t_flag **flags)
 {
-	str = NULL;
-	j = 0;
-	flags = NULL;
-	return 1;
+	const char ci_flags[CI_SZ] = CI_COM;
+	int j;
+	int flag;
+
+	flag = 0;
+	if(lim == 2)
+		flag = 1;
+	while(str[*i][0] == '-' && *i < lim)
+	{
+		printf("new command found\n");
+		j = 0;
+		while(j < CI_SZ)
+		{
+			if(ci_flags[j] == str[*i][1])
+			{
+				printf("comm is |%c|\n", str[*i][1]);
+				(*flags)->ci_flags[j] = 1;
+				flag = 1;
+			}
+			j++;
+		}
+		*i += 1;
+	}
+	if(flag)
+		return 1;
+	else
+	{
+		return 0;
+	}
+	
 }
 
 int	main(int argc, char **argv)
@@ -35,29 +61,39 @@ int	main(int argc, char **argv)
 	t_hash	*hash;
 	t_list	*list;
 	int bytes;
-	int		j;
-	int i;
+	int 	i;
+	if(argc == 2)
+		i = 1;
+	else
+		i = 2;
 
-	i = 2;
-
-	j = 1;
+		flags = malloc(sizeof(t_flag));
+		hash = malloc(sizeof(t_hash));
 	if(argc == 1)
 		printf("usage: ft_ssl command [command opts] [command args]\n");
 
-	else if(cmmnd_checker(argv[1]) && flag_checker(argv, j, &flags))
+	else if(cmmnd_checker(argv[1]) && ci_checker(argv, argc, &i, &flags))
 	{
 		printf("Command found '%s'\n", argv[1]);
-		flags = malloc(sizeof(t_flag));
-		hash = malloc(sizeof(t_hash));
+		// ci_checker(argv, &i, &flags);
 		if (argc == 2)
 		{
 			fd = 0;
+			bytes = MD5_BYTES;
+			hash->chunk_len = ft_set_bytes(fd, bytes, &list);
+			hash->md_128bit = md5_hash(list);
 		}
 		else 
 		{
+			// while(argv[i][0] == '-')
+			// {
+			// 	printf("flag founded\n");
+			// 	i++;
+			// }
 			while(i < argc)
 			{
 				// printf("file found encrypt\n");
+				printf("fd is %d\n", fd);
 				fd = open(argv[i], O_RDONLY);
 				bytes = MD5_BYTES;
 				hash->chunk_len = ft_set_bytes(fd, bytes, &list);
@@ -65,7 +101,6 @@ int	main(int argc, char **argv)
 				i++;
 			}
 		}
-
 	}
 
 	else

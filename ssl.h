@@ -18,7 +18,7 @@
 # include <stdint.h>
 # include <string.h>
 # define MD5_BYTES 64
-# define CI_COM {'p','q','r','s'}
+# define CI_COM {'r','q','p','s'}
 # define HS_COM {"md5", "sha256"}
 # define HS_SZ 2
 # define CI_SZ 4
@@ -37,7 +37,7 @@ typedef __uint128_t	t_uint128_t;
 
 typedef struct		s_flag
 {
-	unsigned int	flags[4];
+	unsigned int	ci_flags[CI_SZ];
 }					t_flag;
 
 typedef struct		s_hash
