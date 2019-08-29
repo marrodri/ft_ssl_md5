@@ -15,16 +15,17 @@ NAME = ft_ssl
 
 CFLAGS += -Wall -Wextra -Werror
 CFLAGS += -I ./Includes/
-CFLAGS += -I ./Includes/libft
+CFLAGS += -I ./libft
 # CFLAGS += -I includes/ft_printf
 RM = rm -f
 HDR = ./Includes/
 
-SRC = ssl_main.c ssl_md5.c
+SRC = ssl_main.c ssl_md5.c get_next_bytes.c \
+	ssl_md5_pad.c ft_lstaddend.c
 
 OBJ = $(SRC:.c=.o)
 
-LIBFT = ./Includes/libft/libft.a
+LIBFT = ./libft/libft.a
 # PRINT_F = includes/ft_printf/libftprintf.a
 
 .PHONY = all clean fclean clean re
