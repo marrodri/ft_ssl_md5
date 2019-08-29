@@ -51,50 +51,47 @@ int		main(int argc, char **argv)
 		i = 2;
 	flags = malloc(sizeof(t_flag));
 	hash = malloc(sizeof(t_hash));
-	if(argc == 1)
+	if (argc == 1)
 		printf("usage: ft_ssl command [command opts] [command args]\n");
 
 	else if(cmmnd_checker(argv[1]) && ci_set(argv, argc, &i, &flags))
 	{
-		if (argc == 2)
+		if (argc == 2 || flags->ci_flags[2])
 		{
 			fd = 0;
 			bytes = MD5_BYTES;
 			hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
 			hash->md_128bit = md5_hash(list);
 		}
-		else 
+		while(i < argc && argc != 2)
 		{
-			while(i < argc)
+			if(flags->ci_flags[3] == 1)// -s input activated
 			{
-				if(flags->ci_flags[3] == 1)// -s input activated
+				if(argv[i])
+				printf("read string %s\n", argv[i]);
+				else
 				{
-					if(argv[i])
-					printf("read string %s\n", argv[i]);
-					else
-					{
-						printf("%s: option requires an argument --s\n", argv[1]);
-						printf("usage: %s [-pqr] [-s string] [files ...]\n", argv[1]);
-					}
-					flags->ci_flags[3] = 0;
+					printf("%s: option requires an argument --s\n", argv[1]);
+					printf("usage: %s [-pqr] [-s string] [files ...]\n", argv[1]);
+				}
+				flags->ci_flags[3] = 0;
+			}
+			else
+			{
+				fd = open(argv[i], O_RDONLY);
+				if (fd == -1)
+				{
+					printf("md5: %s: No such file or directory\n", argv[i]);
 				}
 				else
 				{
-					fd = open(argv[i], O_RDONLY);
-					if (fd == -1)
-					{
-						printf("md5: %s: No such file or directory\n", argv[i]);
-					}
-					else
-					{
-						printf("read args fd is %d\n", fd);
-						bytes = MD5_BYTES;
-						hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
-						hash->md_128bit = md5_hash(list);
-					}
+					printf("read args fd is %d\n", fd);
+					bytes = MD5_BYTES;
+					hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
+					hash->md_128bit = md5_hash(list);
 				}
-				i++;
 			}
+			i++;
 		}
 	}
 	return (0);
