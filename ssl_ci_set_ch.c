@@ -24,41 +24,41 @@ void	init_ci_flags(t_flag **flags)
 	}
 }
 
-int		ci_checker(char *input)
+int		ci_checker(char *input, int *j)
 {
 	int i;
 	const char ci_flags[CI_SZ] = CI_COM;
 	i = 0;
+	printf("input is %c\n", input[1]);
 
 	while(i < CI_SZ)
 	{
 		if(ci_flags[i] == input[1])
+		{
+			*j = i;
 			return 1;
+		}
 		i++;
 	}
+	printf("0 returned\n");
 	return 0;
 }
 
 int		ci_set(char **str, int lim ,int *i, t_flag **flags)
 {
-	// const char ci_flags[CI_SZ] = CI_COM;
 	int j;
 	int check;
 
 	check = 1;
+	j = 0;
 	init_ci_flags(flags);
 	// if (lim == 2)
 	// 	check = 1;
 	while (str[*i][0] == '-' && check)
 	{
-		j = 0;
-		while (j < CI_SZ)
+		if ((check = ci_checker(str[*i], &j)) == 1)
 		{
-			if ((check = ci_checker(str[*i])) == 1)
-			{
-				(*flags)->ci_flags[j] = 1;
-			}
-			j++;
+			(*flags)->ci_flags[j] = 1;
 		}
 		if (str[*i][1] == 's')
 		{

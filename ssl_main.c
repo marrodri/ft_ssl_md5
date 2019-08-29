@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "ssl.h"
-#include <stdio.h>
 
 //TODO IMPORTANT CHANGE ALL FUNCTIONS TO FT_FUNCTIONS
 int		cmmnd_checker(char *str)
@@ -33,8 +32,6 @@ int		cmmnd_checker(char *str)
 			\nsha256\n\nCipher commands:\n", str);
 	return (0);
 }
-
-
 
 int		main(int argc, char **argv)
 {
@@ -62,13 +59,15 @@ int		main(int argc, char **argv)
 			bytes = MD5_BYTES;
 			hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
 			hash->md_128bit = md5_hash(list);
+			// free(list);
 		}
-		while(i < argc && argc != 2)
+		printf("i is%d\n", i);
+		while(i <= argc && argc != 2)
 		{
-			if(flags->ci_flags[3] == 1)// -s input activated
+			if(flags->ci_flags[3] == 1) //-s input activated
 			{
 				if(argv[i])
-				printf("read string %s\n", argv[i]);
+					printf("read string %s\n", argv[i]);
 				else
 				{
 					printf("%s: option requires an argument --s\n", argv[1]);
@@ -79,16 +78,17 @@ int		main(int argc, char **argv)
 			else
 			{
 				fd = open(argv[i], O_RDONLY);
-				if (fd == -1)
+				if (fd == -1 && argv[i])
 				{
 					printf("md5: %s: No such file or directory\n", argv[i]);
 				}
-				else
+				else if(argv[i])
 				{
 					printf("read args fd is %d\n", fd);
 					bytes = MD5_BYTES;
 					hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
 					hash->md_128bit = md5_hash(list);
+					// free(list);
 				}
 			}
 			i++;
