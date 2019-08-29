@@ -85,6 +85,8 @@ int		main(int argc, char **argv)
 				else if(argv[i])
 				{
 					printf("read args fd is %d\n", fd);
+					if(!flags->ci_flags[0] && !flags->ci_flags[1])
+					printf("%s (%s) = ", argv[1], argv[i]);
 					bytes = MD5_BYTES;
 					hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
 					hash->md_128bit = md5_hash(list);
