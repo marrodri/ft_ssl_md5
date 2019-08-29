@@ -18,14 +18,14 @@ void	print_list(t_list **list)
 	t_list *tmp;
 	static int i = 0;
 	tmp = *list;
-	printf("######session %d########\n",i);
+	// printf("######session %d########\n",i);
 	while(tmp)
 	{
-		printf("chunk is |%s|\n", tmp->content);
+		// printf("chunk is |%s|\n", tmp->content);
 		tmp = tmp->next;
 	}
 	i++;
-	printf("^^^^^EXIT CHECK^^^^^^^\n");
+	// printf("^^^^^EXIT CHECK^^^^^^^\n");
 }
 
 int check_last8bytes(uint8_t *chunk, int bytes)
@@ -53,7 +53,7 @@ uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 	dif = bytes - 8;
 	while (i >= dif)
 	{
-		printf("bit len is |%llx|\n", bit_len);
+		// printf("bit len is |%llx|\n", bit_len);
 		chunk[i] = chunk[i] | bit_len;
 		bit_len = bit_len >> 8;
 		i--;
@@ -124,8 +124,8 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 	byte_len = 0;
 	while((ret = read(fd, buff, bytes)) > 0)
 	{
-		printf("ret is %d\n", ret);
-		printf("buff is |%s|\n", buff);
+		// printf("ret is %d\n", ret);
+		// printf("buff is |%s|\n", buff);
 		tmp = ft_memalloc(bytes);
 		tmp = ft_memcpy(tmp, buff, bytes);
 		byte_len = byte_len + ret;
@@ -137,7 +137,7 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 		{
 			chunk++;
 			bit_len = byte_len * 8;
-			printf("bit_len is |%llu|\n", bit_len);
+			// printf("bit_len is |%llu|\n", bit_len);
 			// printf("ret is less than %d bytes appending!!!\n", bytes);
 			//append then check if it the last 8 bytes are 0s or not
 			tmp = ft_append_bytes(tmp, ret, bytes);
