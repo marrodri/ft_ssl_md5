@@ -108,17 +108,30 @@ int		main(int argc, char **argv)
 			while(i < argc)
 			{
 				// printf("file found encrypt\n");
-				fd = open(argv[i], O_RDONLY);
-				if (fd == -1)
+				if(flags->ci_flags[3] == 1)
 				{
-					printf("md5: %s: No such file or directory", argv[i]);
+					if(argv[i])
+					printf("read string %s\n", argv[i]);
+					else
+					{
+						printf("%s: option requires an argument --s\n", argv[1]);
+						printf("usage: %s [-pqr] [-s string] [files ...]\n", argv[1]);
+					}
 				}
 				else
 				{
-					printf("read args fd is %d\n", fd);
-					bytes = MD5_BYTES;
-					hash->chunk_len = ft_set_bytes(fd, bytes, &list);
-					hash->md_128bit = md5_hash(list);
+					fd = open(argv[i], O_RDONLY);
+					if (fd == -1)
+					{
+						printf("md5: %s: No such file or directory", argv[i]);
+					}
+					else
+					{
+						printf("read args fd is %d\n", fd);
+						bytes = MD5_BYTES;
+						hash->chunk_len = ft_set_bytes(fd, bytes, &list);
+						hash->md_128bit = md5_hash(list);
+					}
 				}
 				i++;
 			}
