@@ -54,7 +54,8 @@ typedef struct		s_md5v
 }					t_md5v;
 
 t_uint128_t			md5_hash(t_list *chunks);
-int					ft_set_bytes(const int fd, uint32_t bytes, t_list **list);
+int					ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list);
+int					ci_set(char **str, int lim ,int *i, t_flag **flags);
 void				ft_lstaddend(t_list **alst, t_list *new);
 uint32_t			ft_32bitpad(uint8_t *chunk, int *j);
 uint32_t			*split_32bitwords(uint8_t *chunk);

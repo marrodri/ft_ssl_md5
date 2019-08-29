@@ -109,7 +109,7 @@ void	add_new_chunk(t_list **list, uint8_t *chunk, int bytes)
 	print_list(list);
 }
 
-int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
+int		ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 {
 	uint32_t ret; //32bit as 4byte
 	uint8_t buff[bytes]; //8bit as 1 byte
@@ -159,3 +159,8 @@ int		ft_set_bytes(const int fd, uint32_t bytes, t_list **list)
 	}
 	return (chunk);
 }
+
+// int ft_set_bytes_str(char *str, uint32_t bytes, t_list **list)
+// {
+// 	while
+// }

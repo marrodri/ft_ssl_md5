@@ -21,7 +21,7 @@ RM = rm -f
 HDR = ./Includes/
 
 SRC = ssl_main.c ssl_md5.c get_next_bytes.c \
-	ssl_md5_pad.c ft_lstaddend.c
+	ssl_md5_pad.c ft_lstaddend.c ssl_ci_set_ch.c
 
 OBJ = $(SRC:.c=.o)
 
