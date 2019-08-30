@@ -52,8 +52,6 @@ int		ci_set(char **str, int lim ,int *i, t_flag **flags)
 	check = 1;
 	j = 0;
 	init_ci_flags(flags);
-	// if (lim == 2)
-	// 	check = 1;
 	while (str[*i][0] == '-' && check)
 	{
 		if ((check = ci_checker(str[*i], &j)) == 1)
@@ -69,6 +67,8 @@ int		ci_set(char **str, int lim ,int *i, t_flag **flags)
 		if (*i >= lim)
 			break;
 	}
+	if((*flags)->ci_flags[1])
+		(*flags)->ci_flags[0] = 0;
 	if(check)
 		return (1);
 	else

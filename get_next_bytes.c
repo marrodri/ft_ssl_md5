@@ -61,6 +61,7 @@ uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 	return (chunk);
 }
 
+//wrong fixt this logic
 uint8_t		*ft_append_bytes(uint8_t *chunk, int ret, int bytes)
 {
 	int i;
@@ -118,7 +119,7 @@ int		ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 	int chunk;
 	uint8_t *tmp;
 	uint8_t *extra;
-
+	ft_bzero(buff, bytes);
 	bit_len = 0;
 	chunk = 0;
 	byte_len = 0;

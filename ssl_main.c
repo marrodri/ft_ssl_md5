@@ -92,7 +92,6 @@ int		main(int argc, char **argv)
 					hash->md_128bit = md5_hash(list);
 					if(flags->ci_flags[0])
 						printf(" %s\n", argv[i]);
-					// free(list);
 				}
 			}
 			i++;
@@ -100,3 +99,7 @@ int		main(int argc, char **argv)
 	}
 	return (0);
 }
+
+// 1197802110e5c9dd997961cb10e5c9dd
+
+// 8dc0b073d16f4394eb2ed553d16f4394
