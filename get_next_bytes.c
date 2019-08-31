@@ -44,57 +44,70 @@ int check_last8bytes(uint8_t *chunk, int bytes)
 	return (1);
 }
 
-void ft_pushstr(uint8_t **str, uint8_t val, int n)
+// void ft_pushstr(uint8_t **str, uint8_t val, int n)
+// {
+// 	int i;
+// 	uint8_t tmp;
+
+// 	i = 0;
+// 	tmp = 0;
+// 	if (n == 0)
+// 		return ;
+// 	while(i < (n - 1))
+// 	{
+// 		i++;
+// 	}
+// 	while(i > 0)
+// 	{
+// 		tmp = *str[i - 1];
+// 		printf("tmp = |%x|\n", tmp);
+// 		*str[i] = tmp;
+// 		i--;
+// 	}
+// 	*str[i] = val;
+// 	printf("val is %x\n", *str[i]);
+// 	// return **str;
+// }
+
+uint64_t byte_length(uint64_t val)
 {
 	int i;
-	uint8_t tmp;
-
 	i = 0;
-	if (n == 0)
-		return ;
-	while(i < (n - 1))
+	while(val)
 	{
+		val = val >> 8;
 		i++;
 	}
-	while(i > 0)
-	{
-		tmp = *str[i - 1];
-		// printf();
-		*str[i] = tmp;
-		i--;
-	}
-	*str[i] = val;
-	// return **str;
+	printf("lim is |%d|\n", i);
+	return i;
 }
 
-uint8_t *ft_append_bitlen(uint8_t **chunk, int bytes, uint64_t bit_len)
+uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 {
 	int i;
-	int pos;
 	uint64_t push;
-	uint8_t val;
-	pos = bytes - 9;
-	i = bytes - 9;
-	printf("pos |%d|\n", pos);
-	push = 0;
-	while (i < bytes)
+	uint64_t tmp;
+	uint64_t lim;
+	lim = byte_length(bit_len);
+	i = bytes - 8;
+	push = (lim - 1) * 8;
+	while (i < bytes && lim)
 	{
-		val = 0;
+		tmp = bit_len;
 		printf("bit len is |%llx| \n", bit_len);
-		val = *chunk[i] | bit_len;
-		bit_len = bit_len >> 8;
-		if(push == 0)
-			*chunk[i] = val;
-		else
-			ft_pushstr(&(chunk[pos]), val, push);
+		tmp = bit_len >> push;
+		printf("push is |%lld| and tmp is |%llx|\n", push, tmp);
+		chunk[i] = 0x00 | tmp;
+
 		i++;
-		push++;
+		push -= 8;
+		lim--;
 	}
-	for(i = (bytes - 9); i < bytes; i++)
+	for(i = 0; i < bytes; i++)
 	{
-		printf("byte[%d]:%x\n", i, *chunk[i]);
+		printf("chunk[%d] is |%x| or c|%c|\n", i, chunk[i], chunk[i]);
 	}
-	return (*chunk);
+	return (chunk);
 }
 
 //wrong fixt this logic
@@ -185,12 +198,12 @@ int		ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 				//tmp modded affects everyones node
 				extra = ft_memalloc(bytes);
 				ft_bzero(extra, bytes);
-				extra = ft_append_bitlen(&extra, bytes, bit_len);
+				extra = ft_append_bitlen(extra, bytes, bit_len);
 				add_new_chunk(list, extra, bytes);
 				return chunk;
 			}
 			else
-				tmp = ft_append_bitlen(&tmp, bytes, bit_len);
+				tmp = ft_append_bitlen(tmp, bytes, bit_len);
 		}
 		add_new_chunk(list, tmp, bytes);
 	}

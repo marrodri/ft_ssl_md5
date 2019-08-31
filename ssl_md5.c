@@ -95,7 +95,7 @@ t_uint128_t		md5_hash(t_list *chunks)
 	{
 		i = 0;
 		chunk = chunks->content;
-		printf("chunk is |%s|\n", chunk);
+		// printf("chunk is |%s|\n", chunk);
 		words = split_32bitwords(chunk);
 		for(int i = 0; i < 16; i++)
 		{
@@ -146,14 +146,14 @@ t_uint128_t		md5_hash(t_list *chunks)
 			break;
 		chunks = chunks->next;
 	}
-	uint8_t *digest;
-	digest = ft_append_128bit(a0, b0, c0, b0);
-	printf("output is|");
+	// uint8_t *digest;
+	// digest = ft_append_128bit(a0, b0, c0, b0);
+	printf("a0|%x|\nb0|%x|\nc0|%x|\nd0|%x|\n", a0,b0,c0,d0);
 	//TO FIX OUTPUT IS BAD ASK FOR ALGO HELP
-	for(int i = 0; i < 16; i++)
-	{
-		printf("%x",digest[i]);
-	}
+	// for(int i = 0; i < 16; i++)
+	// {
+	// 	printf("%x",digest[i]);
+	// }
 	printf("|\n");
 	return 0;
 }

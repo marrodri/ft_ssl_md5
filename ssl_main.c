@@ -61,7 +61,7 @@ int		main(int argc, char **argv)
 			hash->md_128bit = md5_hash(list);
 			// free(list);
 		}
-		printf("i is%d\n", i);
+		printf("i is %d\n", i);
 		while(i <= argc && argc != 2)
 		{
 			if(flags->ci_flags[3] == 1) //-s input activated
@@ -84,7 +84,7 @@ int		main(int argc, char **argv)
 				}
 				else if(argv[i])
 				{
-					printf("read args fd is %d\n", fd);
+					// printf("read args fd is %d\n", fd);
 					if(!flags->ci_flags[0] && !flags->ci_flags[1])
 						printf("%s (%s) = ", argv[1], argv[i]);
 					bytes = MD5_BYTES;
