@@ -36,35 +36,22 @@ const uint32_t	g_md5_s[64] =
 	4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
 	6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
 
-uint8_t		*ft_append_128bit(uint32_t a0, uint32_t b0, uint32_t c0, uint32_t d0)
+uint8_t		*ft_append_128bit(uint32_t *input)
 {
-	static uint8_t	output[16];
-	int i;
+	static uint8_t	output[16]; //unsigned char
 
+	uint32_t i;
+	uint32_t j;
 	i = 0;
-	while(i < 4)
+	j = 0;
+	while(j < 4)
 	{
-		output[i] = output[i] | a0;
-		a0 = a0 >> 8;
-		i++;	
-	}
-	while(i < 8)
-	{
-		output[i] = output[i] | b0;
-		b0 = b0 >> 8;
-		i++;	
-	}
-	while(i < 12)
-	{
-		output[i] = output[i] | c0;
-		c0 = c0 >> 8;
-		i++;	
-	}
-	while(i < 16)
-	{
-		output[i] = output[i] | d0;
-		d0 = d0 >> 8;
-		i++;	
+		output[j] = (input[i] & 0xff);
+		output[j + 1] = ((input[i] >> 8) & 0xff);
+		output[j + 2] = ((input[i] >> 16) & 0xff);
+		output[j + 3] = ((input[i] >> 24) & 0xff);
+		j+= 4;
+		i++;
 	}
 	return output;
 }
@@ -97,10 +84,10 @@ t_uint128_t		md5_hash(t_list *chunks)
 		chunk = chunks->content;
 		// printf("chunk is |%s|\n", chunk);
 		words = split_32bitwords(chunk);
-		for(int i = 0; i < 16; i++)
-		{
-			printf("word[%d] are in hex |%x|\n", i, words[i]);
-		}
+		// for(int i = 0; i < 16; i++)
+		// {
+		// 	printf("word[%d] are in hex |%x|\n", i, words[i]);
+		// }
 		while(i < 64)
 		{
 			if(i <= 15)
@@ -138,22 +125,28 @@ t_uint128_t		md5_hash(t_list *chunks)
 			// printf("Rotated B|%x|\n", B);
 			i++;
 		}
-		a0 = a0 + A;
-		b0 = b0 + B;
-		c0 = c0 + C;
-		d0 = d0 + D;
+		A += a0;
+		B += b0;
+		C += c0;
+		D += d0;
+		a0 = A;
+		b0 = B;
+		c0 = C;
+		d0 = D;
 		if(!chunks->next)
 			break;
 		chunks = chunks->next;
 	}
-	// uint8_t *digest;
-	// digest = ft_append_128bit(a0, b0, c0, b0);
-	printf("a0|%x|\nb0|%x|\nc0|%x|\nd0|%x|\n", a0,b0,c0,d0);
+	uint32_t input[4] = {a0, b0, c0, d0};
+	uint8_t *digest;
+	printf("a0|%02x|\nb0|%02x|\nc0|%02x|\nd0|%02x|\n", a0,b0,c0,d0);
+	digest = ft_append_128bit(input);
+	printf("val is |");
 	//TO FIX OUTPUT IS BAD ASK FOR ALGO HELP
-	// for(int i = 0; i < 16; i++)
-	// {
-	// 	printf("%x",digest[i]);
-	// }
+	for(int i = 0; i < 16; i++)
+	{
+		printf("%02x",digest[i]);
+	}
 	printf("|\n");
 	return 0;
 }
