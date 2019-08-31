@@ -58,7 +58,6 @@ uint8_t		*ft_append_128bit(uint32_t *input)
 
 uint8_t		*md5_hash(t_list *chunks)
 {
-	t_md5v		*md5Vr;
 	uint32_t	*words;
 	uint8_t		*chunk;
 	
@@ -66,17 +65,16 @@ uint8_t		*md5_hash(t_list *chunks)
 	uint32_t	i;
 	uint32_t	g;
 	uint32_t	F;
-	uint32_t	a0 = A0;
-	uint32_t	b0 = B0;
-	uint32_t	c0 = C0;
-	uint32_t	d0 = D0;
+	uint32_t	a0 = 0x67452301;
+	uint32_t	b0 = 0xefcdab89;
+	uint32_t	c0 = 0x98badcfe;
+	uint32_t	d0 = 0x10325476;
 	uint32_t	A = a0;
 	uint32_t	B = b0;
 	uint32_t	C = c0;
 	uint32_t	D = d0;
 	uint32_t	R;
 	chunk = NULL;
-	md5Vr = malloc(sizeof(t_md5v));
 
 	while(1)
 	{
