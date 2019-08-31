@@ -17,7 +17,8 @@
 # include <fcntl.h>
 # include <stdint.h>
 # include <string.h>
-# define MD5_BYTES 64
+# define MD5_BYTES	64
+# define SHA256		256
 # define CI_COM {'r','q','p','s'}
 # define HS_COM {"md5", "sha256"}
 # define HS_SZ 2
@@ -52,7 +53,8 @@ typedef struct		s_md5v
 	uint8_t			output[16]; //this is 128bit all together
 }					t_md5v;
 
-t_uint128_t			md5_hash(t_list *chunks);
+typedef	uint8_t		*t_hash_algo(t_list *list);
+uint8_t				*md5_hash(t_list *chunks);
 int					ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list);
 int					ci_set(char **str, int lim ,int *i, t_flag **flags);
 void				ft_lstaddend(t_list **alst, t_list *new);

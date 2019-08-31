@@ -56,7 +56,7 @@ uint8_t		*ft_append_128bit(uint32_t *input)
 	return output;
 }
 
-t_uint128_t		md5_hash(t_list *chunks)
+uint8_t		*md5_hash(t_list *chunks)
 {
 	t_md5v		*md5Vr;
 	uint32_t	*words;
@@ -82,12 +82,12 @@ t_uint128_t		md5_hash(t_list *chunks)
 	{
 		i = 0;
 		chunk = chunks->content;
-		// ft_printf("chunk is |%s|\n", chunk);
+		ft_printf("chunk is |%s|\n", chunk);
 		words = split_32bitwords(chunk);
-		// for(int i = 0; i < 16; i++)
-		// {
-		// 	ft_printf("word[%d] are in hex |%x|\n", i, words[i]);
-		// }
+		for(int z = 0; z < 16; z++)
+		{
+			ft_printf("word[%d] are in hex |%x|\n", z, words[z]);
+		}
 		while(i < 64)
 		{
 			if(i <= 15)
