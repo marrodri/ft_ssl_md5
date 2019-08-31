@@ -13,7 +13,7 @@
 #ifndef SSL_H
 # define SSL_H
 # include "./libft/libft.h"
-# include "./Includes/ft_printf/ft_printf.h"
+# include "./libft/ft_printf.h"
 # include <fcntl.h>
 # include <stdint.h>
 # include <string.h>
@@ -31,7 +31,6 @@
 # define H_DIG(B,C,D) (B ^ C ^ D)
 # define I_DIG(B,C,D) (C ^ (B | (~D)))
 # define R_LEFT(F,S) ((F << S) | (F >> (32 - S)))
-# include <stdio.h>
 
 typedef __uint128_t	t_uint128_t;
 

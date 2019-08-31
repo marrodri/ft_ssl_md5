@@ -29,7 +29,7 @@ int		ci_checker(char *input, int *j)
 	int i;
 	const char ci_flags[CI_SZ] = CI_COM;
 	i = 0;
-	printf("input is %c\n", input[1]);
+	ft_printf("input is %c\n", input[1]);
 
 	while(i < CI_SZ)
 	{
@@ -40,7 +40,7 @@ int		ci_checker(char *input, int *j)
 		}
 		i++;
 	}
-	printf("0 returned\n");
+	ft_printf("0 returned\n");
 	return 0;
 }
 
@@ -73,8 +73,8 @@ int		ci_set(char **str, int lim ,int *i, t_flag **flags)
 		return (1);
 	else
 	{
-		printf("%s: illegal option -- %c\n",str[1] ,str[*i - 1][1]);
-		printf("usage: %s [-pqr] [-s string] [files ...]", str[1]);
+		ft_printf("%s: illegal option -- %c\n",str[1] ,str[*i - 1][1]);
+		ft_printf("usage: %s [-pqr] [-s string] [files ...]", str[1]);
 		return (0);
 	}
 }

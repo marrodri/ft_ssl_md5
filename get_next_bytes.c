@@ -18,14 +18,14 @@ void	print_list(t_list **list)
 	t_list *tmp;
 	static int i = 0;
 	tmp = *list;
-	// printf("######session %d########\n",i);
+	// ft_printf("######session %d########\n",i);
 	while(tmp)
 	{
-		// printf("chunk is |%s|\n", tmp->content);
+		// ft_printf("chunk is |%s|\n", tmp->content);
 		tmp = tmp->next;
 	}
 	i++;
-	// printf("^^^^^EXIT CHECK^^^^^^^\n");
+	// ft_printf("^^^^^EXIT CHECK^^^^^^^\n");
 }
 
 int check_last8bytes(uint8_t *chunk, int bytes)
@@ -60,12 +60,12 @@ int check_last8bytes(uint8_t *chunk, int bytes)
 // 	while(i > 0)
 // 	{
 // 		tmp = *str[i - 1];
-// 		printf("tmp = |%x|\n", tmp);
+// 		ft_printf("tmp = |%x|\n", tmp);
 // 		*str[i] = tmp;
 // 		i--;
 // 	}
 // 	*str[i] = val;
-// 	printf("val is %x\n", *str[i]);
+// 	ft_printf("val is %x\n", *str[i]);
 // 	// return **str;
 // }
 
@@ -78,7 +78,7 @@ uint64_t byte_length(uint64_t val)
 		val = val >> 8;
 		i++;
 	}
-	printf("lim is |%d|\n", i);
+	ft_printf("lim is |%d|\n", i);
 	return i;
 }
 
@@ -94,9 +94,9 @@ uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 	while (i < bytes && lim)
 	{
 		tmp = bit_len;
-		printf("bit len is |%llx| \n", bit_len);
+		ft_printf("bit len is |%llx| \n", bit_len);
 		tmp = bit_len >> push;
-		printf("push is |%lld| and tmp is |%llx|\n", push, tmp);
+		ft_printf("push is |%lld| and tmp is |%llx|\n", push, tmp);
 		chunk[i] = 0x00 | tmp;
 
 		i++;
@@ -105,7 +105,7 @@ uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 	}
 	for(i = 0; i < bytes; i++)
 	{
-		printf("chunk[%d] is |%x| or c|%c|\n", i, chunk[i], chunk[i]);
+		ft_printf("chunk[%d] is |%x| or c|%c|\n", i, chunk[i], chunk[i]);
 	}
 	return (chunk);
 }
@@ -174,8 +174,8 @@ int		ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 	byte_len = 0;
 	while((ret = read(fd, buff, bytes)) > 0)
 	{
-		// printf("ret is %d\n", ret);
-		// printf("buff is |%s|\n", buff);
+		// ft_printf("ret is %d\n", ret);
+		// ft_printf("buff is |%s|\n", buff);
 		tmp = ft_memalloc(bytes);
 		tmp = ft_memcpy(tmp, buff, bytes);
 		byte_len = byte_len + ret;
@@ -187,13 +187,13 @@ int		ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 		{
 			chunk++;
 			bit_len = byte_len * 8;
-			printf("bit_len is |%llu|\n", bit_len);
-			// printf("ret is less than %d bytes appending!!!\n", bytes);
+			ft_printf("bit_len is |%llu|\n", bit_len);
+			// ft_printf("ret is less than %d bytes appending!!!\n", bytes);
 			//append then check if it the last 8 bytes are 0s or not
 			tmp = ft_append_bytes(tmp, ret, bytes);
 			if(!check_last8bytes(tmp, bytes))
 			{
-				// printf("(((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
+				// ft_printf("(((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
 				add_new_chunk(list, tmp, bytes);
 				//tmp modded affects everyones node
 				extra = ft_memalloc(bytes);

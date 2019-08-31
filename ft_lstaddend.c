@@ -18,12 +18,12 @@ void ft_lstaddend(t_list **alst, t_list *new)
 	t_list *tmp;
 
 	tmp = *alst;
-	// printf("beg content is |%s|\n", tmp->content);
+	// ft_printf("beg content is |%s|\n", tmp->content);
 	while(tmp->next)
 	{
 		tmp = tmp->next;
 	}
 	tmp->next = new;
-	// printf("after setting node tmp content is |%s|\n", tmp->content);
-	// printf("NEW NODE ADDED AT THE END!++++++");
+	// ft_printf("after setting node tmp content is |%s|\n", tmp->content);
+	// ft_printf("NEW NODE ADDED AT THE END!++++++");
 }

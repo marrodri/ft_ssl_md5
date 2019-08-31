@@ -16,7 +16,7 @@ NAME = ft_ssl
 CFLAGS += -Wall -Wextra -Werror
 CFLAGS += -I ./Includes/
 CFLAGS += -I ./libft
-# CFLAGS += -I includes/ft_printf
+CFLAGS += -I /Includes/ft_printf/libft
 RM = rm -f
 HDR = ./Includes/
 

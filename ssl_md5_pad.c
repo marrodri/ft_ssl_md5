@@ -39,7 +39,7 @@ uint32_t		*split_32bitwords(uint8_t *chunk)
 	while (i < 16)
 	{
 		words[i] = ft_32bitpad(chunk, &j);
-		// printf("dec is|%u| hex is|%x|\n", words[i]);
+		// ft_printf("dec is|%u| hex is|%x|\n", words[i]);
 		i++;
 	}
 	return words;

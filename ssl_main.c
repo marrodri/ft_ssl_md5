@@ -27,7 +27,7 @@ int		cmmnd_checker(char *str)
 		}
 		i++;
 	}
-	printf("ft_ssl: Error: '%s' is an invalid command.\n\n\
+	ft_printf("ft_ssl: Error: '%s' is an invalid command.\n\n\
 			Standard commands:\n\nMessage Digest commands:\nmd5\
 			\nsha256\n\nCipher commands:\n", str);
 	return (0);
@@ -49,10 +49,11 @@ int		main(int argc, char **argv)
 	flags = malloc(sizeof(t_flag));
 	hash = malloc(sizeof(t_hash));
 	if (argc == 1)
-		printf("usage: ft_ssl command [command opts] [command args]\n");
+		ft_printf("usage: ft_ssl command [command opts] [command args]\n");
 
 	else if(cmmnd_checker(argv[1]) && ci_set(argv, argc, &i, &flags))
 	{
+		ft_printf("ft_printf must be working\n");
 		if (argc == 2 || flags->ci_flags[2])
 		{
 			fd = 0;
@@ -61,17 +62,17 @@ int		main(int argc, char **argv)
 			hash->md_128bit = md5_hash(list);
 			// free(list);
 		}
-		printf("i is %d\n", i);
+		ft_printf("i is %d\n", i);
 		while(i <= argc && argc != 2)
 		{
 			if(flags->ci_flags[3] == 1) //-s input activated
 			{
 				if(argv[i])
-					printf("read string %s\n", argv[i]);
+					ft_printf("read string %s\n", argv[i]);
 				else
 				{
-					printf("%s: option requires an argument --s\n", argv[1]);
-					printf("usage: %s [-pqr] [-s string] [files ...]\n", argv[1]);
+					ft_printf("%s: option requires an argument --s\n", argv[1]);
+					ft_printf("usage: %s [-pqr] [-s string] [files ...]\n", argv[1]);
 				}
 				flags->ci_flags[3] = 0;
 			}
@@ -80,18 +81,18 @@ int		main(int argc, char **argv)
 				fd = open(argv[i], O_RDONLY);
 				if (fd == -1 && argv[i])
 				{
-					printf("md5: %s: No such file or directory\n", argv[i]);
+					ft_printf("md5: %s: No such file or directory\n", argv[i]);
 				}
 				else if(argv[i])
 				{
-					// printf("read args fd is %d\n", fd);
+					// ft_printf("read args fd is %d\n", fd);
 					if(!flags->ci_flags[0] && !flags->ci_flags[1])
-						printf("%s (%s) = ", argv[1], argv[i]);
+						ft_printf("%s (%s) = ", argv[1], argv[i]);
 					bytes = MD5_BYTES;
 					hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
 					hash->md_128bit = md5_hash(list);
 					if(flags->ci_flags[0])
-						printf(" %s\n", argv[i]);
+						ft_printf(" %s\n", argv[i]);
 				}
 			}
 			i++;
