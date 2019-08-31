@@ -23,14 +23,14 @@ int		cmmnd_checker(char *str)
 	{
 		if(!strcmp(str, hash_algo[i]))
 		{
-			return (1);
+			return (i);
 		}
 		i++;
 	}
 	ft_printf("ft_ssl: Error: '%s' is an invalid command.\n\n\
 			Standard commands:\n\nMessage Digest commands:\nmd5\
 			\nsha256\n\nCipher commands:\n", str);
-	return (0);
+	return (-1);
 }
 
 int		main(int argc, char **argv)
@@ -41,7 +41,7 @@ int		main(int argc, char **argv)
 	t_list	*list;
 	int 	bytes;
 	int 	i;
-
+	int		input;
 	if(argc == 2)
 		i = 1;
 	else
@@ -51,7 +51,7 @@ int		main(int argc, char **argv)
 	if (argc == 1)
 		ft_printf("usage: ft_ssl command [command opts] [command args]\n");
 
-	else if(cmmnd_checker(argv[1]) && ci_set(argv, argc, &i, &flags))
+	else if((input = cmmnd_checker(argv[1])) != -1 && ci_set(argv, argc, &i, &flags))
 	{
 		ft_printf("ft_printf must be working\n");
 		if (argc == 2 || flags->ci_flags[2])
@@ -59,7 +59,7 @@ int		main(int argc, char **argv)
 			fd = 0;
 			bytes = MD5_BYTES;
 			hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
-			hash->md_128bit = md5_hash(list);
+			hash->md_128bit = hash_func(input, list);
 			// free(list);
 		}
 		ft_printf("i is %d\n", i);
@@ -90,7 +90,7 @@ int		main(int argc, char **argv)
 						ft_printf("%s (%s) = ", argv[1], argv[i]);
 					bytes = MD5_BYTES;
 					hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
-					hash->md_128bit = md5_hash(list);
+					hash->md_128bit = hash_func(input, list);
 					if(flags->ci_flags[0])
 						ft_printf(" %s\n", argv[i]);
 				}
