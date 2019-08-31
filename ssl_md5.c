@@ -106,7 +106,7 @@ t_uint128_t		md5_hash(t_list *chunks)
 			if(i <= 15)
 			{
 				F = F_DIG(B,C,D);
-				printf("F i.%d is |%x|\n", i, F);
+				// printf("F i.%d is |%x|\n", i, F);
 				g = i;
 			}
 			else if(i >= 16 && i <= 31)
@@ -130,12 +130,12 @@ t_uint128_t		md5_hash(t_list *chunks)
 			C = B;
 			R = R_LEFT(F, g_md5_s[i]);
 			B = B + R;
-			printf("hasshed F|%x|\n", F);
-			printf("A|%x|\n", A);
-			printf("D|%x|\n", D);
-			printf("C|%x|\n", C);
-			printf("rotation left|%x|\n", R);
-			printf("Rotated B|%x|\n", B);
+			// printf("hasshed F|%x|\n", F);
+			// printf("A|%x|\n", A);
+			// printf("D|%x|\n", D);
+			// printf("C|%x|\n", C);
+			// printf("rotation left|%x|\n", R);
+			// printf("Rotated B|%x|\n", B);
 			i++;
 		}
 		a0 = a0 + A;

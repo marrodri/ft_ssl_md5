@@ -44,21 +44,57 @@ int check_last8bytes(uint8_t *chunk, int bytes)
 	return (1);
 }
 
-uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
+void ft_pushstr(uint8_t **str, uint8_t val, int n)
 {
 	int i;
-	int dif;
+	uint8_t tmp;
 
-	i = bytes - 1;
-	dif = bytes - 8;
-	while (i >= dif)
+	i = 0;
+	if (n == 0)
+		return ;
+	while(i < (n - 1))
 	{
-		// printf("bit len is |%llx|\n", bit_len);
-		chunk[i] = chunk[i] | bit_len;
-		bit_len = bit_len >> 8;
+		i++;
+	}
+	while(i > 0)
+	{
+		tmp = *str[i - 1];
+		// printf();
+		*str[i] = tmp;
 		i--;
 	}
-	return (chunk);
+	*str[i] = val;
+	// return **str;
+}
+
+uint8_t *ft_append_bitlen(uint8_t **chunk, int bytes, uint64_t bit_len)
+{
+	int i;
+	int pos;
+	uint64_t push;
+	uint8_t val;
+	pos = bytes - 9;
+	i = bytes - 9;
+	printf("pos |%d|\n", pos);
+	push = 0;
+	while (i < bytes)
+	{
+		val = 0;
+		printf("bit len is |%llx| \n", bit_len);
+		val = *chunk[i] | bit_len;
+		bit_len = bit_len >> 8;
+		if(push == 0)
+			*chunk[i] = val;
+		else
+			ft_pushstr(&(chunk[pos]), val, push);
+		i++;
+		push++;
+	}
+	for(i = (bytes - 9); i < bytes; i++)
+	{
+		printf("byte[%d]:%x\n", i, *chunk[i]);
+	}
+	return (*chunk);
 }
 
 //wrong fixt this logic
@@ -138,7 +174,7 @@ int		ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 		{
 			chunk++;
 			bit_len = byte_len * 8;
-			// printf("bit_len is |%llu|\n", bit_len);
+			printf("bit_len is |%llu|\n", bit_len);
 			// printf("ret is less than %d bytes appending!!!\n", bytes);
 			//append then check if it the last 8 bytes are 0s or not
 			tmp = ft_append_bytes(tmp, ret, bytes);
@@ -149,12 +185,12 @@ int		ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 				//tmp modded affects everyones node
 				extra = ft_memalloc(bytes);
 				ft_bzero(extra, bytes);
-				extra = ft_append_bitlen(extra, bytes, bit_len);
+				extra = ft_append_bitlen(&extra, bytes, bit_len);
 				add_new_chunk(list, extra, bytes);
 				return chunk;
 			}
 			else
-				tmp = ft_append_bitlen(tmp, bytes, bit_len);
+				tmp = ft_append_bitlen(&tmp, bytes, bit_len);
 		}
 		add_new_chunk(list, tmp, bytes);
 	}
