@@ -44,12 +44,12 @@ uint8_t		*ft_append_128bit(uint32_t *input)
 	uint32_t j;
 	i = 0;
 	j = 0;
-	while(j < 4)
+	while(j < 16)
 	{
 		output[j] = (input[i] & 0xff);
-		output[j + 1] = ((input[i] >> 8) & 0xff);
-		output[j + 2] = ((input[i] >> 16) & 0xff);
-		output[j + 3] = ((input[i] >> 24) & 0xff);
+		output[j + 1] = ((input[i] >> 8) | 0x00);
+		output[j + 2] = ((input[i] >> 16) | 0x00);
+		output[j + 3] = ((input[i] >> 24) | 0x00);
 		j+= 4;
 		i++;
 	}
