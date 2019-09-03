@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-char	*ft_strupper(char *str)
+char	*ft_strupper(char *str)   
 {
 	int i;
 

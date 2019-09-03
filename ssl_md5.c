@@ -59,6 +59,7 @@ uint8_t		*ft_append_128bit(uint32_t *input)
 uint8_t		*md5_hash(t_list *chunks)
 {
 	uint32_t	*words;
+	uint32_t	*test;
 	uint8_t		*chunk;
 	
 
@@ -80,6 +81,8 @@ uint8_t		*md5_hash(t_list *chunks)
 	{
 		i = 0;
 		chunk = chunks->content;
+		test = (uint32_t*)(chunk);
+		ft_printf("test is %x\n", test[0]);
 		ft_printf("chunk is |%s|\n", chunk);
 		words = split_32bitwords(chunk);
 		for(int z = 0; z < 16; z++)
