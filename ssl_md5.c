@@ -81,10 +81,17 @@ uint8_t		*md5_hash(t_list *chunks)
 	{
 		i = 0;
 		chunk = chunks->content;
+
+		//use this to separate the 32bit chunk appropriately;
+		//your word
 		test = (uint32_t*)(chunk);
-		ft_printf("test is %x\n", test[0]);
+		for(int j = 0; j < 16; j++)
+		{
+			ft_printf("test[%d] is |%x|\n", j, test[j]);
+		}
+		
 		ft_printf("chunk is |%s|\n", chunk);
-		words = split_32bitwords(chunk);
+		words = (uint32_t*)(chunk);
 		for(int z = 0; z < 16; z++)
 		{
 			ft_printf("word[%d] are in hex |%x|\n", z, words[z]);
