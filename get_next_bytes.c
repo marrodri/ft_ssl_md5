@@ -89,9 +89,9 @@ uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 	uint64_t tmp;
 	uint64_t lim;
 	lim = byte_length(bit_len);
-	i = bytes - 8;
-	push = (lim - 1) * 8;
-	while (i < bytes && lim)
+	i = (bytes - 8) + lim;
+	push = (lim) * 8;
+	while (i >= 56)
 	{
 		tmp = bit_len;
 		ft_printf("bit len is |%llx| \n", bit_len);
@@ -99,9 +99,9 @@ uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 		ft_printf("push is |%lld| and tmp is |%llx|\n", push, tmp);
 		//change here chunk[i] to chunk[i + len]
 		chunk[i] = 0x00 | tmp;
-		i++;
+		i--;
 		push -= 8;
-		lim--;
+		// lim--;
 	}
 	for(i = 0; i < bytes; i++)
 	{
