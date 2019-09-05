@@ -17,7 +17,6 @@
 # include <fcntl.h>
 # include <stdint.h>
 # define MD5_BYTES			64
-# define SHA512_BYTES		128
 # define CI_COM {'r','q','p','s'}
 # define HS_COM {"md5", "sha256"}
 # define HS_SZ 2

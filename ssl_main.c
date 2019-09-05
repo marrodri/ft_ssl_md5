@@ -59,7 +59,6 @@ int		main(int argc, char **argv)
 			bytes = MD5_BYTES;
 			hash_v->chunk_len = set_bytes_fd(fd, bytes, &list);
 			hash_v->md_128bit = hash_func(input, list, hash_v);
-			// free(list);
 		}
 		while(i <= argc && argc != 2)
 		{
