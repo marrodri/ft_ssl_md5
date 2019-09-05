@@ -17,7 +17,7 @@
 # include <fcntl.h>
 # include <stdint.h>
 # define MD5_BYTES			64
-# define SHA256_BYTES		128
+# define SHA512_BYTES		128
 # define CI_COM {'r','q','p','s'}
 # define HS_COM {"md5", "sha256"}
 # define HS_SZ 2
@@ -27,8 +27,6 @@
 # define H_DIG(B,C,D) (B ^ C ^ D)
 # define I_DIG(B,C,D) (C ^ (B | (~D)))
 # define R_LEFT(F,S) ((F << S) | (F >> (32 - S)))
-
-typedef __uint128_t	t_uint128_t;
 
 typedef struct		s_flag
 {
@@ -40,6 +38,7 @@ typedef struct		s_hash
 	int				chunk_len;
 	uint8_t			*mssg;
 	uint8_t			*md_128bit;
+	uint8_t			*md_256bit;
 	uint32_t		a0;
 	uint32_t		b0;
 	uint32_t		c0;
@@ -50,7 +49,6 @@ typedef struct		s_hash
 	uint32_t		d_bf;
 	uint32_t		g;
 	uint32_t		f;
-	t_uint128_t		*md_256bit;
 }					t_hash;
 
 typedef struct		s_byte
