@@ -47,9 +47,9 @@ uint8_t		*ft_append_128bit(uint32_t *input)
 	while(j < 16)
 	{
 		output[j] = (input[i] & 0xff);
-		output[j + 1] = ((input[i] >> 8) | 0x00);
-		output[j + 2] = ((input[i] >> 16) | 0x00);
-		output[j + 3] = ((input[i] >> 24) | 0x00);
+		output[j + 1] = ((input[i] >> 8) & 0xff);
+		output[j + 2] = ((input[i] >> 16) & 0xff);
+		output[j + 3] = ((input[i] >> 24) & 0xff);
 		j+= 4;
 		i++;
 	}
@@ -94,7 +94,7 @@ uint8_t		*md5_hash(t_list *chunks)
 		words = (uint32_t*)(chunk);
 		for(int z = 0; z < 16; z++)
 		{
-			ft_printf("word[%d] are in hex |%x|\n", z, words[z]);
+			ft_printf("word[%d] are in hex |%02x|\n", z, words[z]);
 		}
 		while(i < 64)
 		{
