@@ -159,7 +159,7 @@ void	add_new_chunk(t_list **list, uint8_t *chunk, int bytes)
 	print_list(list);
 }
 
-int		ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
+int		set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 {
 	uint32_t ret; //32bit as 4byte
 	uint8_t buff[bytes]; //8bit as 1 byte
@@ -168,7 +168,8 @@ int		ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 	int chunk;
 	uint8_t *tmp;
 	uint8_t *extra;
-	ft_bzero(buff, bytes);
+
+	// ft_bzero(buff, bytes);
 	bit_len = 0;
 	chunk = 0;
 	byte_len = 0;
@@ -207,8 +208,22 @@ int		ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 		}
 		add_new_chunk(list, tmp, bytes);
 	}
+	if(byte_len % bytes == 0)
+	{
+		ft_printf("we got congruent %d, setting new node to append", bytes);
+		tmp = ft_memalloc(bytes);
+		ft_bzero(tmp, bytes);
+		tmp[0] = 0x80;
+		chunk++;
+		bit_len = byte_len * 8;
+		tmp = ft_append_bitlen(tmp, bytes, bit_len);
+		add_new_chunk(list, tmp, bytes);
+
+	}
 	return (chunk);
 }
+
+// if (byte_len % bytes = 0 then set another linked list content with x80, 00s and bit len in the last 8 bytes)
 
 // int ft_set_bytes_str(char *str, uint32_t bytes, t_list **list)
 // {

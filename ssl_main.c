@@ -58,7 +58,7 @@ int		main(int argc, char **argv)
 		{
 			fd = 0;
 			bytes = MD5_BYTES;
-			hash_v->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
+			hash_v->chunk_len = set_bytes_fd(fd, bytes, &list);
 			hash_v->md_128bit = hash_func(input, list, hash_v);
 			// free(list);
 		}
@@ -85,11 +85,10 @@ int		main(int argc, char **argv)
 				}
 				else if(argv[i])
 				{
-					// ft_printf("read args fd is %d\n", fd);
 					if(!flags->ci_flags[0] && !flags->ci_flags[1])
 						ft_printf("%s (%s) = ", argv[1], argv[i]);
 					bytes = MD5_BYTES;
-					hash_v->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
+					hash_v->chunk_len = set_bytes_fd(fd, bytes, &list);
 					hash_v->md_128bit = hash_func(input, list, hash_v);
 					if(flags->ci_flags[0])
 						ft_printf(" %s\n", argv[i]);

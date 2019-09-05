@@ -54,11 +54,16 @@ typedef struct		s_hash
 	t_uint128_t		*md_256bit;
 }					t_hash;
 
+typedef struct		s_byte
+{
+	uint32_t		ret;
+}					t_byte;
+
 typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);
 uint8_t				*hash_func(int input, t_list *list, t_hash *hash_v);
 uint8_t				*md5_hash(t_list *chunks, t_hash *hash_v);
 uint8_t				*sha256_algo(t_list *list, t_hash *hash_v);
-int					ft_set_bytes_fd(const int fd, uint32_t bytes, t_list **list);
+int					set_bytes_fd(const int fd, uint32_t bytes, t_list **list);
 int					ci_set(char **str, int lim, int *i, t_flag **flags);
 void				ft_lstaddend(t_list **alst, t_list *new);
 uint32_t			ft_32bitpad(uint8_t *chunk, int *j);
