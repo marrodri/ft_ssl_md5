@@ -39,11 +39,11 @@ const uint32_t	g_md5_s[64] =
 uint8_t		*ft_append_128bit(uint32_t *input)
 {
 	static uint8_t	output[16]; //unsigned char
-
 	uint32_t i;
 	uint32_t j;
 	i = 0;
 	j = 0;
+
 	while(j < 16)
 	{
 		output[j] = (input[i] & 0xff);
@@ -67,22 +67,9 @@ void	md5_buff_init(t_hash *hash_v)
 uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 {
 	uint32_t	*words;
-	uint32_t	*test;
 	uint8_t		*chunk;
-	
-
 	uint32_t	i;
 	uint32_t	g;
-	// uint32_t	F;
-	// uint32_t	a0 = 0x67452301;
-	// uint32_t	b0 = 0xefcdab89;
-	// uint32_t	c0 = 0x98badcfe;
-	// uint32_t	d0 = 0x10325476;
-	// uint32_t	A = a0;
-	// uint32_t	B = b0;
-	// uint32_t	C = c0;
-	// uint32_t	D = d0;
-	// uint32_t	R;
 
 	md5_buff_init(hash_v);
 	hash_v->a_bf = hash_v->a0;
@@ -96,15 +83,6 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 	{
 		i = 0;
 		chunk = chunks->content;
-
-		//use this to separate the 32bit chunk appropriately;
-		//your word
-		test = (uint32_t*)(chunk);
-		for(int j = 0; j < 16; j++)
-		{
-			ft_printf("test[%d] is |%x|\n", j, test[j]);
-		}
-		
 		ft_printf("chunk is |%s|\n", chunk);
 		words = (uint32_t*)(chunk);
 		for(int z = 0; z < 16; z++)
@@ -116,7 +94,6 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 			if(i <= 15)
 			{
 				hash_v->f = F_DIG(hash_v->b_bf, hash_v->c_bf, hash_v->d_bf);
-				// ft_printf("F i.%d is |%x|\n", i, F);
 				g = i;
 			}
 			else if(i >= 16 && i <= 31)
@@ -138,7 +115,6 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 			hash_v->a_bf = hash_v->d_bf;
 			hash_v->d_bf = hash_v->c_bf;
 			hash_v->c_bf = hash_v->b_bf;
-			// R = R_LEFT(hash_v->f, g_md5_s[i]);
 			hash_v->b_bf = hash_v->b_bf + R_LEFT(hash_v->f, g_md5_s[i]);
 			// ft_printf("hasshed F|%x|\n", F);
 			// ft_printf("A|%x|\n", A);
@@ -165,7 +141,6 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 	ft_printf("a0|%02x|\nb0|%02x|\nc0|%02x|\nd0|%02x|\n", hash_v->a0,hash_v->b0,hash_v->c0,hash_v->d0);
 	digest = ft_append_128bit(input);
 	ft_printf("val is |");
-	//TO FIX OUTPUT IS BAD ASK FOR ALGO HELP
 	for(int i = 0; i < 16; i++)
 	{
 		ft_printf("%02x",digest[i]);

@@ -16,9 +16,8 @@
 # include "./libft/ft_printf.h"
 # include <fcntl.h>
 # include <stdint.h>
-# include <string.h>
-# define MD5_BYTES	64
-# define SHA256		256
+# define MD5_BYTES			64
+# define SHA256_BYTES		128
 # define CI_COM {'r','q','p','s'}
 # define HS_COM {"md5", "sha256"}
 # define HS_SZ 2
@@ -57,6 +56,10 @@ typedef struct		s_hash
 typedef struct		s_byte
 {
 	uint32_t		ret;
+	uint8_t			*buff;
+	uint32_t		byte_len;
+	uint64_t		bit_len;
+	uint8_t			*byte512_chunk;
 }					t_byte;
 
 typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);

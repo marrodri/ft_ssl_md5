@@ -12,7 +12,6 @@
 
 #include "ssl.h"
 
-//TODO IMPORTANT CHANGE ALL FUNCTIONS TO FT_FUNCTIONS
 int		cmmnd_checker(char *str)
 {
 	int			i;
@@ -42,6 +41,7 @@ int		main(int argc, char **argv)
 	int 	bytes;
 	int 	i;
 	int		input;
+
 	if(argc == 2)
 		i = 1;
 	else
@@ -53,7 +53,6 @@ int		main(int argc, char **argv)
 
 	else if((input = cmmnd_checker(argv[1])) != -1 && ci_set(argv, argc, &i, &flags))
 	{
-		ft_printf("ft_printf must be working\n");
 		if (argc == 2 || flags->ci_flags[2])
 		{
 			fd = 0;
@@ -62,7 +61,6 @@ int		main(int argc, char **argv)
 			hash_v->md_128bit = hash_func(input, list, hash_v);
 			// free(list);
 		}
-		ft_printf("i is %d\n", i);
 		while(i <= argc && argc != 2)
 		{
 			if(flags->ci_flags[3] == 1) //-s input activated
@@ -99,8 +97,3 @@ int		main(int argc, char **argv)
 	}
 	return (0);
 }
-
-// 1197802110e5c9dd997961cb10e5c9dd
-
-//33 to 32 byte change the output, fix the preprocessing
-// 8dc0b073d16f4394eb2ed553d16f4394

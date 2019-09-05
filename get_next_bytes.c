@@ -169,14 +169,11 @@ int		set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 	uint8_t *tmp;
 	uint8_t *extra;
 
-	// ft_bzero(buff, bytes);
 	bit_len = 0;
 	chunk = 0;
 	byte_len = 0;
 	while((ret = read(fd, buff, bytes)) > 0)
 	{
-		// ft_printf("ret is %d\n", ret);
-		// ft_printf("buff is |%s|\n", buff);
 		tmp = ft_memalloc(bytes);
 		tmp = ft_memcpy(tmp, buff, bytes);
 		byte_len = byte_len + ret;
@@ -186,17 +183,15 @@ int		set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 		}
 		if (ret < bytes)
 		{
+			// ft_printf("ret is less than %d bytes appending!!!\n", bytes);
 			chunk++;
 			bit_len = byte_len * 8;
 			ft_printf("bit_len is |%llu|\n", bit_len);
-			// ft_printf("ret is less than %d bytes appending!!!\n", bytes);
-			//append then check if it the last 8 bytes are 0s or not
 			tmp = ft_append_bytes(tmp, ret, bytes);
 			if(!check_last8bytes(tmp, bytes))
 			{
 				// ft_printf("(((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
 				add_new_chunk(list, tmp, bytes);
-				//tmp modded affects everyones node
 				extra = ft_memalloc(bytes);
 				ft_bzero(extra, bytes);
 				extra = ft_append_bitlen(extra, bytes, bit_len);
@@ -218,7 +213,6 @@ int		set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 		bit_len = byte_len * 8;
 		tmp = ft_append_bitlen(tmp, bytes, bit_len);
 		add_new_chunk(list, tmp, bytes);
-
 	}
 	return (chunk);
 }
@@ -229,3 +223,15 @@ int		set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 // {
 // 	while
 // }
+
+
+// 2:05 sun
+// 4:36 mon
+// _____
+// 6:41
+// 3:05 tues
+// ---------
+// 9:46
+// 5:00 wed
+// ____
+// 14:46
