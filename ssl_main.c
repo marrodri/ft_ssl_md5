@@ -37,7 +37,7 @@ int		main(int argc, char **argv)
 {
 	int		fd;
 	t_flag	*flags;
-	t_hash	*hash;
+	t_hash	*hash_v;
 	t_list	*list;
 	int 	bytes;
 	int 	i;
@@ -47,7 +47,7 @@ int		main(int argc, char **argv)
 	else
 		i = 2;
 	flags = malloc(sizeof(t_flag));
-	hash = malloc(sizeof(t_hash));
+	hash_v = malloc(sizeof(t_hash));
 	if (argc == 1)
 		ft_printf("usage: ft_ssl command [command opts] [command args]\n");
 
@@ -58,8 +58,8 @@ int		main(int argc, char **argv)
 		{
 			fd = 0;
 			bytes = MD5_BYTES;
-			hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
-			hash->md_128bit = hash_func(input, list);
+			hash_v->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
+			hash_v->md_128bit = hash_func(input, list, hash_v);
 			// free(list);
 		}
 		ft_printf("i is %d\n", i);
@@ -89,8 +89,8 @@ int		main(int argc, char **argv)
 					if(!flags->ci_flags[0] && !flags->ci_flags[1])
 						ft_printf("%s (%s) = ", argv[1], argv[i]);
 					bytes = MD5_BYTES;
-					hash->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
-					hash->md_128bit = hash_func(input, list);
+					hash_v->chunk_len = ft_set_bytes_fd(fd, bytes, &list);
+					hash_v->md_128bit = hash_func(input, list, hash_v);
 					if(flags->ci_flags[0])
 						ft_printf(" %s\n", argv[i]);
 				}

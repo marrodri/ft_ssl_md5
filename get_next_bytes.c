@@ -97,6 +97,7 @@ uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 		ft_printf("bit len is |%llx| \n", bit_len);
 		tmp = bit_len >> push;
 		ft_printf("push is |%lld| and tmp is |%llx|\n", push, tmp);
+		//change here chunk[i] to chunk[i + len]
 		chunk[i] = 0x00 | tmp;
 		i++;
 		push -= 8;

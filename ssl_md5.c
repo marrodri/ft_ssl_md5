@@ -56,7 +56,15 @@ uint8_t		*ft_append_128bit(uint32_t *input)
 	return output;
 }
 
-uint8_t		*md5_hash(t_list *chunks)
+void	md5_buff_init(t_hash *hash_v)
+{
+	hash_v->a0 = 0x67452301;
+	hash_v->b0 = 0xefcdab89;
+	hash_v->c0 = 0x98badcfe;
+	hash_v->d0 = 0x10325476;
+}
+
+uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 {
 	uint32_t	*words;
 	uint32_t	*test;
@@ -65,16 +73,23 @@ uint8_t		*md5_hash(t_list *chunks)
 
 	uint32_t	i;
 	uint32_t	g;
-	uint32_t	F;
-	uint32_t	a0 = 0x67452301;
-	uint32_t	b0 = 0xefcdab89;
-	uint32_t	c0 = 0x98badcfe;
-	uint32_t	d0 = 0x10325476;
-	uint32_t	A = a0;
-	uint32_t	B = b0;
-	uint32_t	C = c0;
-	uint32_t	D = d0;
-	uint32_t	R;
+	// uint32_t	F;
+	// uint32_t	a0 = 0x67452301;
+	// uint32_t	b0 = 0xefcdab89;
+	// uint32_t	c0 = 0x98badcfe;
+	// uint32_t	d0 = 0x10325476;
+	// uint32_t	A = a0;
+	// uint32_t	B = b0;
+	// uint32_t	C = c0;
+	// uint32_t	D = d0;
+	// uint32_t	R;
+
+	md5_buff_init(hash_v);
+	hash_v->a_bf = hash_v->a0;
+	hash_v->b_bf = hash_v->b0;
+	hash_v->c_bf = hash_v->c0;
+	hash_v->d_bf = hash_v->d0;
+
 	chunk = NULL;
 
 	while(1)
@@ -100,31 +115,31 @@ uint8_t		*md5_hash(t_list *chunks)
 		{
 			if(i <= 15)
 			{
-				F = F_DIG(B,C,D);
+				hash_v->f = F_DIG(hash_v->b_bf, hash_v->c_bf, hash_v->d_bf);
 				// ft_printf("F i.%d is |%x|\n", i, F);
 				g = i;
 			}
 			else if(i >= 16 && i <= 31)
 			{
-				F = G_DIG(B,C,D);
+				hash_v->f = G_DIG(hash_v->b_bf, hash_v->c_bf, hash_v->d_bf);
 				g = (0x5 * i + 0x1) % 0x10;
 			}
 			else if(i >= 32 && i <= 47)
 			{
-				F = H_DIG(B,C,D);
+				hash_v->f = H_DIG(hash_v->b_bf, hash_v->c_bf, hash_v->d_bf);
 				g = (0x3 * i + 0x5) % 0x10;
 			}
 			else if(i >= 48 && i <= 63)
 			{
-				F = I_DIG(B,C,D);
+				hash_v->f = I_DIG(hash_v->b_bf, hash_v->c_bf, hash_v->d_bf);
 				g = (0x7 * i) % 0x10;
 			}
-			F = F + A + g_md5_key[i] + words[g];
-			A = D;
-			D = C;
-			C = B;
-			R = R_LEFT(F, g_md5_s[i]);
-			B = B + R;
+			hash_v->f = hash_v->f + hash_v->a_bf + g_md5_key[i] + words[g];
+			hash_v->a_bf = hash_v->d_bf;
+			hash_v->d_bf = hash_v->c_bf;
+			hash_v->c_bf = hash_v->b_bf;
+			// R = R_LEFT(hash_v->f, g_md5_s[i]);
+			hash_v->b_bf = hash_v->b_bf + R_LEFT(hash_v->f, g_md5_s[i]);
 			// ft_printf("hasshed F|%x|\n", F);
 			// ft_printf("A|%x|\n", A);
 			// ft_printf("D|%x|\n", D);
@@ -133,21 +148,21 @@ uint8_t		*md5_hash(t_list *chunks)
 			// ft_printf("Rotated B|%x|\n", B);
 			i++;
 		}
-		A += a0;
-		B += b0;
-		C += c0;
-		D += d0;
-		a0 = A;
-		b0 = B;
-		c0 = C;
-		d0 = D;
+		hash_v->a_bf += hash_v->a0;
+		hash_v->b_bf += hash_v->b0;
+		hash_v->c_bf += hash_v->c0;
+		hash_v->d_bf += hash_v->d0;
+		hash_v->a0 = hash_v->a_bf;
+		hash_v->b0 = hash_v->b_bf;
+		hash_v->c0 = hash_v->c_bf;
+		hash_v->d0 = hash_v->d_bf;
 		if(!chunks->next)
 			break;
 		chunks = chunks->next;
 	}
-	uint32_t input[4] = {a0, b0, c0, d0};
+	uint32_t input[4] = {hash_v->a0, hash_v->b0, hash_v->c0, hash_v->d0};
 	uint8_t *digest;
-	ft_printf("a0|%02x|\nb0|%02x|\nc0|%02x|\nd0|%02x|\n", a0,b0,c0,d0);
+	ft_printf("a0|%02x|\nb0|%02x|\nc0|%02x|\nd0|%02x|\n", hash_v->a0,hash_v->b0,hash_v->c0,hash_v->d0);
 	digest = ft_append_128bit(input);
 	ft_printf("val is |");
 	//TO FIX OUTPUT IS BAD ASK FOR ALGO HELP
