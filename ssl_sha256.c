@@ -30,5 +30,6 @@ uint8_t *sha256_algo(t_list *list, t_hash *hash_v)
 	list = NULL;
 	hash_v = NULL;
 	ft_printf("sha-256 algo implemented\n");
+	
 	return (0);
 }

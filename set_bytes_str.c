@@ -23,19 +23,17 @@ void	set_bytes_str(char *str, uint32_t bytes, t_list **list)
 	i = 0;
 	byte_len = 0;
 	// ft_printf("str is |%s|\n", str);
-	// chunk = (uint8_t*)malloc((bytes) * sizeof(uint8_t));
-	// ft_bzero(chunk, bytes);
 	while (str[byte_len])
 	{
-		if (i % bytes == 0 && i != 0) //fix this
+		if (i % bytes == 0 && i != 0)
 		{
-			ft_printf("!!!!! we got 64 bytes, setting chunk !!!!!!\n");
+			// ft_printf("!!!!! we got 64 bytes, setting chunk !!!!!!\n");
 			i = 0;
 			tmp = ft_memalloc(bytes);
 			tmp = ft_memcpy(tmp, chunk, bytes);
 			ft_bzero(chunk, bytes);
 			add_new_chunk(list, tmp, bytes);
-			ft_printf("chunk is |%s|\n", tmp);
+			// ft_printf("chunk is |%s|\n", tmp);
 		}
 		chunk[i] = str[byte_len];
 		byte_len++;
@@ -47,13 +45,16 @@ void	set_bytes_str(char *str, uint32_t bytes, t_list **list)
 	tmp = ft_memcpy((char*)tmp, (char*)chunk, bytes);
 	// ft_printf("tmp is |%s|\n", tmp); //
 	// ft_printf("chunk is |%s| and i is |%d|\n", chunk, i); //
+	tmp = ft_append_bytes(tmp, i, bytes);
 	// for(int j = 0; j < 64; j++)
 	// {
 	// 	ft_printf("tmp[%d] is |%02x| c|%c|\n", j, tmp[j], tmp[j]);
 	// }
-	if ((i + 1) % bytes == 0)
+
+	// ft_printf("i %d\n", i);
+	if (i % bytes == 0)
 	{
-		ft_printf("chunk is 64 bytes, setting new chunk\n");
+		// ft_printf("chunk is 64 bytes, setting new chunk\n");
 		add_new_chunk(list, tmp, bytes);
 		tmp = ft_memalloc(bytes);
 		tmp = ft_append_bytes(tmp, 0, bytes);
@@ -61,12 +62,11 @@ void	set_bytes_str(char *str, uint32_t bytes, t_list **list)
 		add_new_chunk(list, tmp, bytes);
 	}
 	else
-	{
-		tmp = ft_append_bytes(tmp, i, bytes);
+	{	
 		if(!check_last8bytes(tmp, bytes))
 		{
-			ft_printf("++++last 8 bytes are not empty, setting new chunk++++\n"); //
-			add_new_chunk(list, chunk, bytes);
+			// ft_printf("++++last 8 bytes are not empty, setting new chunk++++\n"); //
+			add_new_chunk(list, tmp, bytes);
 			tmp = ft_memalloc(bytes);
 			ft_bzero(tmp, bytes);
 			tmp = ft_append_bitlen(tmp, bytes, bit_len);
@@ -83,8 +83,20 @@ void	set_bytes_str(char *str, uint32_t bytes, t_list **list)
 			add_new_chunk(list, tmp, bytes);
 		}
 	}
-	ft_printf("chunks set\n");
+	// ft_printf("chunks set\n");
 	return ;
 }
 
+	// if ((i + 1) % bytes == 0)
+	// {
+	// 	ft_printf("chunk is 64 bytes, setting new chunk\n");
+	// 	add_new_chunk(list, tmp, bytes);
+	// 	tmp = ft_memalloc(bytes);
+	// 	tmp = ft_append_bytes(tmp, 0, bytes);
+	// 	tmp = ft_append_bitlen(tmp, bytes, bit_len);
+	// 	add_new_chunk(list, tmp, bytes);
+	// }
+
 // test this run or else it should be bad add more content till 654
+
+// test this run or else it should be bad add more contentt
