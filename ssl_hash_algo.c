@@ -13,6 +13,26 @@
 
 #include "ssl.h"
 
+int		hash_checker(char *str)
+{
+	int			i;
+	const char	*hash_algo[HS_SZ] = HS_COM;
+
+	i = 0;
+	while(i < HS_SZ)
+	{
+		if(!strcmp(str, hash_algo[i]))
+		{
+			return (i);
+		}
+		i++;
+	}
+	ft_printf("ft_ssl: Error: '%s' is an invalid command.\n\n\
+			Standard commands:\n\nMessage Digest commands:\nmd5\
+			\nsha256\n\nCipher commands:\n", str);
+	return (-1);
+}
+
 uint8_t 	*hash_func(int input, t_list *list, t_hash *hash_v)
 {
 	t_hash_algo *hash_arr[HS_SZ];

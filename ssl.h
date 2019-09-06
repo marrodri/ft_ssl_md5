@@ -60,6 +60,7 @@ typedef struct		s_byte
 
 typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);
 uint8_t				*hash_func(int input, t_list *list, t_hash *hash_v);
+int					hash_checker(char *str);
 uint8_t				*md5_hash(t_list *chunks, t_hash *hash_v);
 uint8_t				*sha256_algo(t_list *list, t_hash *hash_v);
 void				set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v);
@@ -67,4 +68,9 @@ int					ci_set(char **str, int lim, int *i, t_flag **flags);
 void				ft_lstaddend(t_list **alst, t_list *new);
 uint32_t			ft_32bitpad(uint8_t *chunk, int *j);
 uint32_t			*split_32bitwords(uint8_t *chunk);
+
+void				s_flag(char **argv, t_flag **flags, t_hash **hash_v, int i);
+void				p_flag(t_flag **flags, t_hash **hash_v);
+void				rq_flag(char **argv, t_flag **flags, t_hash **hash_v, int i);
+void				put_md5hash(uint8_t *md);
 #endif

@@ -24,26 +24,6 @@ void	put_md5hash(uint8_t *md)
 	}
 }
 
-int		cmmnd_checker(char *str)
-{
-	int			i;
-	const char	*hash_algo[HS_SZ] = HS_COM;
-
-	i = 0;
-	while(i < HS_SZ)
-	{
-		if(!strcmp(str, hash_algo[i]))
-		{
-			return (i);
-		}
-		i++;
-	}
-	ft_printf("ft_ssl: Error: '%s' is an invalid command.\n\n\
-			Standard commands:\n\nMessage Digest commands:\nmd5\
-			\nsha256\n\nCipher commands:\n", str);
-	return (-1);
-}
-
 int		main(int argc, char **argv)
 {
 	int		fd;
@@ -54,16 +34,16 @@ int		main(int argc, char **argv)
 	int 	i;
 	int		input;
 
-	if(argc == 2)
+	flags = malloc(sizeof(t_flag));
+	hash_v = malloc(sizeof(t_hash));
+	if (argc == 2)
 		i = 1;
 	else
 		i = 2;
-	flags = malloc(sizeof(t_flag));
-	hash_v = malloc(sizeof(t_hash));
 	if (argc == 1)
 		ft_printf("usage: ft_ssl command [command opts] [command args]\n");
 
-	else if((input = cmmnd_checker(argv[1])) != -1 && ci_set(argv, argc, &i, &flags))
+	else if ((input = hash_checker(argv[1])) != -1 && ci_set(argv, argc, &i, &flags))
 	{
 		if (argc == 2 || flags->ci_flags[2])
 		{
@@ -71,42 +51,50 @@ int		main(int argc, char **argv)
 			bytes = MD5_BYTES;
 			set_bytes_fd(fd, bytes, &list, &hash_v);
 			hash_v->mssg_dig = hash_func(input, list, hash_v);
-			if(flags->ci_flags[2])
-				ft_printf("%s", hash_v->mssg);
-			put_md5hash(hash_v->mssg_dig);
-			ft_printf("\n");
+			// if(flags->ci_flags[2])
+			// 	ft_printf("%s", hash_v->mssg);
+			// put_md5hash(hash_v->mssg_dig);
+			// ft_printf("\n");
+			p_flag(&flags, &hash_v);
 		}
-		while(i <= argc && argc != 2)
+		while (i <= argc && argc != 2)
 		{
-			if(flags->ci_flags[3] == 1) //-s input activated
+			if (flags->ci_flags[3] == 1) //-s input activated
 			{
-				if(argv[i])
-					ft_printf("read string %s\n", argv[i]);
-				else
-				{
-					ft_printf("%s: option requires an argument --s\n", argv[1]);
-					ft_printf("usage: %s [-pqr] [-s string] [files ...]\n", argv[1]);
-				}
-				flags->ci_flags[3] = 0;
+				s_flag(argv, &flags, &hash_v, i);
+				// if (argv[i])
+				// 	ft_printf("read string %s\n", argv[i]);
+				// else
+				// {
+				// 	ft_printf("%s: option requires an argument --s\n", argv[1]);
+				// 	ft_printf("usage: %s [-pqr] [-s string] [files ...]\n", argv[1]);
+				// }
+				// flags->ci_flags[3] = 0;
 			}
 			else
 			{
 				fd = open(argv[i], O_RDONLY);
 				if (fd == -1 && argv[i])
-					ft_printf("md5: %s: No such file or directory\n", argv[i]);
+					ft_printf("%s: %s: No such file or directory\n", argv[1], argv[i]);
 				else if(argv[i])
 				{
-					if(!flags->ci_flags[0] && !flags->ci_flags[1])
-						ft_printf("%s (%s) = ", argv[1], argv[i]);
 					bytes = MD5_BYTES;
 					set_bytes_fd(fd, bytes, &list, &hash_v);
 					hash_v->mssg_dig = hash_func(input, list, hash_v);
-					put_md5hash(hash_v->mssg_dig);
-					if(flags->ci_flags[0])
-						ft_printf(" %s\n", argv[i]);
-					else if(flags->ci_flags[1])
-						ft_printf("\n");
+					rq_flag(argv, &flags, &hash_v, i);
 				}
+				// else if (argv[i])
+				// {
+				// 	if (!flags->ci_flags[0] && !flags->ci_flags[1])
+				// 		ft_printf("%s (%s) = ", ft_strupper(argv[1]), argv[i]);
+				// 	bytes = MD5_BYTES;
+				// 	set_bytes_fd(fd, bytes, &list, &hash_v);
+				// 	hash_v->mssg_dig = hash_func(input, list, hash_v);
+				// 	put_md5hash(hash_v->mssg_dig);
+				// 	if(flags->ci_flags[0])
+				// 		ft_printf(" %s\n", argv[i]);
+				// 	ft_printf("\n");
+				// }
 			}
 			i++;
 		}
