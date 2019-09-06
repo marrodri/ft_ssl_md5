@@ -45,7 +45,11 @@ int		main(int argc, char **argv)
 
 	else if ((input = hash_checker(argv[1])) != -1 && ci_set(argv, argc, &i, &flags))
 	{
-		if (argc == 2 || flags->ci_flags[2])
+		for(int j = 0; j < 4; j++)
+		{
+			ft_printf("flag[%d]=|%d|\n",j,flags->ci_flags[j]);
+		}
+		if (argc == 2 || flags->ci_flags[2] || !argv[i]) //-p flag
 		{
 			fd = 0;
 			bytes = MD5_BYTES;
