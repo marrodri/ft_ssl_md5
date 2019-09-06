@@ -53,9 +53,7 @@ int		main(int argc, char **argv)
 	int 	bytes;
 	int 	i;
 	int		input;
-	int		j;
 
-	j =0;
 	if(argc == 2)
 		i = 1;
 	else
@@ -103,8 +101,11 @@ int		main(int argc, char **argv)
 					bytes = MD5_BYTES;
 					set_bytes_fd(fd, bytes, &list, &hash_v);
 					hash_v->mssg_dig = hash_func(input, list, hash_v);
+					put_md5hash(hash_v->mssg_dig);
 					if(flags->ci_flags[0])
 						ft_printf(" %s\n", argv[i]);
+					else if(flags->ci_flags[1])
+						ft_printf("\n");
 				}
 			}
 			i++;

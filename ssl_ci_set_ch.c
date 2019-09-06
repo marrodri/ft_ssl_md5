@@ -16,7 +16,7 @@ void	init_ci_flags(t_flag **flags)
 {
 	int i;
 
-	i= 0;
+	i = 0;
 	while(i < CI_SZ)
 	{
 		(*flags)->ci_flags[i] = 0;
@@ -29,19 +29,19 @@ int		ci_checker(char *input, int *j)
 	int i;
 	const char ci_flags[CI_SZ] = CI_COM;
 	i = 0;
-	ft_printf("input is %c\n", input[1]);
+	// ft_printf("input is %c\n", input[1]);
 
 	while(i < CI_SZ)
 	{
 		if(ci_flags[i] == input[1])
 		{
 			*j = i;
-			return 1;
+			return (1);
 		}
 		i++;
 	}
-	ft_printf("0 returned\n");
-	return 0;
+	// ft_printf("0 returned\n");
+	return (0);
 }
 
 int		ci_set(char **str, int lim ,int *i, t_flag **flags)

@@ -13,21 +13,6 @@
 #include "ssl.h"
 #include <stdio.h>
 
-void	print_list(t_list **list)
-{
-	t_list *tmp;
-	static int i = 0;
-	tmp = *list;
-	// ft_printf("######session %d########\n",i);
-	while(tmp)
-	{
-		// ft_printf("chunk is |%s|\n", tmp->content);
-		tmp = tmp->next;
-	}
-	i++;
-	// ft_printf("^^^^^EXIT CHECK^^^^^^^\n");
-}
-
 int check_last8bytes(uint8_t *chunk, int bytes)
 {
 	int i;
@@ -44,31 +29,6 @@ int check_last8bytes(uint8_t *chunk, int bytes)
 	return (1);
 }
 
-// void ft_pushstr(uint8_t **str, uint8_t val, int n)
-// {
-// 	int i;
-// 	uint8_t tmp;
-
-// 	i = 0;
-// 	tmp = 0;
-// 	if (n == 0)
-// 		return ;
-// 	while(i < (n - 1))
-// 	{
-// 		i++;
-// 	}
-// 	while(i > 0)
-// 	{
-// 		tmp = *str[i - 1];
-// 		ft_printf("tmp = |%x|\n", tmp);
-// 		*str[i] = tmp;
-// 		i--;
-// 	}
-// 	*str[i] = val;
-// 	ft_printf("val is %x\n", *str[i]);
-// 	// return **str;
-// }
-
 uint64_t byte_length(uint64_t val)
 {
 	int i;
@@ -78,8 +38,7 @@ uint64_t byte_length(uint64_t val)
 		val = val >> 8;
 		i++;
 	}
-	// ft_printf("lim is |%d|\n", i);
-	return i;
+	return (i);
 }
 
 uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
@@ -94,23 +53,14 @@ uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 	while (i >= 56)
 	{
 		tmp = bit_len;
-		// ft_printf("bit len is |%llx| \n", bit_len);
 		tmp = bit_len >> push;
-		// ft_printf("push is |%lld| and tmp is |%llx|\n", push, tmp);
-		//change here chunk[i] to chunk[i + len]
 		chunk[i] = 0x00 | tmp;
 		i--;
 		push -= 8;
-		// lim--;
 	}
-	// for(i = 0; i < bytes; i++)
-	// {
-	// 	ft_printf("chunk[%d] is |%x| or c|%c|\n", i, chunk[i], chunk[i]);
-	// }
 	return (chunk);
 }
 
-//wrong fixt this logic
 uint8_t		*ft_append_bytes(uint8_t *chunk, int ret, int bytes)
 {
 	int i;
@@ -156,7 +106,6 @@ void	add_new_chunk(t_list **list, uint8_t *chunk, int bytes)
 		*list = new_chunk;
 	else
 		ft_lstaddend(list, new_chunk);
-	print_list(list);
 }
 
 void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
@@ -172,7 +121,8 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 	bit_len = 0;
 	chunk = 0;
 	byte_len = 0;
-	// (*hash_v)->mssg = ft_strnew(1);
+	(*hash_v)->mssg = NULL;
+	// ft_bzero((*hash_v)->mssg, 1);
 	while((ret = read(fd, buff, bytes)) > 0)
 	{
 		byte_len = byte_len + ret;
@@ -181,19 +131,20 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 
 		if((*hash_v)->mssg)
 		{
+			// ft_printf("mssg is not null, appending\n");
 			(*hash_v)->mssg = ft_strjoin((char*)tmp, (char *)buff);
 		}
 		else
-			(*hash_v)->mssg = (char*)buff;
+		{
+
+			(*hash_v)->mssg = ft_strdup((char*)buff);
+		}
 		if (ret < bytes)
 		{
-			// ft_printf("ret is less than %d bytes appending!!!\n", bytes);
 			bit_len = byte_len * 8;
-			// ft_printf("bit_len is |%llu|\n", bit_len);
 			tmp = ft_append_bytes(tmp, ret, bytes);
 			if(!check_last8bytes(tmp, bytes))
 			{
-				// ft_printf("(((((((the last 8 bytes are not 0, SETTING A NEW NODE))))))))\n");
 				add_new_chunk(list, tmp, bytes);
 				extra = ft_memalloc(bytes);
 				ft_bzero(extra, bytes);
@@ -208,7 +159,7 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 	}
 	if(byte_len % bytes == 0)
 	{
-		ft_printf("we got congruent %d, setting new node to append", bytes);
+		// ft_printf("we got congruent %d, setting new node to append", bytes);
 		tmp = ft_memalloc(bytes);
 		ft_bzero(tmp, bytes);
 		tmp[0] = 0x80;
@@ -218,8 +169,6 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 	}
 	return ;
 }
-
-// if (byte_len % bytes = 0 then set another linked list content with x80, 00s and bit len in the last 8 bytes)
 
 // int ft_set_bytes_str(char *str, uint32_t bytes, t_list **list)
 // {
@@ -234,6 +183,8 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 // 3:05 tues
 // ---------
 // 9:46
-// 5:00 wed
+// 6:09 wed
 // ____
-// 14:46
+// 15:55
+//
+//______
