@@ -35,9 +35,8 @@ typedef struct		s_flag
 typedef struct		s_hash
 {
 	int				chunk_len;
-	uint8_t			*mssg;
-	uint8_t			*md_128bit;
-	uint8_t			*md_256bit;
+	char			*mssg;
+	uint8_t			*mssg_dig;
 	uint32_t		a0;
 	uint32_t		b0;
 	uint32_t		c0;
@@ -63,7 +62,7 @@ typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);
 uint8_t				*hash_func(int input, t_list *list, t_hash *hash_v);
 uint8_t				*md5_hash(t_list *chunks, t_hash *hash_v);
 uint8_t				*sha256_algo(t_list *list, t_hash *hash_v);
-int					set_bytes_fd(const int fd, uint32_t bytes, t_list **list);
+void				set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v);
 int					ci_set(char **str, int lim, int *i, t_flag **flags);
 void				ft_lstaddend(t_list **alst, t_list *new);
 uint32_t			ft_32bitpad(uint8_t *chunk, int *j);

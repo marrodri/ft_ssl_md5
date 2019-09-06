@@ -78,7 +78,7 @@ uint64_t byte_length(uint64_t val)
 		val = val >> 8;
 		i++;
 	}
-	ft_printf("lim is |%d|\n", i);
+	// ft_printf("lim is |%d|\n", i);
 	return i;
 }
 
@@ -94,19 +94,19 @@ uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 	while (i >= 56)
 	{
 		tmp = bit_len;
-		ft_printf("bit len is |%llx| \n", bit_len);
+		// ft_printf("bit len is |%llx| \n", bit_len);
 		tmp = bit_len >> push;
-		ft_printf("push is |%lld| and tmp is |%llx|\n", push, tmp);
+		// ft_printf("push is |%lld| and tmp is |%llx|\n", push, tmp);
 		//change here chunk[i] to chunk[i + len]
 		chunk[i] = 0x00 | tmp;
 		i--;
 		push -= 8;
 		// lim--;
 	}
-	for(i = 0; i < bytes; i++)
-	{
-		ft_printf("chunk[%d] is |%x| or c|%c|\n", i, chunk[i], chunk[i]);
-	}
+	// for(i = 0; i < bytes; i++)
+	// {
+	// 	ft_printf("chunk[%d] is |%x| or c|%c|\n", i, chunk[i], chunk[i]);
+	// }
 	return (chunk);
 }
 
@@ -159,7 +159,7 @@ void	add_new_chunk(t_list **list, uint8_t *chunk, int bytes)
 	print_list(list);
 }
 
-int		set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
+void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 {
 	uint32_t ret; //32bit as 4byte
 	uint8_t buff[bytes]; //8bit as 1 byte
@@ -172,21 +172,24 @@ int		set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 	bit_len = 0;
 	chunk = 0;
 	byte_len = 0;
+	// (*hash_v)->mssg = ft_strnew(1);
 	while((ret = read(fd, buff, bytes)) > 0)
 	{
+		byte_len = byte_len + ret;
 		tmp = ft_memalloc(bytes);
 		tmp = ft_memcpy(tmp, buff, bytes);
-		byte_len = byte_len + ret;
-		if (ret == bytes)
+
+		if((*hash_v)->mssg)
 		{
-			chunk++;
+			(*hash_v)->mssg = ft_strjoin((char*)tmp, (char *)buff);
 		}
+		else
+			(*hash_v)->mssg = (char*)buff;
 		if (ret < bytes)
 		{
 			// ft_printf("ret is less than %d bytes appending!!!\n", bytes);
-			chunk++;
 			bit_len = byte_len * 8;
-			ft_printf("bit_len is |%llu|\n", bit_len);
+			// ft_printf("bit_len is |%llu|\n", bit_len);
 			tmp = ft_append_bytes(tmp, ret, bytes);
 			if(!check_last8bytes(tmp, bytes))
 			{
@@ -196,7 +199,7 @@ int		set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 				ft_bzero(extra, bytes);
 				extra = ft_append_bitlen(extra, bytes, bit_len);
 				add_new_chunk(list, extra, bytes);
-				return chunk;
+				return ;
 			}
 			else
 				tmp = ft_append_bitlen(tmp, bytes, bit_len);
@@ -209,12 +212,11 @@ int		set_bytes_fd(const int fd, uint32_t bytes, t_list **list)
 		tmp = ft_memalloc(bytes);
 		ft_bzero(tmp, bytes);
 		tmp[0] = 0x80;
-		chunk++;
 		bit_len = byte_len * 8;
 		tmp = ft_append_bitlen(tmp, bytes, bit_len);
 		add_new_chunk(list, tmp, bytes);
 	}
-	return (chunk);
+	return ;
 }
 
 // if (byte_len % bytes = 0 then set another linked list content with x80, 00s and bit len in the last 8 bytes)

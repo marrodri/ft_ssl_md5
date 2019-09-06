@@ -12,6 +12,18 @@
 
 #include "ssl.h"
 
+void	put_md5hash(uint8_t *md)
+{
+	int j;
+
+	j = 0;
+	while(j < 16)
+	{
+		ft_printf("%02x", md[j]);
+		j++;
+	}
+}
+
 int		cmmnd_checker(char *str)
 {
 	int			i;
@@ -41,7 +53,9 @@ int		main(int argc, char **argv)
 	int 	bytes;
 	int 	i;
 	int		input;
+	int		j;
 
+	j =0;
 	if(argc == 2)
 		i = 1;
 	else
@@ -57,8 +71,12 @@ int		main(int argc, char **argv)
 		{
 			fd = 0;
 			bytes = MD5_BYTES;
-			hash_v->chunk_len = set_bytes_fd(fd, bytes, &list);
-			hash_v->md_128bit = hash_func(input, list, hash_v);
+			set_bytes_fd(fd, bytes, &list, &hash_v);
+			hash_v->mssg_dig = hash_func(input, list, hash_v);
+			if(flags->ci_flags[2])
+				ft_printf("%s", hash_v->mssg);
+			put_md5hash(hash_v->mssg_dig);
+			ft_printf("\n");
 		}
 		while(i <= argc && argc != 2)
 		{
@@ -77,16 +95,14 @@ int		main(int argc, char **argv)
 			{
 				fd = open(argv[i], O_RDONLY);
 				if (fd == -1 && argv[i])
-				{
 					ft_printf("md5: %s: No such file or directory\n", argv[i]);
-				}
 				else if(argv[i])
 				{
 					if(!flags->ci_flags[0] && !flags->ci_flags[1])
 						ft_printf("%s (%s) = ", argv[1], argv[i]);
 					bytes = MD5_BYTES;
-					hash_v->chunk_len = set_bytes_fd(fd, bytes, &list);
-					hash_v->md_128bit = hash_func(input, list, hash_v);
+					set_bytes_fd(fd, bytes, &list, &hash_v);
+					hash_v->mssg_dig = hash_func(input, list, hash_v);
 					if(flags->ci_flags[0])
 						ft_printf(" %s\n", argv[i]);
 				}

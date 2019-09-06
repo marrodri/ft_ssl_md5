@@ -76,19 +76,18 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 	hash_v->b_bf = hash_v->b0;
 	hash_v->c_bf = hash_v->c0;
 	hash_v->d_bf = hash_v->d0;
-
 	chunk = NULL;
 
 	while(1)
 	{
 		i = 0;
 		chunk = chunks->content;
-		ft_printf("chunk is |%s|\n", chunk);
+		// ft_printf("chunk is |%s|\n", chunk);
 		words = (uint32_t*)(chunk);
-		for(int z = 0; z < 16; z++)
-		{
-			ft_printf("word[%d] are in hex |%02x|\n", z, words[z]);
-		}
+		// for(int z = 0; z < 16; z++)
+		// {
+		// 	ft_printf("word[%d] are in hex |%02x|\n", z, words[z]);
+		// }
 		while(i < 64)
 		{
 			if(i <= 15)
@@ -120,8 +119,6 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 			// ft_printf("A|%x|\n", A);
 			// ft_printf("D|%x|\n", D);
 			// ft_printf("C|%x|\n", C);
-			// ft_printf("rotation left|%x|\n", R);
-			// ft_printf("Rotated B|%x|\n", B);
 			i++;
 		}
 		hash_v->a_bf += hash_v->a0;
@@ -138,15 +135,15 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 	}
 	uint32_t input[4] = {hash_v->a0, hash_v->b0, hash_v->c0, hash_v->d0};
 	uint8_t *digest;
-	ft_printf("a0|%02x|\nb0|%02x|\nc0|%02x|\nd0|%02x|\n", hash_v->a0,hash_v->b0,hash_v->c0,hash_v->d0);
+	// ft_printf("a0|%02x|\nb0|%02x|\nc0|%02x|\nd0|%02x|\n", hash_v->a0,hash_v->b0,hash_v->c0,hash_v->d0);
 	digest = ft_append_128bit(input);
-	ft_printf("val is |");
-	for(int i = 0; i < 16; i++)
-	{
-		ft_printf("%02x",digest[i]);
-	}
-	ft_printf("|\n");
-	return 0;
+	// ft_printf("val is |");
+	// for(int i = 0; i < 16; i++)
+	// {
+	// 	ft_printf("%02x",digest[i]);
+	// }
+	// ft_printf("|\n");
+	return digest;
 }
 
 
