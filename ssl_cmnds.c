@@ -19,7 +19,24 @@
 void	s_flag(char **argv, t_flag **flags, t_hash **hash_v, int i)
 {
 	if (argv[i])
-		ft_printf("read string %s\n", argv[i]);
+	{
+		if((*flags)->ci_flags[0])
+		{
+			put_md5hash((*hash_v)->mssg_dig);
+			ft_printf(" \"%s\"\n", ft_strupper(argv[1]),argv[i]);
+		}
+		if(!(*flags)->ci_flags[1])
+		{
+			ft_printf("%s (\"%s\") = ", ft_strupper(argv[1]), argv[i]);
+			put_md5hash((*hash_v)->mssg_dig);
+			ft_printf("\n");
+		}
+		else
+		{
+			put_md5hash((*hash_v)->mssg_dig);
+			ft_printf("\n");
+		}
+	}
 	else
 	{
 		ft_printf("%s: option requires an argument --s\n", argv[1]);

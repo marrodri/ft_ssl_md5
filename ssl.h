@@ -65,7 +65,6 @@ typedef struct		s_app
 	int				bytes;
 }					t_app;
 
-
 typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);
 typedef void		*t_puthash(uint8_t *md);
 uint8_t				*hash_func(int input, t_list *list, t_hash *hash_v);
@@ -73,11 +72,15 @@ int					hash_checker(char *str);
 uint8_t				*md5_hash(t_list *chunks, t_hash *hash_v);
 uint8_t				*sha256_algo(t_list *list, t_hash *hash_v);
 void				set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v);
+void				set_bytes_str(char *str, uint32_t bytes, t_list **list);
+int					check_last8bytes(uint8_t *chunk, int bytes);
+uint8_t				*ft_append_bytes(uint8_t *chunk, int ret, int bytes);
+uint8_t				*ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len);
+void				add_new_chunk(t_list **list, uint8_t *chunk, int bytes);
 int					ci_set(char **str, int lim, int *i, t_flag **flags);
 void				ft_lstaddend(t_list **alst, t_list *new);
 uint32_t			ft_32bitpad(uint8_t *chunk, int *j);
 uint32_t			*split_32bitwords(uint8_t *chunk);
-
 void				put_hashmd(int input, char *algo, uint8_t *md);
 void				s_flag(char **argv, t_flag **flags, t_hash **hash_v, int i);
 void				p_flag(t_flag **flags, t_hash **hash_v);

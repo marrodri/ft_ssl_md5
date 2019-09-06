@@ -74,7 +74,13 @@ int		main(int argc, char **argv)
 		while (i <= argc && argc != 2)
 		{
 			if (flags->ci_flags[3] == 1)
+			{
+				app->bytes = MD5_BYTES;
+				set_bytes_str(argv[i], app->bytes, &list);
+				hash_v->mssg_dig = hash_func(app->input, list, hash_v);
 				s_flag(argv, &flags, &hash_v, i);
+				free_list(&list);
+			}
 			else
 			{
 				app->fd = open(argv[i], O_RDONLY);

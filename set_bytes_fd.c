@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_bytes.c                                   :+:      :+:    :+:   */
+/*   set_bytes_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marrodri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/22 16:21:30 by marrodri          #+#    #+#             */
-/*   Updated: 2019/08/22 16:21:33 by marrodri         ###   ########.fr       */
+/*   Created: 2019/09/06 12:14:56 by marrodri          #+#    #+#             */
+/*   Updated: 2019/09/06 12:14:59 by marrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ssl.h"
-#include <stdio.h>
 
 int check_last8bytes(uint8_t *chunk, int bytes)
 {
@@ -115,12 +114,10 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 	uint8_t buff[bytes]; //8bit as 1 byte
 	uint32_t byte_len; //int
 	uint64_t bit_len; //unsigned long long
-	int chunk;
 	uint8_t *tmp;
 	uint8_t *extra;
 
 	bit_len = 0;
-	chunk = 0;
 	byte_len = 0;
 	(*hash_v)->mssg = NULL;
 	while((ret = read(fd, buff, bytes)) > 0)
@@ -128,16 +125,10 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 		byte_len = byte_len + ret;
 		tmp = ft_memalloc(bytes);
 		tmp = ft_memcpy(tmp, buff, bytes);
-
 		if((*hash_v)->mssg)
-		{
 			(*hash_v)->mssg = ft_strjoin((char*)tmp, (char *)buff);
-		}
 		else
-		{
 			(*hash_v)->mssg = ft_strdup((char*)buff);
-		}
-		
 		if (ret < bytes)
 		{
 			bit_len = byte_len * 8;
@@ -168,20 +159,3 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 	}
 	return ;
 }
-
-
-
-
-// 2:05 sun
-// 4:36 mon
-// _____
-// 6:41
-// 3:05 tues
-// ---------
-// 9:46
-// 6:09 wed
-// ____
-// 15:55
-//	5:19 thurs
-//______
-// 21:14

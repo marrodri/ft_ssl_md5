@@ -12,8 +12,10 @@
 
 #include "ssl.h"
 
+/* 
+**DELETE IF NOT USED FOR SHA256
+*/
 
-//DELETE IF NOT USED FOR SHA256
 uint32_t		ft_32bitpad(uint8_t *chunk, int *j)
 {
 	int			i;
@@ -21,10 +23,10 @@ uint32_t		ft_32bitpad(uint8_t *chunk, int *j)
 
 	i = 0;
 	word = 0;
-	while(i < 4)
+	while (i < 4)
 	{
 		word = (word << 8) | chunk[*j];
-		*j+= 1;
+		*j += 1;
 		i++;
 	}
 	return word;
