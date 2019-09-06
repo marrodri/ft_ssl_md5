@@ -71,65 +71,34 @@ int		main(int argc, char **argv)
 
 	else if ((input = hash_checker(argv[1])) != -1 && ci_set(argv, argc, &i, &flags))
 	{
-		// for(int j = 0; j < 4; j++)
-		// {
-		// 	ft_printf("flag[%d]=|%d|\n",j,flags->ci_flags[j]);
-		// }
 		if (argc == 2 || flags->ci_flags[2] || !argv[i]) //-p flag
 		{
 			fd = 0;
 			bytes = MD5_BYTES;
 			set_bytes_fd(fd, bytes, &list, &hash_v);
 			hash_v->mssg_dig = hash_func(input, list, hash_v);
-			// if(flags->ci_flags[2])
-			// 	ft_printf("%s", hash_v->mssg);
-			// put_md5hash(hash_v->mssg_dig);
-			// ft_printf("\n");
 			p_flag(&flags, &hash_v);
 			free_list(&list);
 		}
 		while (i <= argc && argc != 2)
 		{
-			if (flags->ci_flags[3] == 1) //-s input activated
+			if (flags->ci_flags[3] == 1)
 			{
 				s_flag(argv, &flags, &hash_v, i);
-				// if (argv[i])
-				// 	ft_printf("read string %s\n", argv[i]);
-				// else
-				// {
-				// 	ft_printf("%s: option requires an argument --s\n", argv[1]);
-				// 	ft_printf("usage: %s [-pqr] [-s string] [files ...]\n", argv[1]);
-				// }
-				// flags->ci_flags[3] = 0;
 			}
 			else
 			{
 				fd = open(argv[i], O_RDONLY);
 				if (fd == -1 && argv[i])
-					ft_printf("%s: %s: No such file or directory\n", argv[1], argv[i]);
+					ft_printf("ft_ssl: %s: %s: No such file or directory\n", argv[1], argv[i]);
 				else if(argv[i])
 				{
-					// ft_printf("no seg fault here continue\n");
 					bytes = MD5_BYTES;
 					set_bytes_fd(fd, bytes, &list, &hash_v);
-					// ft_printf("list node is inside in rq flag|%s|\n", list->content);
 					hash_v->mssg_dig = hash_func(input, list, hash_v);
 					rq_flag(argv, &flags, &hash_v, i);
-					// ft_printf("here\n");
 					free_list(&list);
 				}
-				// else if (argv[i])
-				// {
-				// 	if (!flags->ci_flags[0] && !flags->ci_flags[1])
-				// 		ft_printf("%s (%s) = ", ft_strupper(argv[1]), argv[i]);
-				// 	bytes = MD5_BYTES;
-				// 	set_bytes_fd(fd, bytes, &list, &hash_v);
-				// 	hash_v->mssg_dig = hash_func(input, list, hash_v);
-				// 	put_md5hash(hash_v->mssg_dig);
-				// 	if(flags->ci_flags[0])
-				// 		ft_printf(" %s\n", argv[i]);
-				// 	ft_printf("\n");
-				// }
 			}
 			i++;
 		}

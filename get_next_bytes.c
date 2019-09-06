@@ -169,10 +169,7 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 	return ;
 }
 
-// int ft_set_bytes_str(char *str, uint32_t bytes, t_list **list)
-// {
-// 	while
-// }
+
 
 
 // 2:05 sun
