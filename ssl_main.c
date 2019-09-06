@@ -28,25 +28,18 @@ void	free_list(t_list **list)
 {
 	t_list *tmp;
 
-	// ft_printf("!!!!!!!FREEE HERE !!!!!!!!!!!\n");
 	while(*list)
 	{
 		tmp = (*list)->next;
-		// if(list)
-		// 	ft_printf("list is not null content|%s|\n", (*list)->content);
-		// else
-		// 	ft_printf("list is null\n");
 		if((*list)->content)
 		{
 			(*list)->content_size = 0;
 			(*list)->content = NULL;
-			// free((*list)->content);
 		}
 		free(*list);
 		(*list) = NULL;
 		*list = tmp;
 	}
-		// ft_printf("=============FINISH FREE =============\n");
 }
 
 

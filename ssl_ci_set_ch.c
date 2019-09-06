@@ -28,9 +28,9 @@ int		ci_checker(char *input, int *j)
 {
 	int i;
 	const char ci_flags[CI_SZ] = CI_COM;
+
 	i = 0;
 	// ft_printf("input is %c\n", input[1]);
-
 	while(i < CI_SZ)
 	{
 		if(ci_flags[i] == input[1])
@@ -55,9 +55,7 @@ int		ci_set(char **str, int lim ,int *i, t_flag **flags)
 	while (str[*i][0] == '-' && check)
 	{
 		if ((check = ci_checker(str[*i], &j)) == 1)
-		{
 			(*flags)->ci_flags[j] = 1;
-		}
 		if (str[*i][1] == 's')
 		{
 			*i += 1;
