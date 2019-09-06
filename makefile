@@ -20,10 +20,10 @@ CFLAGS += -I /Includes/ft_printf/libft
 RM = rm -f
 HDR = ./Includes/
 
-SRC = ssl_main.c ssl_md5.c get_next_bytes.c \
+SRC = ssl_main.c ssl_md5.c set_next_bytes.c \
 	ssl_sha_pad.c ft_lstaddend.c ssl_ci_set_ch.c\
-	ssl_hash_algo.c ssl_sha256.c ssl_cmnds.c\
-	ssl_put_hash.c
+	ssl_hash_algo.c ssl_sha256.c ssl_cmnds.c
+	# ssl_put_hash.c
 
 OBJ = $(SRC:.c=.o)
 

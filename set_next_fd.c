@@ -182,6 +182,6 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 // 6:09 wed
 // ____
 // 15:55
-//	3:44 thurs
+//	5:19 thurs
 //______
-// 19:39
+// 21:14

@@ -12,10 +12,10 @@ int set_bytes_s(char *str, uint32_t bytes, t_list **list)
 	uint64_t bit_len;
 
 	i = 0;
-	ch =0;
-	while(str[i])
+	ch = 0;
+	while (str[i])
 	{
-		if(i == 63)
+		if (i == 63)
 		{
 			chunk = ft_strncpy(chunk,str, 64);
 		}

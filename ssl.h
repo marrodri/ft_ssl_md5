@@ -58,6 +58,14 @@ typedef struct		s_byte
 	uint8_t			*byte512_chunk;
 }					t_byte;
 
+typedef struct		s_app
+{
+	int				input;
+	int				fd;
+	int				bytes;
+}					t_app;
+
+
 typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);
 typedef void		*t_puthash(uint8_t *md);
 uint8_t				*hash_func(int input, t_list *list, t_hash *hash_v);
