@@ -10,21 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "ssl.h"
 
-int		hash_checker(char *str)
+int			hash_checker(char *str)
 {
 	int			i;
 	const char	*hash_algo[HS_SZ] = HS_COM;
 
 	i = 0;
-	while(i < HS_SZ)
+	while (i < HS_SZ)
 	{
-		if(!strcmp(str, hash_algo[i]))
-		{
+		if (!strcmp(str, hash_algo[i]))
 			return (i);
-		}
 		i++;
 	}
 	ft_printf("ft_ssl: Error: '%s' is an invalid command.\n\n\
@@ -33,11 +30,11 @@ int		hash_checker(char *str)
 	return (-1);
 }
 
-uint8_t 	*hash_func(int input, t_list *list, t_hash *hash_v)
+uint8_t		*hash_func(int input, t_list *list, t_hash *hash_v)
 {
 	t_hash_algo *hash_arr[HS_SZ];
+
 	hash_arr[0] = md5_hash;
 	hash_arr[1] = sha256_algo;
-	
-	return(hash_arr[input](list, hash_v));
+	return (hash_arr[input](list, hash_v));
 }

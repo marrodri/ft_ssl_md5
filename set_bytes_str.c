@@ -83,20 +83,5 @@ void	set_bytes_str(char *str, uint32_t bytes, t_list **list)
 			add_new_chunk(list, tmp, bytes);
 		}
 	}
-	// ft_printf("chunks set\n");
 	return ;
 }
-
-	// if ((i + 1) % bytes == 0)
-	// {
-	// 	ft_printf("chunk is 64 bytes, setting new chunk\n");
-	// 	add_new_chunk(list, tmp, bytes);
-	// 	tmp = ft_memalloc(bytes);
-	// 	tmp = ft_append_bytes(tmp, 0, bytes);
-	// 	tmp = ft_append_bitlen(tmp, bytes, bit_len);
-	// 	add_new_chunk(list, tmp, bytes);
-	// }
-
-// test this run or else it should be bad add more content till 654
-
-// test this run or else it should be bad add more contentt
