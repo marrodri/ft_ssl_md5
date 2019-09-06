@@ -7,7 +7,7 @@ int set_bytes_s(char *str, uint32_t bytes, t_list **list)
 	int ch;
 	uint8_t *tmp;
 	uint8_t *extra;
-	uint8_t chunk[bytes];
+	uint8_t *chunk;
 	uint32_t byte_len;
 	uint64_t bit_len;
 
@@ -17,7 +17,7 @@ int set_bytes_s(char *str, uint32_t bytes, t_list **list)
 	{
 		if(i == 63)
 		{
-			chunk = 
+			chunk = ft_strncpy(chunk,str, 64);
 		}
 
 		i++;
