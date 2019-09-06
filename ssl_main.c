@@ -24,21 +24,29 @@ void	put_md5hash(uint8_t *md)
 	}
 }
 
-void	free_list(t_list *list)
+void	free_list(t_list **list)
 {
 	t_list *tmp;
 
-
-	while(list)
+	// ft_printf("!!!!!!!FREEE HERE !!!!!!!!!!!\n");
+	while(*list)
 	{
-		tmp = list->next;
-		if(list->content)
+		tmp = (*list)->next;
+		// if(list)
+		// 	ft_printf("list is not null content|%s|\n", (*list)->content);
+		// else
+		// 	ft_printf("list is null\n");
+		if((*list)->content)
 		{
-			free(list->content);
+			(*list)->content_size = 0;
+			(*list)->content = NULL;
+			// free((*list)->content);
 		}
-		free(list);
-		list = tmp;
+		free(*list);
+		(*list) = NULL;
+		*list = tmp;
 	}
+		// ft_printf("=============FINISH FREE =============\n");
 }
 
 
@@ -78,7 +86,7 @@ int		main(int argc, char **argv)
 			// put_md5hash(hash_v->mssg_dig);
 			// ft_printf("\n");
 			p_flag(&flags, &hash_v);
-			free_list(list);
+			free_list(&list);
 		}
 		while (i <= argc && argc != 2)
 		{
@@ -101,13 +109,14 @@ int		main(int argc, char **argv)
 					ft_printf("%s: %s: No such file or directory\n", argv[1], argv[i]);
 				else if(argv[i])
 				{
+					// ft_printf("no seg fault here continue\n");
 					bytes = MD5_BYTES;
 					set_bytes_fd(fd, bytes, &list, &hash_v);
-					ft_printf("list node is |%s|\n", list->content);
+					// ft_printf("list node is inside in rq flag|%s|\n", list->content);
 					hash_v->mssg_dig = hash_func(input, list, hash_v);
 					rq_flag(argv, &flags, &hash_v, i);
-					ft_printf("here\n?");
-					free_list(list);
+					// ft_printf("here\n");
+					free_list(&list);
 				}
 				// else if (argv[i])
 				// {

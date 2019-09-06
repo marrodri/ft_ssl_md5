@@ -131,14 +131,13 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 
 		if((*hash_v)->mssg)
 		{
-			// ft_printf("mssg is not null, appending\n");
 			(*hash_v)->mssg = ft_strjoin((char*)tmp, (char *)buff);
 		}
 		else
 		{
-
 			(*hash_v)->mssg = ft_strdup((char*)buff);
 		}
+		
 		if (ret < bytes)
 		{
 			bit_len = byte_len * 8;
@@ -186,6 +185,6 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 // 6:09 wed
 // ____
 // 15:55
-//	3:36 thurs
+//	3:44 thurs
 //______
-// 19:31
+// 19:39

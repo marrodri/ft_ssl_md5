@@ -82,7 +82,7 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 	{
 		i = 0;
 		chunk = chunks->content;
-		ft_printf("chunk is |%s|\n", chunk);
+		// ft_printf("chunk is |%s|\n", chunk);
 		words = (uint32_t*)(chunk);
 		// for(int z = 0; z < 16; z++)
 		// {
