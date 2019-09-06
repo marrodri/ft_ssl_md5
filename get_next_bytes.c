@@ -32,6 +32,7 @@ int check_last8bytes(uint8_t *chunk, int bytes)
 uint64_t byte_length(uint64_t val)
 {
 	int i;
+
 	i = 0;
 	while(val)
 	{
@@ -122,7 +123,6 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 	chunk = 0;
 	byte_len = 0;
 	(*hash_v)->mssg = NULL;
-	// ft_bzero((*hash_v)->mssg, 1);
 	while((ret = read(fd, buff, bytes)) > 0)
 	{
 		byte_len = byte_len + ret;
@@ -186,6 +186,6 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 // 6:09 wed
 // ____
 // 15:55
-//	2:05 thurs
+//	3:36 thurs
 //______
-// 18:00
+// 19:31

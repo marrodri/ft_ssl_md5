@@ -74,3 +74,6 @@ void				p_flag(t_flag **flags, t_hash **hash_v);
 void				rq_flag(char **argv, t_flag **flags, t_hash **hash_v, int i);
 void				put_md5hash(uint8_t *md);
 #endif
+
+
+//  "pity those that aren't following baerista on spotify."

@@ -24,6 +24,24 @@ void	put_md5hash(uint8_t *md)
 	}
 }
 
+void	free_list(t_list *list)
+{
+	t_list *tmp;
+
+
+	while(list)
+	{
+		tmp = list->next;
+		if(list->content)
+		{
+			free(list->content);
+		}
+		free(list);
+		list = tmp;
+	}
+}
+
+
 int		main(int argc, char **argv)
 {
 	int		fd;
@@ -45,10 +63,10 @@ int		main(int argc, char **argv)
 
 	else if ((input = hash_checker(argv[1])) != -1 && ci_set(argv, argc, &i, &flags))
 	{
-		for(int j = 0; j < 4; j++)
-		{
-			ft_printf("flag[%d]=|%d|\n",j,flags->ci_flags[j]);
-		}
+		// for(int j = 0; j < 4; j++)
+		// {
+		// 	ft_printf("flag[%d]=|%d|\n",j,flags->ci_flags[j]);
+		// }
 		if (argc == 2 || flags->ci_flags[2] || !argv[i]) //-p flag
 		{
 			fd = 0;
@@ -60,6 +78,7 @@ int		main(int argc, char **argv)
 			// put_md5hash(hash_v->mssg_dig);
 			// ft_printf("\n");
 			p_flag(&flags, &hash_v);
+			free_list(list);
 		}
 		while (i <= argc && argc != 2)
 		{
@@ -84,8 +103,11 @@ int		main(int argc, char **argv)
 				{
 					bytes = MD5_BYTES;
 					set_bytes_fd(fd, bytes, &list, &hash_v);
+					ft_printf("list node is |%s|\n", list->content);
 					hash_v->mssg_dig = hash_func(input, list, hash_v);
 					rq_flag(argv, &flags, &hash_v, i);
+					ft_printf("here\n?");
+					free_list(list);
 				}
 				// else if (argv[i])
 				// {

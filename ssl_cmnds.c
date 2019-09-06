@@ -41,7 +41,6 @@ void	p_flag(t_flag **flags, t_hash **hash_v)
 	ft_printf("\n");
 }
 
-
 //-r
 //ft_printf("%x ",ft_md5(*file readed*));
 //ft_printf(" %s\n", file name);
@@ -58,6 +57,6 @@ void	rq_flag(char **argv, t_flag **flags, t_hash **hash_v, int i)
 	// hash_v->mssg_dig = hash_func(input, list, hash_v);
 	put_md5hash((*hash_v)->mssg_dig);
 	if((*flags)->ci_flags[0])
-		ft_printf(" %s\n", argv[i]);
+		ft_printf(" %s", argv[i]);
 	ft_printf("\n");
 }
