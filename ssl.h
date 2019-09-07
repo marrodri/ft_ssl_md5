@@ -62,6 +62,9 @@ typedef struct		s_app
 {
 	int				input;
 	int				fd;
+	char			*file;
+	char			*hash_name;
+	int				i;
 	int				bytes;
 }					t_app;
 
@@ -84,9 +87,10 @@ void				ft_lstaddend(t_list **alst, t_list *new);
 uint32_t			ft_32bitpad(uint8_t *chunk, int *j);
 uint32_t			*split_32bitwords(uint8_t *chunk);
 void				put_hashmd(int input, char *algo, uint8_t *md);
-void				s_flag(char **argv, t_flag **flags, t_hash **hash_v, int i);
-void				p_flag(t_flag **flags, t_hash **hash_v);
-void				rq_flag(char **argv, t_flag **flags,
+void				s_output(char **argv, t_flag **flags, t_hash **hash_v, int i);
+void				p_output(t_flag **flags, t_hash **hash_v);
+void				rq_output(char **argv, t_flag **flags,
 	t_hash **hash_v, int i);
 void				put_md5hash(uint8_t *md);
+void				free_list(t_list **list);
 #endif

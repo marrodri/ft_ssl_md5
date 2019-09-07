@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strupper.c                                      :+:      :+:    :+:   */
+/*   ssl_free.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marrodri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/17 19:32:19 by marrodri          #+#    #+#             */
-/*   Updated: 2019/04/17 19:32:29 by marrodri         ###   ########.fr       */
+/*   Created: 2019/09/06 16:48:35 by marrodri          #+#    #+#             */
+/*   Updated: 2019/09/06 16:48:37 by marrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ssl.h"
 
-char	*ft_strupper(char *str)
+void	free_list(t_list **list)
 {
-	int i;
+	t_list *tmp;
 
-	i = 0;
-	while (str[i])
+	while (*list)
 	{
-		str[i] = ft_toupper(str[i]);
-		i++;
+		tmp = (*list)->next;
+		if ((*list)->content)
+		{
+			(*list)->content_size = 0;
+			(*list)->content = NULL;
+		}
+		free(*list);
+		(*list) = NULL;
+		*list = tmp;
 	}
-	str[i] = '\0';
-	return (str);
 }

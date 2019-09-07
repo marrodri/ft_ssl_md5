@@ -12,7 +12,7 @@
 
 #include "ssl.h"
 
-void	s_flag(char **argv, t_flag **flags, t_hash **hash_v, int i)
+void	s_output(char **argv, t_flag **flags, t_hash **hash_v, int i)
 {
 	if (argv[i])
 	{
@@ -41,7 +41,7 @@ void	s_flag(char **argv, t_flag **flags, t_hash **hash_v, int i)
 	(*flags)->ci_flags[3] = 0;
 }
 
-void	p_flag(t_flag **flags, t_hash **hash_v)
+void	p_output(t_flag **flags, t_hash **hash_v)
 {
 	if ((*flags)->ci_flags[2])
 		ft_printf("%s", (*hash_v)->mssg);
@@ -49,7 +49,7 @@ void	p_flag(t_flag **flags, t_hash **hash_v)
 	ft_printf("\n");
 }
 
-void	rq_flag(char **argv, t_flag **flags, t_hash **hash_v, int i)
+void	rq_output(char **argv, t_flag **flags, t_hash **hash_v, int i)
 {
 	if (!(*flags)->ci_flags[0] && !(*flags)->ci_flags[1])
 		ft_printf("%s (%s) = ", ft_strupper(argv[1]), argv[i]);

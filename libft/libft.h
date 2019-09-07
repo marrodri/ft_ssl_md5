@@ -106,9 +106,3 @@ long long int		ft_llideduct(long long int num);
 long long int		ft_power_of_lli(long long int n, long long int expo);
 char				*ft_ldtoa(long double ld_num, int prec);
 #endif
-
-
-// abcdefghjklzxcvb.,.fdfdfdfddffdfdfdfdfferfrfrf
-
-//32byte len changes
-// abcdefghjklzxcvb.,.fdfdfdf12QW12
