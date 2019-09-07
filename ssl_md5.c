@@ -44,25 +44,25 @@ uint8_t		*ft_append_128bit(uint32_t *input)
 
 	i = 0;
 	j = 0;
-	while(j < 16)
+	while (j < 16)
 	{
 		output[j] = (input[i] & 0xff);
 		output[j + 1] = ((input[i] >> 8) & 0xff);
 		output[j + 2] = ((input[i] >> 16) & 0xff);
 		output[j + 3] = ((input[i] >> 24) & 0xff);
-		j+= 4;
+		j += 4;
 		i++;
 	}
 	return (output);
 }
 
-void	hashv_alloc(t_hash **hash_v)
+void		hashv_alloc(t_hash **hash_v)
 {
-	(*hash_v)->h0 = (uint32_t*)malloc(4 *sizeof(uint32_t));
-	(*hash_v)->h_bf = (uint32_t*)malloc(4 *sizeof(uint32_t)); 
+	(*hash_v)->h0 = (uint32_t*)malloc(4 * sizeof(uint32_t));
+	(*hash_v)->h_bf = (uint32_t*)malloc(4 * sizeof(uint32_t));
 }
 
-void	md5_buff_init(t_hash *hash_v)
+void		md5_buff_init(t_hash *hash_v)
 {
 	hash_v->h0[0] = 0x67452301;
 	hash_v->h0[1] = 0xefcdab89;
@@ -74,74 +74,74 @@ void	md5_buff_init(t_hash *hash_v)
 	hash_v->h_bf[3] = hash_v->h0[3];
 }
 
+void		md5_buff_upadte(t_hash *hash_v)
+{
+	hash_v->h_bf[0] += hash_v->h0[0];
+	hash_v->h_bf[1] += hash_v->h0[1];
+	hash_v->h_bf[2] += hash_v->h0[2];
+	hash_v->h_bf[3] += hash_v->h0[3];
+	hash_v->h0[0] = hash_v->h_bf[0];
+	hash_v->h0[1] = hash_v->h_bf[1];
+	hash_v->h0[2] = hash_v->h_bf[2];
+	hash_v->h0[3] = hash_v->h_bf[3];
+}
+
+void	md5_hash_proc_rot(t_hash *hash_v, uint32_t i, uint32_t g, uint32_t *words)
+{
+	if (i <= 15)
+	{
+		hash_v->f = F_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
+		g = i;
+	}
+	else if (i >= 16 && i <= 31)
+	{
+		hash_v->f = G_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
+		g = (0x5 * i + 0x1) % 0x10;
+	}
+	else if (i >= 32 && i <= 47)
+	{
+		hash_v->f = H_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
+		g = (0x3 * i + 0x5) % 0x10;
+	}
+	else if (i >= 48 && i <= 63)
+	{
+		hash_v->f = I_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
+		g = (0x7 * i) % 0x10;
+	}
+	hash_v->f = hash_v->f + hash_v->h_bf[0] + g_md5_key[i] + words[g];
+	hash_v->h_bf[0] = hash_v->h_bf[3];
+	hash_v->h_bf[3] = hash_v->h_bf[2];
+	hash_v->h_bf[2] = hash_v->h_bf[1];
+	hash_v->h_bf[1] = hash_v->h_bf[1] + R_LEFT(hash_v->f, g_md5_s[i]);
+}
+
 uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 {
 	uint32_t	*words;
 	uint8_t		*chunk;
 	uint32_t	i;
 	uint32_t	g;
-	uint8_t *digest;
+	uint8_t		*digest;
 
 	hashv_alloc(&hash_v);
 	md5_buff_init(hash_v);
 	chunk = NULL;
-	// hash_v->a_bf = hash_v->a0;
-	// hash_v->b_bf = hash_v->b0;
-	// hash_v->c_bf = hash_v->c0;
-	// hash_v->d_bf = hash_v->d0;
-	// hash_v->h_bf[0] = hash_v->h0[0];
-	// hash_v->h_bf[1] = hash_v->h0[1];
-	// hash_v->h_bf[2] = hash_v->h0[2];
-	// hash_v->h_bf[3] = hash_v->h0[3];
-
-	while(1)
+	g = 0;
+	while (1)
 	{
 		i = 0;
 		chunk = chunks->content;
 		words = (uint32_t*)(chunk);
-		while(i < 64)
+		while (i < 64)
 		{
-			if(i <= 15)
-			{
-				hash_v->f = F_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
-				g = i;
-			}
-			else if(i >= 16 && i <= 31)
-			{
-				hash_v->f = G_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
-				g = (0x5 * i + 0x1) % 0x10;
-			}
-			else if(i >= 32 && i <= 47)
-			{
-				hash_v->f = H_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
-				g = (0x3 * i + 0x5) % 0x10;
-			}
-			else if(i >= 48 && i <= 63)
-			{
-				hash_v->f = I_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
-				g = (0x7 * i) % 0x10;
-			}
-			hash_v->f = hash_v->f + hash_v->h_bf[0] + g_md5_key[i] + words[g];
-			hash_v->h_bf[0] = hash_v->h_bf[3];
-			hash_v->h_bf[3] = hash_v->h_bf[2];
-			hash_v->h_bf[2] = hash_v->h_bf[1];
-			hash_v->h_bf[1] = hash_v->h_bf[1] + R_LEFT(hash_v->f, g_md5_s[i]);
+			md5_hash_proc_rot(hash_v, i, g, words);
 			i++;
 		}
-		hash_v->h_bf[0] += hash_v->h0[0];
-		hash_v->h_bf[1] += hash_v->h0[1];
-		hash_v->h_bf[2] += hash_v->h0[2];
-		hash_v->h_bf[3] += hash_v->h0[3];
-		hash_v->h0[0] = hash_v->h_bf[0];
-		hash_v->h0[1] = hash_v->h_bf[1];
-		hash_v->h0[2] = hash_v->h_bf[2];
-		hash_v->h0[3] = hash_v->h_bf[3];
-		if(!chunks->next)
-			break;
+		md5_buff_upadte(hash_v);
+		if (!chunks->next)
+			break ;
 		chunks = chunks->next;
 	}
 	digest = ft_append_128bit(hash_v->h0);
 	return (digest);
 }
-
-
