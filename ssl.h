@@ -85,6 +85,7 @@ uint8_t				*ft_append_bitlen(uint8_t *chunk,
 void				add_new_chunk(t_list **list, uint8_t *chunk, int bytes);
 int					ci_set(char **str, int lim, int *i, t_flag **flags);
 void				ft_lstaddend(t_list **alst, t_list *new);
+void				init_var_fd(t_lstcon **lst_v, t_hash **hash_v, uint32_t bytes);
 uint32_t			ft_32bitpad(uint8_t *chunk, int *j);
 uint32_t			*split_32bitwords(uint8_t *chunk);
 void				put_hashmd(int input, char *algo, uint8_t *md);

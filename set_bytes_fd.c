@@ -43,22 +43,13 @@ void	set_mssg_fd(t_hash **hash_v, char *tmp, char *buff)
 		(*hash_v)->mssg = ft_strdup(buff);
 }
 
-void	set_buff_fd(t_lstcon **lstv, t_hash **hash_v, uint32_t bytes, uint32_t ret)
+void	set_buff_fd(t_lstcon **lstv, t_hash **hash_v,
+	uint32_t bytes, uint32_t ret)
 {
 	(*lstv)->byte_len = (*lstv)->byte_len + ret;
 	(*lstv)->tmp = ft_memalloc(bytes);
 	set_mssg_fd(hash_v, (char*)((*lstv)->tmp), (char*)((*lstv)->buff));
 	(*lstv)->tmp = ft_memcpy((*lstv)->tmp, (*lstv)->buff, bytes);
-}
-
-void	init_var_fd(t_lstcon **lst_v, t_hash **hash_v, uint32_t bytes)
-{
-	*lst_v = malloc(sizeof(t_lstcon));
-	(*lst_v)->bit_len = 0;
-	(*lst_v)->byte_len = 0;
-	(*lst_v)->buff = ft_memalloc(bytes);
-	ft_bzero((*lst_v)->buff, bytes);
-	(*hash_v)->mssg = NULL;
 }
 
 void	set_bytes_fd(const int fd, uint32_t bytes,
@@ -71,10 +62,6 @@ void	set_bytes_fd(const int fd, uint32_t bytes,
 	while ((ret = read(fd, lstv->buff, bytes)) > 0)
 	{
 		set_buff_fd(&lstv, hash_v, bytes, ret);
-		// lstv->byte_len = lstv->byte_len + ret;
-		// lstv->tmp = ft_memalloc(bytes);
-		// set_mssg(hash_v, (char*)lstv->tmp, (char*)lstv->buff);
-		// lstv->tmp = ft_memcpy(lstv->tmp, lstv->buff, bytes);
 		if (ret < bytes)
 		{
 			lstv->bit_len = lstv->byte_len * 8;
