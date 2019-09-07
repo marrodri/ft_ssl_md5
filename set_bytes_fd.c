@@ -12,7 +12,8 @@
 
 #include "ssl.h"
 
-void	append_last_chunk(t_list **list, uint8_t *tmp, uint32_t bytes, uint32_t byte_len)
+void	append_last_chunk_fd(t_list **list, uint8_t *tmp,
+	uint32_t bytes, uint32_t byte_len)
 {
 	uint64_t bit_len;
 
@@ -24,7 +25,8 @@ void	append_last_chunk(t_list **list, uint8_t *tmp, uint32_t bytes, uint32_t byt
 	add_new_chunk(list, tmp, bytes);
 }
 
-void	append_new_chunk(t_list **list, uint8_t *tmp, uint32_t bytes, uint64_t bit_len)
+void	append_new_chunk_fd(t_list **list, uint8_t *tmp,
+	uint32_t bytes, uint64_t bit_len)
 {
 	add_new_chunk(list, tmp, bytes);
 	tmp = ft_memalloc(bytes);
@@ -33,7 +35,7 @@ void	append_new_chunk(t_list **list, uint8_t *tmp, uint32_t bytes, uint64_t bit_
 	add_new_chunk(list, tmp, bytes);
 }
 
-void	set_mssg(t_hash **hash_v, char *tmp, char *buff)
+void	set_mssg_fd(t_hash **hash_v, char *tmp, char *buff)
 {
 	if ((*hash_v)->mssg)
 		(*hash_v)->mssg = ft_strjoin(tmp, buff);
@@ -41,7 +43,15 @@ void	set_mssg(t_hash **hash_v, char *tmp, char *buff)
 		(*hash_v)->mssg = ft_strdup(buff);
 }
 
-void init_var(t_lstcon **lst_v, t_hash **hash_v, uint32_t bytes)
+void	set_buff_fd(t_lstcon **lstv, t_hash **hash_v, uint32_t bytes, uint32_t ret)
+{
+	(*lstv)->byte_len = (*lstv)->byte_len + ret;
+	(*lstv)->tmp = ft_memalloc(bytes);
+	set_mssg_fd(hash_v, (char*)((*lstv)->tmp), (char*)((*lstv)->buff));
+	(*lstv)->tmp = ft_memcpy((*lstv)->tmp, (*lstv)->buff, bytes);
+}
+
+void	init_var_fd(t_lstcon **lst_v, t_hash **hash_v, uint32_t bytes)
 {
 	*lst_v = malloc(sizeof(t_lstcon));
 	(*lst_v)->bit_len = 0;
@@ -51,46 +61,36 @@ void init_var(t_lstcon **lst_v, t_hash **hash_v, uint32_t bytes)
 	(*hash_v)->mssg = NULL;
 }
 
-void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
+void	set_bytes_fd(const int fd, uint32_t bytes,
+	t_list **list, t_hash **hash_v)
 {
 	uint32_t	ret;
-	t_lstcon 	*lst_v;
-	// uint8_t		buff[bytes];
-	// uint32_t	byte_len;
-	// uint64_t	bit_len;
-	// uint8_t		*tmp;
+	t_lstcon	*lstv;
 
-	// lst_v = malloc(sizeof(t_lstcon));
-	// lst_v->bit_len = 0;
-	// lst_v->byte_len = 0;
-	// lst_v->buff = ft_memalloc(bytes);
-	// ft_bzero(lst_v->buff, bytes);
-	// (*hash_v)->mssg = NULL;
-	init_var(&lst_v, hash_v, bytes);
-	while ((ret = read(fd, lst_v->buff, bytes)) > 0)
+	init_var_fd(&lstv, hash_v, bytes);
+	while ((ret = read(fd, lstv->buff, bytes)) > 0)
 	{
-		lst_v->byte_len = lst_v->byte_len + ret;
-		lst_v->tmp = ft_memalloc(bytes);
-		set_mssg(hash_v, (char*)lst_v->tmp, (char*)lst_v->buff);
-		lst_v->tmp = ft_memcpy(lst_v->tmp, lst_v->buff, bytes);
-		// ft_printf("!!!!!!!!!here seg\n");
+		set_buff_fd(&lstv, hash_v, bytes, ret);
+		// lstv->byte_len = lstv->byte_len + ret;
+		// lstv->tmp = ft_memalloc(bytes);
+		// set_mssg(hash_v, (char*)lstv->tmp, (char*)lstv->buff);
+		// lstv->tmp = ft_memcpy(lstv->tmp, lstv->buff, bytes);
 		if (ret < bytes)
 		{
-			lst_v->bit_len = lst_v->byte_len * 8;
-			lst_v->tmp = ft_append_bytes(lst_v->tmp, ret, bytes);
-			if (!check_last8bytes(lst_v->tmp, bytes))
+			lstv->bit_len = lstv->byte_len * 8;
+			lstv->tmp = ft_append_bytes(lstv->tmp, ret, bytes);
+			if (!check_last8bytes(lstv->tmp, bytes))
 			{
-				append_new_chunk(list, lst_v->tmp, bytes, lst_v->bit_len);
-				free(lst_v);
+				append_new_chunk_fd(list, lstv->tmp, bytes, lstv->bit_len);
+				free(lstv);
 				return ;
 			}
 			else
-				lst_v->tmp = ft_append_bitlen(lst_v->tmp, bytes, lst_v->bit_len);
+				lstv->tmp = ft_append_bitlen(lstv->tmp, bytes, lstv->bit_len);
 		}
-		add_new_chunk(list, lst_v->tmp, bytes);
+		add_new_chunk(list, lstv->tmp, bytes);
 	}
-	if (lst_v->byte_len % bytes == 0)
-		append_last_chunk(list, lst_v->tmp, bytes, lst_v->byte_len);
-	free(lst_v);
-	return ;
+	if (lstv->byte_len % bytes == 0)
+		append_last_chunk_fd(list, lstv->tmp, bytes, lstv->byte_len);
+	free(lstv);
 }
