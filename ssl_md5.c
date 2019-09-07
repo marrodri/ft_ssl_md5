@@ -56,22 +56,18 @@ uint8_t		*ft_append_128bit(uint32_t *input)
 	return (output);
 }
 
-void		hashv_alloc(t_hash **hash_v)
+void		md5_buff_init(t_hash **hash_v)
 {
 	(*hash_v)->h0 = (uint32_t*)malloc(4 * sizeof(uint32_t));
 	(*hash_v)->h_bf = (uint32_t*)malloc(4 * sizeof(uint32_t));
-}
-
-void		md5_buff_init(t_hash *hash_v)
-{
-	hash_v->h0[0] = 0x67452301;
-	hash_v->h0[1] = 0xefcdab89;
-	hash_v->h0[2] = 0x98badcfe;
-	hash_v->h0[3] = 0x10325476;
-	hash_v->h_bf[0] = hash_v->h0[0];
-	hash_v->h_bf[1] = hash_v->h0[1];
-	hash_v->h_bf[2] = hash_v->h0[2];
-	hash_v->h_bf[3] = hash_v->h0[3];
+	(*hash_v)->h0[0] = 0x67452301;
+	(*hash_v)->h0[1] = 0xefcdab89;
+	(*hash_v)->h0[2] = 0x98badcfe;
+	(*hash_v)->h0[3] = 0x10325476;
+	(*hash_v)->h_bf[0] = (*hash_v)->h0[0];
+	(*hash_v)->h_bf[1] = (*hash_v)->h0[1];
+	(*hash_v)->h_bf[2] = (*hash_v)->h0[2];
+	(*hash_v)->h_bf[3] = (*hash_v)->h0[3];
 }
 
 void		md5_buff_upadte(t_hash *hash_v)
@@ -86,7 +82,7 @@ void		md5_buff_upadte(t_hash *hash_v)
 	hash_v->h0[3] = hash_v->h_bf[3];
 }
 
-void	md5_hash_proc_rot(t_hash *hash_v, uint32_t i, uint32_t g, uint32_t *words)
+void		md5_proc(t_hash *hash_v, uint32_t i, uint32_t g, uint32_t *words)
 {
 	if (i <= 15)
 	{
@@ -123,23 +119,20 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 	uint32_t	g;
 	uint8_t		*digest;
 
-	hashv_alloc(&hash_v);
-	md5_buff_init(hash_v);
+	md5_buff_init(&hash_v);
 	chunk = NULL;
 	g = 0;
-	while (1)
+	while (chunks)
 	{
 		i = 0;
 		chunk = chunks->content;
 		words = (uint32_t*)(chunk);
 		while (i < 64)
 		{
-			md5_hash_proc_rot(hash_v, i, g, words);
+			md5_proc(hash_v, i, g, words);
 			i++;
 		}
 		md5_buff_upadte(hash_v);
-		if (!chunks->next)
-			break ;
 		chunks = chunks->next;
 	}
 	digest = ft_append_128bit(hash_v->h0);
