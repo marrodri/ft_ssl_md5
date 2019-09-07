@@ -49,15 +49,6 @@ typedef struct		s_hash
 	uint32_t		f;
 }					t_hash;
 
-typedef struct		s_byte
-{
-	uint32_t		ret;
-	uint8_t			*buff;
-	uint32_t		byte_len;
-	uint64_t		bit_len;
-	uint8_t			*byte512_chunk;
-}					t_byte;
-
 typedef struct		s_app
 {
 	int				input;
@@ -68,6 +59,15 @@ typedef struct		s_app
 	int				i;
 	int				bytes;
 }					t_app;
+
+typedef	struct		s_lstcon
+{
+	uint8_t		*buff;
+	uint32_t	byte_len;
+	uint64_t	bit_len;
+	uint8_t		*tmp;
+}					t_lstcon;
+
 
 typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);
 typedef void		*t_puthash(uint8_t *md);
