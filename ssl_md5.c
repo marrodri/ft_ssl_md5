@@ -38,12 +38,12 @@ const uint32_t	g_md5_s[64] =
 
 uint8_t		*ft_append_128bit(uint32_t *input)
 {
-	static uint8_t	output[16]; //unsigned char
-	uint32_t i;
-	uint32_t j;
+	static uint8_t	output[16];
+	uint32_t		i;
+	uint32_t		j;
+
 	i = 0;
 	j = 0;
-
 	while(j < 16)
 	{
 		output[j] = (input[i] & 0xff);
@@ -53,7 +53,7 @@ uint8_t		*ft_append_128bit(uint32_t *input)
 		j+= 4;
 		i++;
 	}
-	return output;
+	return (output);
 }
 
 void	hashv_alloc(t_hash **hash_v)
@@ -68,6 +68,10 @@ void	md5_buff_init(t_hash *hash_v)
 	hash_v->h0[1] = 0xefcdab89;
 	hash_v->h0[2] = 0x98badcfe;
 	hash_v->h0[3] = 0x10325476;
+	hash_v->h_bf[0] = hash_v->h0[0];
+	hash_v->h_bf[1] = hash_v->h0[1];
+	hash_v->h_bf[2] = hash_v->h0[2];
+	hash_v->h_bf[3] = hash_v->h0[3];
 }
 
 uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
@@ -80,15 +84,15 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 
 	hashv_alloc(&hash_v);
 	md5_buff_init(hash_v);
+	chunk = NULL;
 	// hash_v->a_bf = hash_v->a0;
 	// hash_v->b_bf = hash_v->b0;
 	// hash_v->c_bf = hash_v->c0;
 	// hash_v->d_bf = hash_v->d0;
-	hash_v->h_bf[0] = hash_v->h0[0];
-	hash_v->h_bf[1] = hash_v->h0[1];
-	hash_v->h_bf[2] = hash_v->h0[2];
-	hash_v->h_bf[3] = hash_v->h0[3];
-	chunk = NULL;
+	// hash_v->h_bf[0] = hash_v->h0[0];
+	// hash_v->h_bf[1] = hash_v->h0[1];
+	// hash_v->h_bf[2] = hash_v->h0[2];
+	// hash_v->h_bf[3] = hash_v->h0[3];
 
 	while(1)
 	{
