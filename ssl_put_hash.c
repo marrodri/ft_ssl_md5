@@ -12,7 +12,7 @@
 
 #include "ssl.h"
 
-void	put_md5hash(uint8_t *md)
+int		*put_md5hash(uint8_t *md)
 {
 	int i;
 
@@ -22,25 +22,31 @@ void	put_md5hash(uint8_t *md)
 		ft_printf("%02x", md[i]);
 		i++;
 	}
+	return (0);
 }
 
-void	put256hash(uint8_t *md)
+int		*put256hash(uint8_t *md)
 {
 	int i;
 
 	i = 0;
+	ft_printf("printing sha256 algo here from put256 hash");
+	return 0;
 	while (i < 32)
 	{
 		ft_printf("%02x", md[i]);
 		i++;
 	}
+	return (0);
 }
 
-void	put_hashmd(int input, char *algo, uint8_t *md)
+void	put_hashmd(int input, uint8_t *md)
 {
 	t_puthash *pr_hash[HS_SZ];
+	int *i;
 
+	i = NULL;
 	pr_hash[0] = put_md5hash;
 	pr_hash[1] = put256hash;
-	pr_hash[input](md);
+	i = pr_hash[input](md);
 }

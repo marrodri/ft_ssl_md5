@@ -34,30 +34,32 @@ typedef struct		s_flag
 
 typedef struct		s_hash
 {
-	int				chunk_len;
-	char			*mssg;
-	uint8_t			*mssg_dig;
-	uint32_t		a0;
-	uint32_t		b0;
-	uint32_t		c0;
-	uint32_t		d0;
-	uint32_t		a_bf;
-	uint32_t		b_bf;
-	uint32_t		c_bf;
-	uint32_t		d_bf;
-	uint32_t		g;
-	uint32_t		f;
+	int			chunk_len;
+	char		*mssg;
+	uint8_t		*mssg_dig;
+	uint32_t	a0;
+	uint32_t	b0;
+	uint32_t	c0;
+	uint32_t	d0;
+	uint32_t	a_bf;
+	uint32_t	b_bf;
+	uint32_t	c_bf;
+	uint32_t	d_bf;
+	uint32_t	*h0;
+	uint32_t	*h_bf;
+	uint32_t	g;
+	uint32_t	f;
 }					t_hash;
 
 typedef struct		s_app
 {
-	int				input;
-	int				fd;
-	char			*file;
-	char			**av;
-	char			*hash_name;
-	int				i;
-	int				bytes;
+	int			input;
+	int			fd;
+	char		*file;
+	char		**av;
+	char		*hash_name;
+	int			i;
+	int			bytes;
 }					t_app;
 
 typedef	struct		s_lstcon
@@ -68,13 +70,12 @@ typedef	struct		s_lstcon
 	uint8_t		*tmp;
 }					t_lstcon;
 
-
 typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);
-typedef void		*t_puthash(uint8_t *md);
+typedef int			*t_puthash(uint8_t *md);
 uint8_t				*hash_func(int input, t_list *list, t_hash *hash_v);
 int					hash_checker(char *str);
 uint8_t				*md5_hash(t_list *chunks, t_hash *hash_v);
-uint8_t				*sha256_algo(t_list *list, t_hash *hash_v);
+uint8_t				*sha256_hash(t_list *list, t_hash *hash_v);
 void				set_bytes_fd(const int fd, uint32_t bytes,
 	t_list **list, t_hash **hash_v);
 void				set_bytes_str(char *str, uint32_t bytes, t_list **list);
@@ -82,20 +83,23 @@ int					check_last8bytes(uint8_t *chunk, int bytes);
 uint8_t				*ft_append_bytes(uint8_t *chunk, int ret, int bytes);
 uint8_t				*ft_append_bitlen(uint8_t *chunk,
 	int bytes, uint64_t bit_len);
-void				add_new_chunk(t_list **list, uint8_t *chunk, int bytes);
-int					ci_set(char **str, int lim, int *i, t_flag **flags);
-void				ft_lstaddend(t_list **alst, t_list *new);
-void				init_varlst(t_lstcon **lst_v, uint32_t bytes);
 uint32_t			ft_32bitpad(uint8_t *chunk, int *j);
-uint32_t			*split_32bitwords(uint8_t *chunk);
-void				put_hashmd(int input, char *algo, uint8_t *md);
-void				s_output(char **argv, t_flag **flags, t_hash **hash_v, int i);
-void				p_output(t_flag **flags, t_hash **hash_v);
-void				rq_output(char **argv, t_flag **flags,
-	t_hash **hash_v, int i);
-void				stdin_p_input(t_app *app, t_list *list, t_flag *flags, t_hash *hash_v);
-void				str_input(t_app *app, t_list *list, t_hash *hash_v, t_flag *flags);
-void				fd_input(t_app *app, t_list *list, t_hash *hash_v, t_flag *flags);
-void				put_md5hash(uint8_t *md);
+void				add_new_chunk(t_list **list, uint8_t *chunk, int bytes);
+void				ft_lstaddend(t_list **alst, t_list *new);
 void				free_list(t_list **list);
+uint32_t			*split_32bitwords(uint8_t *chunk);
+void				init_varlst(t_lstcon **lst_v, uint32_t bytes);
+int					ci_set(char **str, int lim, int *i, t_flag **flags);
+void				stdin_p_input(t_app *app, t_list *list,
+	t_flag *flags, t_hash *hash_v);
+void				str_input(t_app *app, t_list *list,
+	t_hash *hash_v, t_flag *flags);
+void				fd_input(t_app *app, t_list *list,
+	t_hash *hash_v, t_flag *flags);
+void				put_hashmd(int input, uint8_t *md);
+void				s_output(char **argv, t_flag **flags,
+	t_hash **hash_v, t_app *app);
+void				p_output(t_flag **flags, t_hash **hash_v, t_app *app);
+void				rq_output(char **argv, t_flag **flags,
+	t_hash **hash_v, t_app *app);
 #endif

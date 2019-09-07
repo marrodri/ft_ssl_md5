@@ -25,7 +25,7 @@ const	uint32_t	g_sha256_key[64]=
 	0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-uint8_t *sha256_algo(t_list *list, t_hash *hash_v)
+uint8_t *sha256_hash(t_list *list, t_hash *hash_v)
 {
 	list = NULL;
 	hash_v = NULL;

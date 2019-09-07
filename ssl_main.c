@@ -12,17 +12,17 @@
 
 #include "ssl.h"
 
-void	put_md5hash(uint8_t *md)
-{
-	int j;
+// void	put_md5hash(uint8_t *md)
+// {
+// 	int j;
 
-	j = 0;
-	while (j < 16)
-	{
-		ft_printf("%02x", md[j]);
-		j++;
-	}
-}
+// 	j = 0;
+// 	while (j < 16)
+// 	{
+// 		ft_printf("%02x", md[j]);
+// 		j++;
+// 	}
+// }
 
 void	init_main(t_flag **flags, t_hash **hash_v, t_app **app, char **argv)
 {
@@ -31,6 +31,7 @@ void	init_main(t_flag **flags, t_hash **hash_v, t_app **app, char **argv)
 	*hash_v = malloc(sizeof(t_hash));
 	(*app)->av = argv;
 	(*app)->bytes = MD5_BYTES;
+	(*hash_v)->mssg = NULL;
 }
 
 void	init_input(t_app **app, int argc)
@@ -51,7 +52,6 @@ int		main(int argc, char **argv)
 	init_main(&flags, &hash_v, &app, argv);
 	init_input(&app, argc);
 	list = NULL;
-	hash_v->mssg = NULL;
 	if (argc == 1)
 		ft_printf("usage: ft_ssl command [command opts] [command args]\n");
 	else if ((app->input = hash_checker(argv[1])) != -1

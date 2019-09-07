@@ -22,15 +22,13 @@ HDR = ./Includes/
 
 SRC = ssl_main.c ssl_md5.c set_bytes_fd.c \
 	ssl_sha_pad.c ft_lstaddend.c ssl_ci_set_ch.c\
-	ssl_hash_algo.c ssl_sha256.c ssl_cmnds.c\
-	set_bytes_str.c ssl_inputs.c\
-	ssl_list.c ssl_bit_op.c
-	# ssl_put_hash.c
+	ssl_hash_algo.c ssl_sha256.c ssl_output.c\
+	set_bytes_str.c ssl_inputs.c ssl_list.c\
+	ssl_bit_op.c ssl_put_hash.c
 
 OBJ = $(SRC:.c=.o)
 
 LIBFT = ./libft/libft.a
-# PRINT_F = includes/ft_printf/libftprintf.a
 
 .PHONY = all clean fclean clean re
 

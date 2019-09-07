@@ -15,14 +15,12 @@
 void	stdin_p_input(t_app *app, t_list *list, t_flag *flags, t_hash *hash_v)
 {
 	char	**argv;
-	int		i;
 
-	i = app->i;
 	argv = app->av;
 	app->fd = 0;
 	set_bytes_fd(app->fd, app->bytes, &list, &hash_v);
 	hash_v->mssg_dig = hash_func(app->input, list, hash_v);
-	p_output(&flags, &hash_v);
+	p_output(&flags, &hash_v, app);
 	free_list(&list);
 }
 
@@ -35,7 +33,7 @@ void	str_input(t_app *app, t_list *list, t_hash *hash_v, t_flag *flags)
 	argv = app->av;
 	set_bytes_str(argv[i], app->bytes, &list);
 	hash_v->mssg_dig = hash_func(app->input, list, hash_v);
-	s_output(argv, &flags, &hash_v, i);
+	s_output(argv, &flags, &hash_v, app);
 	free_list(&list);
 }
 
@@ -54,7 +52,7 @@ void	fd_input(t_app *app, t_list *list, t_hash *hash_v, t_flag *flags)
 	{
 		set_bytes_fd(app->fd, app->bytes, &list, &hash_v);
 		hash_v->mssg_dig = hash_func(app->input, list, hash_v);
-		rq_output(argv, &flags, &hash_v, i);
+		rq_output(argv, &flags, &hash_v, app);
 		free_list(&list);
 	}
 }
