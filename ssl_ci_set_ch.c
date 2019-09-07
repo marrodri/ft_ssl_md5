@@ -17,7 +17,7 @@ void	init_ci_flags(t_flag **flags)
 	int i;
 
 	i = 0;
-	while(i < CI_SZ)
+	while (i < CI_SZ)
 	{
 		(*flags)->ci_flags[i] = 0;
 		i++;
@@ -26,25 +26,23 @@ void	init_ci_flags(t_flag **flags)
 
 int		ci_checker(char *input, int *j)
 {
-	int i;
-	const char ci_flags[CI_SZ] = CI_COM;
+	int			i;
+	const char	ci_flags[CI_SZ] = CI_COM;
 
 	i = 0;
-	// ft_printf("input is %c\n", input[1]);
-	while(i < CI_SZ)
+	while (i < CI_SZ)
 	{
-		if(ci_flags[i] == input[1])
+		if (ci_flags[i] == input[1])
 		{
 			*j = i;
 			return (1);
 		}
 		i++;
 	}
-	// ft_printf("0 returned\n");
 	return (0);
 }
 
-int		ci_set(char **str, int lim ,int *i, t_flag **flags)
+int		ci_set(char **str, int lim, int *i, t_flag **flags)
 {
 	int j;
 	int check;
@@ -52,27 +50,22 @@ int		ci_set(char **str, int lim ,int *i, t_flag **flags)
 	check = 1;
 	j = 0;
 	init_ci_flags(flags);
-	while (str[*i][0] == '-' && check)
+	while (str[*i][0] == '-' && check && (*i != lim))
 	{
 		if ((check = ci_checker(str[*i], &j)) == 1)
 			(*flags)->ci_flags[j] = 1;
 		if (str[*i][1] == 's')
 		{
 			*i += 1;
-			break;
+			break ;
 		}
 		*i += 1;
-		if (*i >= lim)
-			break;
 	}
-	if((*flags)->ci_flags[1])
+	if ((*flags)->ci_flags[1])
 		(*flags)->ci_flags[0] = 0;
-	if(check)
+	if (check)
 		return (1);
-	else
-	{
-		ft_printf("%s: illegal option -- %c\n",str[1] ,str[*i - 1][1]);
-		ft_printf("usage: %s [-pqr] [-s string] [files ...]", str[1]);
-		return (0);
-	}
+	ft_printf("%s: illegal option -- %c\n", str[1], str[*i - 1][1]);
+	ft_printf("usage: %s [-pqr] [-s string] [files ...]", str[1]);
+	return (0);
 }

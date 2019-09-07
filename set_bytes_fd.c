@@ -12,108 +12,13 @@
 
 #include "ssl.h"
 
-int check_last8bytes(uint8_t *chunk, int bytes)
-{
-	int i;
-	int dif;
-
-	i = bytes - 1;
-	dif = bytes - 8;
-	while (i >= dif)
-	{
-		if (chunk[i] != 0x00)
-			return (0);
-		i--;
-	}
-	return (1);
-}
-
-uint64_t byte_length(uint64_t val)
-{
-	int i;
-
-	i = 0;
-	while(val)
-	{
-		val = val >> 8;
-		i++;
-	}
-	return (i);
-}
-
-uint8_t *ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
-{
-	int i;
-	uint64_t push;
-	uint64_t tmp;
-	uint64_t lim;
-	lim = byte_length(bit_len);
-	i = (bytes - 8) + lim;
-	push = (lim) * 8;
-	while (i >= 56)
-	{
-		tmp = bit_len;
-		tmp = bit_len >> push;
-		chunk[i] = 0x00 | tmp;
-		i--;
-		push -= 8;
-	}
-	return (chunk);
-}
-
-uint8_t		*ft_append_bytes(uint8_t *chunk, int ret, int bytes)
-{
-	int i;
-	int dif;
-
-	i = ret + 1;
-	dif = bytes - 8;
-	chunk[ret] = (chunk[ret] << 8) | 0x80;
-	while (i < bytes)
-	{
-		chunk[i] = (chunk[i] << 8) | 0x00;
-		i++;
-	}
-	return (chunk);
-}
-
-t_list	*set_new_node(uint8_t *chunk, int bytes)
-{
-	t_list *new;
-
-	if ((new = (t_list *)malloc(sizeof(t_list))) == NULL)
-		return NULL;
-	if (chunk)
-	{
-		new->content = chunk;
-		new->content_size = bytes;
-	}
-	else
-	{
-		new->content = NULL;
-		new->content_size = 0;
-	}
-	new->next = NULL;
-	return new;
-}
-
-void	add_new_chunk(t_list **list, uint8_t *chunk, int bytes)
-{
-	t_list *new_chunk;
-
-	new_chunk = set_new_node(chunk, bytes);
-	if (*list == NULL)
-		*list = new_chunk;
-	else
-		ft_lstaddend(list, new_chunk);
-}
 
 void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 {
-	uint32_t ret; //32bit as 4byte
-	uint8_t buff[bytes]; //8bit as 1 byte
-	uint32_t byte_len; //int
-	uint64_t bit_len; //unsigned long long
+	uint32_t ret;
+	uint8_t buff[bytes];
+	uint32_t byte_len;
+	uint64_t bit_len;
 	uint8_t *tmp;
 	uint8_t *extra;
 
@@ -149,7 +54,6 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 	}
 	if(byte_len % bytes == 0)
 	{
-		// ft_printf("we got congruent %d, setting new node to append", bytes);
 		tmp = ft_memalloc(bytes);
 		ft_bzero(tmp, bytes);
 		tmp[0] = 0x80;

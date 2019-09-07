@@ -63,6 +63,7 @@ typedef struct		s_app
 	int				input;
 	int				fd;
 	char			*file;
+	char			**av;
 	char			*hash_name;
 	int				i;
 	int				bytes;
@@ -91,6 +92,9 @@ void				s_output(char **argv, t_flag **flags, t_hash **hash_v, int i);
 void				p_output(t_flag **flags, t_hash **hash_v);
 void				rq_output(char **argv, t_flag **flags,
 	t_hash **hash_v, int i);
+void				stdin_p_input(t_app *app, t_list *list, t_flag *flags, t_hash *hash_v);
+void				str_input(t_app *app, t_list *list, t_hash *hash_v, t_flag *flags);
+void				fd_input(t_app *app, t_list *list, t_hash *hash_v, t_flag *flags);
 void				put_md5hash(uint8_t *md);
 void				free_list(t_list **list);
 #endif
