@@ -51,6 +51,7 @@ int		main(int argc, char **argv)
 	init_main(&flags, &hash_v, &app, argv);
 	init_input(&app, argc);
 	list = NULL;
+	hash_v->mssg = NULL;
 	if (argc == 1)
 		ft_printf("usage: ft_ssl command [command opts] [command args]\n");
 	else if ((app->input = hash_checker(argv[1])) != -1

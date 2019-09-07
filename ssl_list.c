@@ -61,12 +61,11 @@ void		add_new_chunk(t_list **list, uint8_t *chunk, int bytes)
 		ft_lstaddend(list, new_chunk);
 }
 
-void	init_var_fd(t_lstcon **lst_v, t_hash **hash_v, uint32_t bytes)
+void	init_varlst(t_lstcon **lst_v, uint32_t bytes)
 {
 	*lst_v = malloc(sizeof(t_lstcon));
 	(*lst_v)->bit_len = 0;
 	(*lst_v)->byte_len = 0;
 	(*lst_v)->buff = ft_memalloc(bytes);
 	ft_bzero((*lst_v)->buff, bytes);
-	(*hash_v)->mssg = NULL;
 }

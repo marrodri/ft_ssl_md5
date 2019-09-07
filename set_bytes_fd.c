@@ -58,7 +58,7 @@ void	set_bytes_fd(const int fd, uint32_t bytes,
 	uint32_t	ret;
 	t_lstcon	*lstv;
 
-	init_var_fd(&lstv, hash_v, bytes);
+	init_varlst(&lstv, bytes);
 	while ((ret = read(fd, lstv->buff, bytes)) > 0)
 	{
 		set_buff_fd(&lstv, hash_v, bytes, ret);
