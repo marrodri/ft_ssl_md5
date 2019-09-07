@@ -57,6 +57,7 @@ uint64_t	byte_length(uint64_t val)
 	return (i);
 }
 
+//append bit_len md5
 uint8_t		*ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 {
 	int			i;

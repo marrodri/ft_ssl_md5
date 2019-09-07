@@ -37,14 +37,6 @@ typedef struct		s_hash
 	int			chunk_len;
 	char		*mssg;
 	uint8_t		*mssg_dig;
-	// uint32_t	a0;
-	// uint32_t	b0;
-	// uint32_t	c0;
-	// uint32_t	d0;
-	// uint32_t	a_bf;
-	// uint32_t	b_bf;
-	// uint32_t	c_bf;
-	// uint32_t	d_bf;
 	uint32_t	*h0;
 	uint32_t	*h_bf;
 	uint32_t	g;

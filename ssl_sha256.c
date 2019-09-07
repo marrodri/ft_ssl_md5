@@ -12,7 +12,7 @@
 
 #include "ssl.h"
 
-const	uint32_t	g_sha256_key[64] =
+const uint32_t	g_sha256_key[64] =
 {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b,
 	0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01,
 	0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7,
@@ -28,11 +28,41 @@ const	uint32_t	g_sha256_key[64] =
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-uint8_t *sha256_hash(t_list *list, t_hash *hash_v)
+void	sha256_buff_init(t_hash **hash_v)
 {
-	list = NULL;
-	hash_v = NULL;
-	ft_printf("sha-256 algo implemented\n");
+	(*hash_v)->h0 = (uint32_t*)malloc(8 * sizeof(uint32_t));
+	(*hash_v)->h_bf = (uint32_t*)malloc(8 * sizeof(uint32_t));
+	(*hash_v)->h0[0] = 0x6a09e667;
+	(*hash_v)->h0[1] = 0xbb67ae85;
+	(*hash_v)->h0[2] = 0x3c6ef372;
+	(*hash_v)->h0[3] = 0xa54ff53a;
+	(*hash_v)->h0[4] = 0x510e527f;
+	(*hash_v)->h0[5] = 0x9b05688c;
+	(*hash_v)->h0[6] = 0x1f83d9ab;
+	(*hash_v)->h0[7] = 0x5be0cd19;
+}
+
+uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
+{
+	uint8_t		*digest;
+	uint32_t	*words;
+	uint32_t	i;
+	uint8_t		*chunk;
+
+	sha256_buff_init(&hash_v);
+	chunk = NULL;
+	while(chunks)
+	{
+		i = 0;
+		chunk = chunks->content;
+		while()
+		{
+			i++;
+		}
+		chunks = chunks->next;
+	}
+
+	
 	
 	return (0);
 }
