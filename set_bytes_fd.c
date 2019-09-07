@@ -41,6 +41,16 @@ void	set_mssg(t_hash **hash_v, char *tmp, char *buff)
 		(*hash_v)->mssg = ft_strdup(buff);
 }
 
+void init_var(t_lstcon **lst_v, t_hash **hash_v, uint32_t bytes)
+{
+	*lst_v = malloc(sizeof(t_lstcon));
+	(*lst_v)->bit_len = 0;
+	(*lst_v)->byte_len = 0;
+	(*lst_v)->buff = ft_memalloc(bytes);
+	ft_bzero((*lst_v)->buff, bytes);
+	(*hash_v)->mssg = NULL;
+}
+
 void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 {
 	uint32_t	ret;
@@ -50,12 +60,13 @@ void	set_bytes_fd(const int fd, uint32_t bytes, t_list **list, t_hash **hash_v)
 	// uint64_t	bit_len;
 	// uint8_t		*tmp;
 
-	lst_v = malloc(sizeof(t_lstcon));
-	lst_v->bit_len = 0;
-	lst_v->byte_len = 0;
-	lst_v->buff = ft_memalloc(bytes);
-	ft_bzero(lst_v->buff, bytes);
-	(*hash_v)->mssg = NULL;
+	// lst_v = malloc(sizeof(t_lstcon));
+	// lst_v->bit_len = 0;
+	// lst_v->byte_len = 0;
+	// lst_v->buff = ft_memalloc(bytes);
+	// ft_bzero(lst_v->buff, bytes);
+	// (*hash_v)->mssg = NULL;
+	init_var(&lst_v, hash_v, bytes);
 	while ((ret = read(fd, lst_v->buff, bytes)) > 0)
 	{
 		lst_v->byte_len = lst_v->byte_len + ret;
