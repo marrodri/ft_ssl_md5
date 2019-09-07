@@ -56,12 +56,18 @@ uint8_t		*ft_append_128bit(uint32_t *input)
 	return output;
 }
 
+void	hashv_alloc(t_hash **hash_v)
+{
+	(*hash_v)->h0 = (uint32_t*)malloc(4 *sizeof(uint32_t));
+	(*hash_v)->h_bf = (uint32_t*)malloc(4 *sizeof(uint32_t)); 
+}
+
 void	md5_buff_init(t_hash *hash_v)
 {
-	hash_v->a0 = 0x67452301;
-	hash_v->b0 = 0xefcdab89;
-	hash_v->c0 = 0x98badcfe;
-	hash_v->d0 = 0x10325476;
+	hash_v->h0[0] = 0x67452301;
+	hash_v->h0[1] = 0xefcdab89;
+	hash_v->h0[2] = 0x98badcfe;
+	hash_v->h0[3] = 0x10325476;
 }
 
 uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
@@ -70,12 +76,18 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 	uint8_t		*chunk;
 	uint32_t	i;
 	uint32_t	g;
+	uint8_t *digest;
 
+	hashv_alloc(&hash_v);
 	md5_buff_init(hash_v);
-	hash_v->a_bf = hash_v->a0;
-	hash_v->b_bf = hash_v->b0;
-	hash_v->c_bf = hash_v->c0;
-	hash_v->d_bf = hash_v->d0;
+	// hash_v->a_bf = hash_v->a0;
+	// hash_v->b_bf = hash_v->b0;
+	// hash_v->c_bf = hash_v->c0;
+	// hash_v->d_bf = hash_v->d0;
+	hash_v->h_bf[0] = hash_v->h0[0];
+	hash_v->h_bf[1] = hash_v->h0[1];
+	hash_v->h_bf[2] = hash_v->h0[2];
+	hash_v->h_bf[3] = hash_v->h0[3];
 	chunk = NULL;
 
 	while(1)
@@ -87,47 +99,45 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 		{
 			if(i <= 15)
 			{
-				hash_v->f = F_DIG(hash_v->b_bf, hash_v->c_bf, hash_v->d_bf);
+				hash_v->f = F_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
 				g = i;
 			}
 			else if(i >= 16 && i <= 31)
 			{
-				hash_v->f = G_DIG(hash_v->b_bf, hash_v->c_bf, hash_v->d_bf);
+				hash_v->f = G_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
 				g = (0x5 * i + 0x1) % 0x10;
 			}
 			else if(i >= 32 && i <= 47)
 			{
-				hash_v->f = H_DIG(hash_v->b_bf, hash_v->c_bf, hash_v->d_bf);
+				hash_v->f = H_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
 				g = (0x3 * i + 0x5) % 0x10;
 			}
 			else if(i >= 48 && i <= 63)
 			{
-				hash_v->f = I_DIG(hash_v->b_bf, hash_v->c_bf, hash_v->d_bf);
+				hash_v->f = I_DIG(hash_v->h_bf[1], hash_v->h_bf[2], hash_v->h_bf[3]);
 				g = (0x7 * i) % 0x10;
 			}
-			hash_v->f = hash_v->f + hash_v->a_bf + g_md5_key[i] + words[g];
-			hash_v->a_bf = hash_v->d_bf;
-			hash_v->d_bf = hash_v->c_bf;
-			hash_v->c_bf = hash_v->b_bf;
-			hash_v->b_bf = hash_v->b_bf + R_LEFT(hash_v->f, g_md5_s[i]);
+			hash_v->f = hash_v->f + hash_v->h_bf[0] + g_md5_key[i] + words[g];
+			hash_v->h_bf[0] = hash_v->h_bf[3];
+			hash_v->h_bf[3] = hash_v->h_bf[2];
+			hash_v->h_bf[2] = hash_v->h_bf[1];
+			hash_v->h_bf[1] = hash_v->h_bf[1] + R_LEFT(hash_v->f, g_md5_s[i]);
 			i++;
 		}
-		hash_v->a_bf += hash_v->a0;
-		hash_v->b_bf += hash_v->b0;
-		hash_v->c_bf += hash_v->c0;
-		hash_v->d_bf += hash_v->d0;
-		hash_v->a0 = hash_v->a_bf;
-		hash_v->b0 = hash_v->b_bf;
-		hash_v->c0 = hash_v->c_bf;
-		hash_v->d0 = hash_v->d_bf;
+		hash_v->h_bf[0] += hash_v->h0[0];
+		hash_v->h_bf[1] += hash_v->h0[1];
+		hash_v->h_bf[2] += hash_v->h0[2];
+		hash_v->h_bf[3] += hash_v->h0[3];
+		hash_v->h0[0] = hash_v->h_bf[0];
+		hash_v->h0[1] = hash_v->h_bf[1];
+		hash_v->h0[2] = hash_v->h_bf[2];
+		hash_v->h0[3] = hash_v->h_bf[3];
 		if(!chunks->next)
 			break;
 		chunks = chunks->next;
 	}
-	uint32_t input[4] = {hash_v->a0, hash_v->b0, hash_v->c0, hash_v->d0};
-	uint8_t *digest;
-	digest = ft_append_128bit(input);
-	return digest;
+	digest = ft_append_128bit(hash_v->h0);
+	return (digest);
 }
 
 

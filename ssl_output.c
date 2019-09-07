@@ -19,20 +19,17 @@ void	s_output(char **argv, t_flag **flags, t_hash **hash_v, t_app *app)
 		if ((*flags)->ci_flags[0])
 		{
 			put_hashmd(app->input, (*hash_v)->mssg_dig);
-			// put_md5hash((*hash_v)->mssg_dig);
 			ft_printf(" \"%s\"\n", argv[app->i]);
 		}
 		else if (!(*flags)->ci_flags[1])
 		{
 			ft_printf("%s (\"%s\") = ", ft_strupper(argv[1]), argv[app->i]);
 			put_hashmd(app->input, (*hash_v)->mssg_dig);
-			// put_md5hash((*hash_v)->mssg_dig);
 			ft_printf("\n");
 		}
 		else
 		{
 			put_hashmd(app->input, (*hash_v)->mssg_dig);
-			// put_md5hash((*hash_v)->mssg_dig);
 			ft_printf("\n");
 		}
 	}
@@ -49,7 +46,6 @@ void	p_output(t_flag **flags, t_hash **hash_v, t_app *app)
 	if ((*flags)->ci_flags[2])
 		ft_printf("%s", (*hash_v)->mssg);
 	put_hashmd(app->input, (*hash_v)->mssg_dig);
-	// put_md5hash((*hash_v)->mssg_dig);
 	ft_printf("\n");
 }
 
@@ -57,7 +53,6 @@ void	rq_output(char **argv, t_flag **flags, t_hash **hash_v, t_app *app)
 {
 	if (!(*flags)->ci_flags[0] && !(*flags)->ci_flags[1])
 		ft_printf("%s (%s) = ", ft_strupper(argv[1]), argv[app->i]);
-	// put_md5hash((*hash_v)->mssg_dig);
 	put_hashmd(app->input, (*hash_v)->mssg_dig);
 	if ((*flags)->ci_flags[0])
 		ft_printf(" %s", argv[app->i]);
