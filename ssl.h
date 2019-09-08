@@ -46,10 +46,16 @@ typedef struct		s_hash
 	uint8_t		*mssg_dig;
 	uint32_t	*h0;
 	uint32_t	*h_bf;
+	uint32_t	a;
+	uint32_t	b;
+	uint32_t	c;
+	uint32_t	d;
+	uint32_t	e;
+	uint32_t	f;
+	uint32_t	g;
+	uint32_t	h;
 	uint32_t	s0;
 	uint32_t	s1;
-	uint32_t	g;
-	uint32_t	f;
 }					t_hash;
 
 typedef struct		s_app

@@ -64,10 +64,11 @@ void		md5_buff_init(t_hash **hash_v)
 	(*hash_v)->h0[1] = 0xefcdab89;
 	(*hash_v)->h0[2] = 0x98badcfe;
 	(*hash_v)->h0[3] = 0x10325476;
-	(*hash_v)->h_bf[0] = (*hash_v)->h0[0];
-	(*hash_v)->h_bf[1] = (*hash_v)->h0[1];
-	(*hash_v)->h_bf[2] = (*hash_v)->h0[2];
-	(*hash_v)->h_bf[3] = (*hash_v)->h0[3];
+//	(*hash_v)->h_bf[0] = (*hash_v)->h0[0];
+//	(*hash_v)->h_bf[1] = (*hash_v)->h0[1];
+//	(*hash_v)->h_bf[2] = (*hash_v)->h0[2];
+//	(*hash_v)->h_bf[3] = (*hash_v)->h0[3];
+	ft_memcpy((*hash_v)->h_bf, (*hash_v)->h0, (32 / 8) * 4);
 }
 
 void		md5_buff_upadte(t_hash *hash_v)

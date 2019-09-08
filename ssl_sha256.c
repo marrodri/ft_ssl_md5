@@ -55,7 +55,7 @@ void	*ft_append_256bit(uint32_t *input)
 void	sha256_buff_init(t_hash **hash_v)
 {
 	(*hash_v)->h0 = (uint32_t*)malloc(8 * sizeof(uint32_t));
-	(*hash_v)->h_bf = (uint32_t*)malloc(8 * sizeof(uint32_t));
+	// (*hash_v)->h_bf = (uint32_t*)malloc(8 * sizeof(uint32_t));
 	(*hash_v)->h0[0] = 0x6a09e667;
 	(*hash_v)->h0[1] = 0xbb67ae85;
 	(*hash_v)->h0[2] = 0x3c6ef372;
@@ -64,6 +64,10 @@ void	sha256_buff_init(t_hash **hash_v)
 	(*hash_v)->h0[5] = 0x9b05688c;
 	(*hash_v)->h0[6] = 0x1f83d9ab;
 	(*hash_v)->h0[7] = 0x5be0cd19;
+	for(int j = 0; j < 8; j++)
+	{
+		ft_printf("h0[%d]=|%02x|\n", j, (*hash_v)->h0[j]);
+	}
 }
 
 uint32_t	*set_w_bf(uint32_t *words)
@@ -77,11 +81,7 @@ uint32_t	*set_w_bf(uint32_t *words)
 		w_bf[i] = words[i];
 		i++;
 	}
-	// for(int j = 0; j < 64; j++)
-	// {
-	// 	ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
-	// }
-	return w_bf;
+	return (w_bf);
 }
 
 uint32_t *swap_big_endian()
@@ -136,26 +136,21 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
 		for(int j = 0; j < 64; j++)
 		{
-			ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
+			ft_printf("w_bf[%d] |%08x|\n", j, w_bf[j]);
 		}
 		//set  hash buffer 
-		hash_v->h_bf[0] = hash_v->h0[0]; //a = h0
-		hash_v->h_bf[1] = hash_v->h0[1]; //b = h1
-		hash_v->h_bf[2] = hash_v->h0[2]; //c = h2
-		hash_v->h_bf[3] = hash_v->h0[3]; //d = h3
-		hash_v->h_bf[4] = hash_v->h0[4]; //e = h4
-		hash_v->h_bf[5] = hash_v->h0[5]; //f = h5
-		hash_v->h_bf[6] = hash_v->h0[6]; //g = h6
-		hash_v->h_bf[7] = hash_v->h0[7]; //h = h7
+		hash_v->a = hash_v->h0[0]; //a = h0
+		hash_v->b = hash_v->h0[1]; //b = h1
+		hash_v->c = hash_v->h0[2]; //c = h2
+		hash_v->d = hash_v->h0[3]; //d = h3
+		hash_v->e = hash_v->h0[4]; //e = h4
+		hash_v->f = hash_v->h0[5]; //f = h5
+		hash_v->g = hash_v->h0[6]; //g = h6
+		hash_v->h = hash_v->h0[7]; //h = h7
 
 		i = 0;
 		while(i < 64)
 		{
-			//set new vals s1,ch, temp, s0, maj, temp2
-			// s1 = (ROT_RIGHT(hash_v->h_bf[4], 6)) ^ (ROT_RIGHT(hash_v->h_bf[4], 11)) ^ (ROT_RIGHT(hash_v->h_bf[4], 25));
-			// ch = (hash_v->h_bf[4] & hash_v->h_bf[5]) ^ ((~hash_v->h_bf[4]) & hash_v->h_bf[6]);
-			// s0 = (ROT_RIGHT(hash_v->h_bf[0], 2)) ^ (ROT_RIGHT(hash_v->h_bf[0], 13)) ^ (ROT_RIGHT(hash_v->h_bf[0], 22));
-			// maj = (hash_v->h_bf[0] & hash_v->h_bf[1]) ^ (hash_v->h_bf[0] & hash_v->h_bf[2]) ^ (hash_v->h_bf[1] & hash_v->h_bf[2]);
 			s1 = BSIG1(hash_v->h_bf[4]); //e
 			ch = CH(hash_v->h_bf[4], hash_v->h_bf[5], hash_v->h_bf[6]);
 			temp1 = hash_v->h_bf[7] + s1 + ch + g_sha256_key[i] + w_bf[i];
@@ -164,24 +159,24 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 			temp2 = s0 + maj;
 			
 			//set rotation hashes
-			hash_v->h_bf[7] = hash_v->h_bf[6]; // h = g
-			hash_v->h_bf[6] = hash_v->h_bf[5]; // g = f
-			hash_v->h_bf[5] = hash_v->h_bf[4]; // f = e
-			hash_v->h_bf[4] = hash_v->h_bf[3] + temp1; // e = d + temp1;
-			hash_v->h_bf[3] = hash_v->h_bf[2]; // d = c;
-			hash_v->h_bf[2] = hash_v->h_bf[1]; // c = b
-			hash_v->h_bf[1] = hash_v->h_bf[0]; // b = a
-			hash_v->h_bf[0] = temp1 + temp2; // a = temp1 + temp2;
+			hash_v->h = hash_v->g; // h = g
+			hash_v->g = hash_v->f; // g = f
+			hash_v->f = hash_v->e; // f = e
+			hash_v->e = hash_v->d + temp1; // e = d + temp1;
+			hash_v->d = hash_v->c; // d = c;
+			hash_v->c = hash_v->d; // c = b
+			hash_v->b = hash_v->a; // b = a
+			hash_v->a = temp1 + temp2; // a = temp1 + temp2;
 			i++;
 		}
-		hash_v->h0[0] += hash_v->h_bf[0]; // h0 = h0 + a
-		hash_v->h0[1] += hash_v->h_bf[1]; // h1 = h1 + b
-		hash_v->h0[2] += hash_v->h_bf[2]; // h2 = h2 + c
-		hash_v->h0[3] += hash_v->h_bf[3]; // h3 = h3 + d
-		hash_v->h0[4] += hash_v->h_bf[4]; // h4 = h4 + e
-		hash_v->h0[5] += hash_v->h_bf[5]; // h5 = h5 + f
-		hash_v->h0[6] += hash_v->h_bf[6]; // h6 = h6 + g
-		hash_v->h0[7] += hash_v->h_bf[7]; // h7 = h7 + h
+		hash_v->h0[0] += hash_v->a; // h0 = h0 + a
+		hash_v->h0[1] += hash_v->b; // h1 = h1 + b
+		hash_v->h0[2] += hash_v->c; // h2 = h2 + c
+		hash_v->h0[3] += hash_v->d; // h3 = h3 + d
+		hash_v->h0[4] += hash_v->e; // h4 = h4 + e
+		hash_v->h0[5] += hash_v->f; // h5 = h5 + f
+		hash_v->h0[6] += hash_v->g; // h6 = h6 + g
+		hash_v->h0[7] += hash_v->h; // h7 = h7 + h
 
 		//add the compressed chunk to the current hash value
 		chunks = chunks->next;
