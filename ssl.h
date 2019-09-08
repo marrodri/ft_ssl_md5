@@ -63,6 +63,7 @@ typedef	struct		s_lstcon
 }					t_lstcon;
 
 typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);
+typedef uint8_t		*t_bitlen_app(uint8_t *chunk, int bytes, uint64_t bit_len);
 typedef int			*t_puthash(uint8_t *md);
 uint8_t				*hash_func(int input, t_list *list, t_hash *hash_v);
 int					hash_checker(char *str);
@@ -73,8 +74,8 @@ void				set_bytes_fd(const int fd, uint32_t bytes,
 void				set_bytes_str(char *str, uint32_t bytes, t_list **list);
 int					check_last8bytes(uint8_t *chunk, int bytes);
 uint8_t				*ft_append_bytes(uint8_t *chunk, int ret, int bytes);
-uint8_t				*ft_append_bitlen(uint8_t *chunk,
-	int bytes, uint64_t bit_len);
+uint8_t		*app_bitlen_md5(uint8_t *chunk, int bytes, uint64_t bit_len);
+uint8_t *app_bitlen_sha256(uint8_t *chunk, int bytes, uint64_t bit_len);
 uint32_t			ft_32bitpad(uint8_t *chunk, int *j);
 void				add_new_chunk(t_list **list, uint8_t *chunk, int bytes);
 void				ft_lstaddend(t_list **alst, t_list *new);

@@ -58,7 +58,7 @@ uint64_t	byte_length(uint64_t val)
 }
 
 //append bit_len md5
-uint8_t		*ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
+uint8_t		*app_bitlen_md5(uint8_t *chunk, int bytes, uint64_t bit_len)
 {
 	int			i;
 	uint64_t	push;
@@ -81,23 +81,39 @@ uint8_t		*ft_append_bitlen(uint8_t *chunk, int bytes, uint64_t bit_len)
 
 
 //append bit_len sha256
-uint8_t		*ft_bitlen_sha256(uint8_t *chunk, int bytes, uint64_t bit_len)
-{
-	int			i;
-	uint64_t	push;
-	uint64_t	tmp;
-	uint64_t	lim;
+// uint8_t		*ft_bitlen_sha256(uint8_t *chunk, int bytes, uint64_t bit_len)
+// {
+// 	int			i;
+// 	uint64_t	push;
+// 	uint64_t	tmp;
+// 	uint64_t	lim;
 
-	lim = byte_length(bit_len);
-	i = (bytes - 8) + lim;
-	push = (lim) * 8;
-	while (i >= 56)
+// 	lim = byte_length(bit_len);
+// 	i = (bytes - 8) + lim;
+// 	push = (lim) * 8;
+// 	while (i >= 56)
+// 	{
+// 		tmp = bit_len;
+// 		tmp = bit_len >> push;
+// 		chunk[i] = 0x00 | tmp;
+// 		i--;
+// 		push -= 8;
+// 	}
+// 	return (chunk);
+// }
+
+uint8_t *app_bitlen_sha256(uint8_t *chunk, int bytes, uint64_t bit_len)
+{
+	int i;
+	int dif;
+	dif = bytes - 8;
+	while (i >= dif)
 	{
-		tmp = bit_len;
-		tmp = bit_len >> push;
-		chunk[i] = 0x00 | tmp;
+		chunk[i] = (chunk[i] << 8) | bit_len;
+		// printf("bit len is |%llx|\n", bit_len);
+		chunk[i] = chunk[i] | bit_len;
+		bit_len = bit_len >> 8;
 		i--;
-		push -= 8;
 	}
 	return (chunk);
 }
