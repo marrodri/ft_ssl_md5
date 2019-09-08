@@ -84,6 +84,13 @@ uint32_t	*set_w_bf(uint32_t *words)
 	return w_bf;
 }
 
+uint32_t *swap_big_endian()
+{
+	uint32_t big_end[8];
+	big_end[0] = 0;
+	return 0;
+}
+
 uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 {
 	uint8_t		*digest;
@@ -109,16 +116,16 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		i = 16;
 		chunk = chunks->content;
 		words = split_32bitwords(chunk);
-		// for(int j = 0; j < 16; j++)
-		// {
-		// 	ft_printf("32bit word[%d] |%02x|\n", j, words[j]);
-		// }
+		for(int j = 0; j < 16; j++)
+		{
+			ft_printf("32bit word[%d] |%02x|\n", j, words[j]);
+		}
 		//copy chunk to special words[64 bytes] from [0 - 15]
 		w_bf = set_w_bf(words);
-		for(int j = 0; j < 64; j++)
-		{
-			ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
-		}
+		// for(int j = 0; j < 64; j++)
+		// {
+		// 	ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
+		// }
 		while(i < 64)
 		{
 			s0 = (ROT_RIGHT(w_bf[i - 15], 7)) ^ (ROT_RIGHT(w_bf[i - 15], 18)) ^ (w_bf[i - 15] >> 3);
@@ -126,11 +133,11 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 			w_bf[i] = w_bf[i - 16] + s0 + w_bf[i - 7] + s1;
 			i++;
 		}
-		// ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
-		// for(int j = 0; j < 64; j++)
-		// {
-		// 	ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
-		// }
+		ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
+		for(int j = 0; j < 64; j++)
+		{
+			ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
+		}
 		//set  hash buffer 
 		hash_v->h_bf[0] = hash_v->h0[0]; //a = h0
 		hash_v->h_bf[1] = hash_v->h0[1]; //b = h1
@@ -180,9 +187,9 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	{
 		ft_printf("h0[%d] is |%02x|\n", j, hash_v->h0[j]);
 	}
-	
+	//
 	digest = ft_append_256bit(hash_v->h0);
 
 	//append diggest value here in big-endian
-	return digest;
+	return (digest);
 }
