@@ -46,7 +46,7 @@ void	*ft_append_256bit(uint32_t *input)
 		output[j + 5] = ((input[i] >> 20) & 0xff);
 		output[j + 6] = ((input[i] >> 24) & 0xff);
 		output[j + 7] = ((input[i] >> 28) & 0xff);
-		j += 4;
+		j += 8;
 		i++;
 	}
 	return output;
@@ -111,7 +111,7 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	words = NULL;
 	sha256_buff_init(&hash_v);
 	chunk = NULL;
-	while(chunks)
+	while (chunks)
 	{
 		i = 16;
 		chunk = chunks->content;
@@ -128,8 +128,8 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		// }
 		while(i < 64)
 		{
-			s0 = (ROT_RIGHT(w_bf[i - 15], 7)) ^ (ROT_RIGHT(w_bf[i - 15], 18)) ^ (w_bf[i - 15] >> 3);
-			s1 = (ROT_RIGHT(w_bf[i - 2], 17)) ^ (ROT_RIGHT(w_bf[i - 2], 19)) ^ (w_bf[i - 15] >> 10);
+			s0 = SSIG0(w_bf[i - 15]);
+			s1 = SSIG0(w_bf[i - 2]);
 			w_bf[i] = w_bf[i - 16] + s0 + w_bf[i - 7] + s1;
 			i++;
 		}
@@ -152,11 +152,15 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		while(i < 64)
 		{
 			//set new vals s1,ch, temp, s0, maj, temp2
-			s1 = (ROT_RIGHT(hash_v->h_bf[4], 6)) ^ (ROT_RIGHT(hash_v->h_bf[4], 11)) ^ (ROT_RIGHT(hash_v->h_bf[4], 25));
-			ch = (hash_v->h_bf[4] & hash_v->h_bf[5]) ^ ((~hash_v->h_bf[4]) & hash_v->h_bf[6]);
+			// s1 = (ROT_RIGHT(hash_v->h_bf[4], 6)) ^ (ROT_RIGHT(hash_v->h_bf[4], 11)) ^ (ROT_RIGHT(hash_v->h_bf[4], 25));
+			// ch = (hash_v->h_bf[4] & hash_v->h_bf[5]) ^ ((~hash_v->h_bf[4]) & hash_v->h_bf[6]);
+			// s0 = (ROT_RIGHT(hash_v->h_bf[0], 2)) ^ (ROT_RIGHT(hash_v->h_bf[0], 13)) ^ (ROT_RIGHT(hash_v->h_bf[0], 22));
+			// maj = (hash_v->h_bf[0] & hash_v->h_bf[1]) ^ (hash_v->h_bf[0] & hash_v->h_bf[2]) ^ (hash_v->h_bf[1] & hash_v->h_bf[2]);
+			s1 = BSIG1(hash_v->h_bf[4]); //e
+			ch = CH(hash_v->h_bf[4], hash_v->h_bf[5], hash_v->h_bf[6]);
 			temp1 = hash_v->h_bf[7] + s1 + ch + g_sha256_key[i] + w_bf[i];
-			s0 = (ROT_RIGHT(hash_v->h_bf[0], 2)) ^ (ROT_RIGHT(hash_v->h_bf[0], 13)) ^ (ROT_RIGHT(hash_v->h_bf[0], 22));
-			maj = (hash_v->h_bf[0] & hash_v->h_bf[1]) ^ (hash_v->h_bf[0] & hash_v->h_bf[2]) ^ (hash_v->h_bf[1] & hash_v->h_bf[2]);
+			s0 = BSIG0(hash_v->h_bf[0]);
+			maj = MAJ(hash_v->h_bf[0], hash_v->h_bf[1], hash_v->h_bf[2]);
 			temp2 = s0 + maj;
 			
 			//set rotation hashes
@@ -179,7 +183,6 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		hash_v->h0[6] += hash_v->h_bf[6]; // h6 = h6 + g
 		hash_v->h0[7] += hash_v->h_bf[7]; // h7 = h7 + h
 
-		
 		//add the compressed chunk to the current hash value
 		chunks = chunks->next;
 	}

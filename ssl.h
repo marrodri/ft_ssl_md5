@@ -27,6 +27,12 @@
 # define I_DIG(B,C,D) (C ^ (B | (~D)))
 # define ROT_LEFT(F,S) ((F << S) | (F >> (32 - S)))
 # define ROT_RIGHT(F,S) ((F >> S) | (F << (32 - S)))
+# define SSIG0(x) ((ROT_RIGHT(x, 7)) ^ (ROT_RIGHT(x, 18)) ^ (x >> 3)) 
+# define SSIG1(x) ((ROT_RIGHT(x, 17)) ^ (ROT_RIGHT(x, 19)) ^ (x >> 10)) 
+# define CH(E,F,G) ((E & F) ^ ((~E) & G))
+# define MAJ(A,B,C) ((A & B) ^ (A & C) ^ (B & C))
+# define BSIG1(x) ((ROT_RIGHT(x, 6)) ^ (ROT_RIGHT(x, 11)) ^ (ROT_RIGHT(x, 25)))
+# define BSIG0(x) ((ROT_RIGHT(x, 2)) ^ (ROT_RIGHT(x, 13)) ^ (ROT_RIGHT(x, 22)))
 
 typedef struct		s_flag
 {
