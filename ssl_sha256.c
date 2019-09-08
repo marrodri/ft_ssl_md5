@@ -49,6 +49,10 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	uint32_t	i;
 	uint8_t		*chunk;
 
+	digest = NULL;
+	words = NULL;
+	ft_printf("WIP NOT DONE!!!!");
+	return 0;
 	sha256_buff_init(&hash_v);
 	chunk = NULL;
 	while(chunks)

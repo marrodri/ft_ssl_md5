@@ -12,22 +12,22 @@
 
 #include "ssl.h"
 
-void	append_last_chunk_str(t_lstcon **lstv, t_list **list, uint32_t bytes)
+void	append_last_chunk_str(t_app *app, t_lstcon **lstv, t_list **list)
 {
-	add_new_chunk(list, (*lstv)->tmp, bytes);
-	(*lstv)->tmp = ft_memalloc(bytes);
-	ft_bzero((*lstv)->tmp, bytes);
-	(*lstv)->tmp = ft_append_bitlen((*lstv)->tmp, bytes, (*lstv)->bit_len);
-	add_new_chunk(list, (*lstv)->tmp, bytes);
+	add_new_chunk(list, (*lstv)->tmp, app->bytes);
+	(*lstv)->tmp = ft_memalloc(app->bytes);
+	ft_bzero((*lstv)->tmp, app->bytes);
+	(*lstv)->tmp = bitlen_tb(app->input, (*lstv)->tmp, app->bytes, (*lstv)->bit_len);
+	add_new_chunk(list, (*lstv)->tmp, app->bytes);
 }
 
-void	append_1bit_chunk_str(t_lstcon **lstv, t_list **list, uint32_t bytes)
+void	append_1bit_chunk_str(t_app *app, t_lstcon **lstv, t_list **list)
 {
-	add_new_chunk(list, (*lstv)->tmp, bytes);
-	(*lstv)->tmp = ft_memalloc(bytes);
-	(*lstv)->tmp = ft_append_bytes((*lstv)->tmp, 0, bytes);
-	(*lstv)->tmp = ft_append_bitlen((*lstv)->tmp, bytes, (*lstv)->bit_len);
-	add_new_chunk(list, (*lstv)->tmp, bytes);
+	add_new_chunk(list, (*lstv)->tmp, app->bytes);
+	(*lstv)->tmp = ft_memalloc(app->bytes);
+	(*lstv)->tmp = ft_append_bytes((*lstv)->tmp, 0, app->bytes);
+	(*lstv)->tmp = bitlen_tb(app->input, (*lstv)->tmp, app->bytes, (*lstv)->bit_len);
+	add_new_chunk(list, (*lstv)->tmp, app->bytes);
 }
 
 void	set_buff_str(t_lstcon **lstv, uint32_t bytes, int i)
@@ -61,25 +61,25 @@ int		set_new_chunk_str(t_lstcon **lstv, t_list **list,
 	return (i);
 }
 
-void	set_bytes_str(char *str, uint32_t bytes, t_list **list)
+void	set_bytes_str(t_app *app, char *str, t_list **list)
 {
 	int			i;
 	t_lstcon	*lstv;
 
-	init_varlst(&lstv, bytes);
+	init_varlst(&lstv, app->bytes);
 	i = 0;
-	i = set_new_chunk_str(&lstv, list, bytes, str);
-	set_buff_str(&lstv, bytes, i);
-	if (i % bytes == 0)
-		append_1bit_chunk_str(&lstv, list, bytes);
+	i = set_new_chunk_str(&lstv, list, app->bytes, str);
+	set_buff_str(&lstv, app->bytes, i);
+	if (i % app->bytes == 0)
+		append_1bit_chunk_str(app, &lstv, list);
 	else
 	{
-		if (!check_last8bytes(lstv->tmp, bytes))
-			append_last_chunk_str(&lstv, list, bytes);
+		if (!check_last8bytes(lstv->tmp, app->bytes))
+			append_last_chunk_str(app, &lstv, list);
 		else
 		{
-			lstv->tmp = ft_append_bitlen(lstv->tmp, bytes, lstv->bit_len);
-			add_new_chunk(list, lstv->tmp, bytes);
+			lstv->tmp = bitlen_tb(app->input, lstv->tmp, app->bytes, lstv->bit_len);
+			add_new_chunk(list, lstv->tmp, app->bytes);
 		}
 	}
 	free(lstv);

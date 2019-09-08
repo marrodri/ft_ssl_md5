@@ -18,6 +18,7 @@ uint8_t *app_bitlen_sha256(uint8_t *chunk, int bytes, uint64_t bit_len)
 {
 	int i;
 	int dif;
+	i = bytes;
 	dif = bytes - 8;
 	while (i >= dif)
 	{
