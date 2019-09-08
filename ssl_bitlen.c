@@ -18,8 +18,9 @@ uint8_t *app_bitlen_sha256(uint8_t *chunk, int bytes, uint64_t bit_len)
 {
 	int i;
 	int dif;
-	i = bytes;
+	i = bytes - 1;
 	dif = bytes - 8;
+	ft_printf("bit_len is d|%d| x|%x|\n", bit_len);
 	while (i >= dif)
 	{
 		chunk[i] = (chunk[i] << 8) | bit_len;
@@ -28,6 +29,10 @@ uint8_t *app_bitlen_sha256(uint8_t *chunk, int bytes, uint64_t bit_len)
 		bit_len = bit_len >> 8;
 		i--;
 	}
+	// for(int i = 0; i< 64; i++)
+	// {
+	// 	ft_printf("str[%d] is hex |%02x| in c is |%c|\n", i, chunk[i], chunk[i]);
+	// }
 	return (chunk);
 }
 

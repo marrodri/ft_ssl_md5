@@ -108,7 +108,7 @@ void		md5_proc(t_hash *hash_v, uint32_t i, uint32_t g, uint32_t *words)
 	hash_v->h_bf[0] = hash_v->h_bf[3];
 	hash_v->h_bf[3] = hash_v->h_bf[2];
 	hash_v->h_bf[2] = hash_v->h_bf[1];
-	hash_v->h_bf[1] = hash_v->h_bf[1] + R_LEFT(hash_v->f, g_md5_s[i]);
+	hash_v->h_bf[1] = hash_v->h_bf[1] + ROT_LEFT(hash_v->f, g_md5_s[i]);
 }
 
 uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)

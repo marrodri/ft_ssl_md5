@@ -25,7 +25,8 @@
 # define G_DIG(B,C,D) ((B & D) | (C & (~D)))
 # define H_DIG(B,C,D) (B ^ C ^ D)
 # define I_DIG(B,C,D) (C ^ (B | (~D)))
-# define R_LEFT(F,S) ((F << S) | (F >> (32 - S)))
+# define ROT_LEFT(F,S) ((F << S) | (F >> (32 - S)))
+# define ROT_RIGHT(F,S) ((F >> S) | (F << (32 - S)))
 
 typedef struct		s_flag
 {
@@ -39,6 +40,8 @@ typedef struct		s_hash
 	uint8_t		*mssg_dig;
 	uint32_t	*h0;
 	uint32_t	*h_bf;
+	uint32_t	s0;
+	uint32_t	s1;
 	uint32_t	g;
 	uint32_t	f;
 }					t_hash;

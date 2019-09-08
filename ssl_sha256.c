@@ -42,29 +42,64 @@ void	sha256_buff_init(t_hash **hash_v)
 	(*hash_v)->h0[7] = 0x5be0cd19;
 }
 
+uint32_t	*set_w_bf(uint32_t *words)
+{
+	int i;
+	uint32_t *w_bf;
+	i = 0;
+	w_bf = ft_memalloc(64);
+	while(i < 16)
+	{
+		w_bf[i] = words[i];
+		i++;
+	}
+	// for(int j = 0; j < 64; j++)
+	// {
+	// 	ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
+	// }
+	return w_bf;
+}
+
 uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 {
 	uint8_t		*digest;
 	uint32_t	*words;
+	uint32_t	*w_bf;
 	uint32_t	i;
 	uint8_t		*chunk;
-
+	uint32_t s0;
+	uint32_t s1;
 	digest = NULL;
 	words = NULL;
-	ft_printf("WIP NOT DONE!!!!");
-	return 0;
 	sha256_buff_init(&hash_v);
 	chunk = NULL;
 	while(chunks)
 	{
 		i = 16;
 		chunk = chunks->content;
+		words = split_32bitwords(chunk);
+		// for(int j = 0; j < 16; j++)
+		// {
+		// 	ft_printf("32bit word[%d] |%02x|\n", j, words[j]);
+		// }
 		//copy chunk to special words[64 bytes] from [0 - 15]
+		w_bf = set_w_bf(words);
+		for(int j = 0; j < 64; j++)
+		{
+			ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
+		}
 		while(i < 64)
 		{
+			s0 = (ROT_RIGHT(w_bf[i - 15], 7)) ^ (ROT_RIGHT(w_bf[i - 15], 18)) ^ (w_bf[i - 15] >> 3);
+			s1 = (ROT_RIGHT(w_bf[i - 2], 17)) ^ (ROT_RIGHT(w_bf[i - 2], 19)) ^ (w_bf[i - 15] >> 10);
+			w_bf[i] = w_bf[i - 16] + s0 + w_bf[i - 7] + s1;
 			i++;
 		}
-
+		ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
+		for(int j = 0; j < 64; j++)
+		{
+			ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
+		}
 		//set  hash buffer 
 
 		i = 0;
