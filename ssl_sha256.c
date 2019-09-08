@@ -53,16 +53,26 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	chunk = NULL;
 	while(chunks)
 	{
-		i = 0;
+		i = 16;
 		chunk = chunks->content;
-		while()
+		//copy chunk to special words[64 bytes] from [0 - 15]
+		while(i < 64)
 		{
 			i++;
 		}
+
+		//set  hash buffer 
+
+		i = 0;
+		while(i < 64)
+		{
+			i++;
+		}
+		//add the compressed chunk to the current hash value
 		chunks = chunks->next;
 	}
 
 	
-	
+	//append diggest value here in big-endian
 	return (0);
 }
