@@ -35,8 +35,8 @@ LIBFT = ./libft/libft.a
 all: $(NAME)
 
 $(OBJ): %.o: %.c
-	@gcc -c $(CFLAGS) $< -o $@
-
+	@gcc -c $(CFLAGS) $< -o $@ -g
+ 
 $(LIBFT):
 	@make -C libft
 

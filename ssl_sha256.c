@@ -64,10 +64,10 @@ void	sha256_buff_init(t_hash **hash_v)
 	(*hash_v)->h0[5] = 0x9b05688c;
 	(*hash_v)->h0[6] = 0x1f83d9ab;
 	(*hash_v)->h0[7] = 0x5be0cd19;
-	for(int j = 0; j < 8; j++)
-	{
-		ft_printf("h0[%d]=|%02x|\n", j, (*hash_v)->h0[j]);
-	}
+	// for(int j = 0; j < 8; j++)
+	// {
+	// 	ft_printf("h0[%d]=|%02x|\n", j, (*hash_v)->h0[j]);
+	// }
 }
 
 uint32_t	*set_w_bf(uint32_t *words)
@@ -84,11 +84,12 @@ uint32_t	*set_w_bf(uint32_t *words)
 	return (w_bf);
 }
 
-uint32_t *swap_big_endian()
+uint32_t swap_endian(uint32_t num)
 {
-	uint32_t big_end[8];
-	big_end[0] = 0;
-	return 0;
+	return (((num & 0x000000ff) << 24u) |
+			((num & 0x0000ff00) << 8u) |
+			((num & 0x00ff0000) >> 8u) |
+			((num & 0xff000000) >> 24u)); 
 }
 
 uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
@@ -115,29 +116,26 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	{
 		i = 16;
 		chunk = chunks->content;
-		words = split_32bitwords(chunk);
+		words = (uint32_t*)(chunk);
 		for(int j = 0; j < 16; j++)
-		{
-			ft_printf("32bit word[%d] |%02x|\n", j, words[j]);
-		}
-		//copy chunk to special words[64 bytes] from [0 - 15]
+			words[j] = swap_endian(words[j]);
+		// for(int j = 0; j < 16; j++)
+		// 	ft_printf("32bit word[%d] |%02x|\n", j, words[j]);
 		w_bf = set_w_bf(words);
 		// for(int j = 0; j < 64; j++)
-		// {
 		// 	ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
-		// }
 		while(i < 64)
 		{
 			s0 = SSIG0(w_bf[i - 15]);
+			s0 = swap_endian(s0);
 			s1 = SSIG0(w_bf[i - 2]);
+			s0 = swap_endian(s1);
 			w_bf[i] = w_bf[i - 16] + s0 + w_bf[i - 7] + s1;
 			i++;
 		}
-		ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
-		for(int j = 0; j < 64; j++)
-		{
-			ft_printf("w_bf[%d] |%08x|\n", j, w_bf[j]);
-		}
+		// ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
+		// for(int j = 0; j < 64; j++)
+		// 	ft_printf("w_bf[%d] |%08x|\n", j, w_bf[j]);
 		//set  hash buffer 
 		hash_v->a = hash_v->h0[0]; //a = h0
 		hash_v->b = hash_v->h0[1]; //b = h1
@@ -151,11 +149,11 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		i = 0;
 		while(i < 64)
 		{
-			s1 = BSIG1(hash_v->h_bf[4]); //e
-			ch = CH(hash_v->h_bf[4], hash_v->h_bf[5], hash_v->h_bf[6]);
-			temp1 = hash_v->h_bf[7] + s1 + ch + g_sha256_key[i] + w_bf[i];
-			s0 = BSIG0(hash_v->h_bf[0]);
-			maj = MAJ(hash_v->h_bf[0], hash_v->h_bf[1], hash_v->h_bf[2]);
+			s1 = BSIG1(hash_v->e); //e
+			ch = CH(hash_v->e, hash_v->f, hash_v->g);
+			temp1 = hash_v->h + s1 + ch + g_sha256_key[i] + w_bf[i];
+			s0 = BSIG0(hash_v->a);
+			maj = MAJ(hash_v->a, hash_v->b, hash_v->c);
 			temp2 = s0 + maj;
 			
 			//set rotation hashes
@@ -181,10 +179,10 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		//add the compressed chunk to the current hash value
 		chunks = chunks->next;
 	}
-	for(int j = 0; j < 8; j++)
-	{
-		ft_printf("h0[%d] is |%02x|\n", j, hash_v->h0[j]);
-	}
+	// for(int j = 0; j < 8; j++)
+	// {
+	// 	ft_printf("h0[%d] is |%02x|\n", j, hash_v->h0[j]);
+	// }
 	//
 	digest = ft_append_256bit(hash_v->h0);
 
