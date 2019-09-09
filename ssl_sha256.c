@@ -12,6 +12,14 @@
 
 #include "ssl.h"
 
+uint32_t swap_endian(uint32_t num)
+{
+	return (((num & 0x000000ff) << 24u) |
+			((num & 0x0000ff00) << 8u) |
+			((num & 0x00ff0000) >> 8u) |
+			((num & 0xff000000) >> 24u)); 
+}
+
 const uint32_t	g_sha256_key[64] =
 {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b,
 	0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01,
@@ -33,21 +41,24 @@ void	*ft_append_256bit(uint32_t *input)
 	static uint8_t output[32];
 	uint32_t i;
 	uint32_t j;
-
-	i =0;
-	j =0;
+	for(int i = 0; i < 8; i++)
+	{
+		input[i] = swap_endian(input[i]);
+	}
+	i = 0;
+	j = 0;
 	while (j < 32)
 	{
 		output[j] = (input[i] & 0xff); 
-		output[j + 1] = ((input[i] >> 4) & 0xff);
-		output[j + 2] = ((input[i] >> 8) & 0xff);
-		output[j + 3] = ((input[i] >> 12) & 0xff);
-		output[j + 4] = ((input[i] >> 16) & 0xff);
-		output[j + 5] = ((input[i] >> 20) & 0xff);
-		output[j + 6] = ((input[i] >> 24) & 0xff);
-		output[j + 7] = ((input[i] >> 28) & 0xff);
+		output[j + 1] = ((input[i] >> 8) & 0xff);
+		output[j + 2] = ((input[i] >> 16) & 0xff);
+		output[j + 3] = ((input[i] >> 24) & 0xff);
+		output[j + 4] = (input[i + 1] & 0xff);
+		output[j + 5] = ((input[i + 1] >> 8) & 0xff);
+		output[j + 6] = ((input[i + 1] >> 16) & 0xff);
+		output[j + 7] = ((input[i + 1] >> 24) & 0xff);
 		j += 8;
-		i++;
+		i += 2;
 	}
 	return output;
 }
@@ -55,7 +66,6 @@ void	*ft_append_256bit(uint32_t *input)
 void	sha256_buff_init(t_hash **hash_v)
 {
 	(*hash_v)->h0 = (uint32_t*)malloc(8 * sizeof(uint32_t));
-	// (*hash_v)->h_bf = (uint32_t*)malloc(8 * sizeof(uint32_t));
 	(*hash_v)->h0[0] = 0x6a09e667;
 	(*hash_v)->h0[1] = 0xbb67ae85;
 	(*hash_v)->h0[2] = 0x3c6ef372;
@@ -84,13 +94,7 @@ uint32_t	*set_w_bf(uint32_t *words)
 	return (w_bf);
 }
 
-uint32_t swap_endian(uint32_t num)
-{
-	return (((num & 0x000000ff) << 24u) |
-			((num & 0x0000ff00) << 8u) |
-			((num & 0x00ff0000) >> 8u) |
-			((num & 0xff000000) >> 24u)); 
-}
+
 
 uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 {
@@ -128,10 +132,6 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 			w_bf[i] = w_bf[i - 16] + s0 + w_bf[i - 7] + s1;
 			i++;
 		}
-		// ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
-		// for(int j = 0; j < 64; j++)
-		// 	ft_printf("w_bf[%d] |%08x|\n", j, w_bf[j]);
-		//set hash buffer 
 		hash_v->a = hash_v->h0[0]; //a = h0
 		hash_v->b = hash_v->h0[1]; //b = h1
 		hash_v->c = hash_v->h0[2]; //c = h2
@@ -140,7 +140,6 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		hash_v->f = hash_v->h0[5]; //f = h5
 		hash_v->g = hash_v->h0[6]; //g = h6
 		hash_v->h = hash_v->h0[7]; //h = h7
-
 		i = 0;
 		ft_printf("INIT VAL !!!!!!\n");
 		ft_printf("a[%d] is |%02x|\n", i, hash_v->a);
@@ -161,8 +160,6 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 			s0 = BSIG0(hash_v->a);
 			maj = MAJ(hash_v->a, hash_v->b, hash_v->c);
 			temp2 = s0 + maj;
-
-			//set rotation hashes
 			hash_v->h = hash_v->g; // h = g
 			hash_v->g = hash_v->f; // g = f
 			hash_v->f = hash_v->e; // f = e
@@ -192,13 +189,9 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		//add the compressed chunk to the current hash value
 		chunks = chunks->next;
 	}
-	for(int j = 0; j < 8; j++)
-	{
-		ft_printf("h0[%d] is |%02x|\n", j, hash_v->h0[j]);
-	}
-	//
-	digest = ft_append_256bit(hash_v->h0);
 
-	//append diggest value here in big-endian
+	for(int j = 0; j < 8; j++)
+		ft_printf("h0[%d] is |%02x|\n", j, hash_v->h0[j]);
+	digest = ft_append_256bit(hash_v->h0);
 	return (digest);
 }
