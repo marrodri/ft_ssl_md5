@@ -123,22 +123,15 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		i = 16;
 		while(i < 64)
 		{
-			// ft_printf("~~~~~i%d~~~~\n", i);
 			s0 = SSIG0(w_bf[i - 15]);
-			// ft_printf("%d.-s0 is |%x|\n", i, s0);
-			// ft_printf("w_bf[%d-15] is |%x|\n", i, w_bf[i - 15]);
-			// s0 = swap_endian(s0);
 			s1 = SSIG1(w_bf[i - 2]);
-			// ft_printf("%d.-s1 is |%x|\n", i, s1);
-			// ft_printf("w_bf[%d-2] is |%x|\n", i, w_bf[i - 2]);
-			// s0 = swap_endian(s1);
 			w_bf[i] = w_bf[i - 16] + s0 + w_bf[i - 7] + s1;
 			i++;
 		}
-		ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
-		for(int j = 0; j < 64; j++)
-			ft_printf("w_bf[%d] |%08x|\n", j, w_bf[j]);
-		//set  hash buffer 
+		// ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
+		// for(int j = 0; j < 64; j++)
+		// 	ft_printf("w_bf[%d] |%08x|\n", j, w_bf[j]);
+		//set hash buffer 
 		hash_v->a = hash_v->h0[0]; //a = h0
 		hash_v->b = hash_v->h0[1]; //b = h1
 		hash_v->c = hash_v->h0[2]; //c = h2
@@ -149,6 +142,17 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		hash_v->h = hash_v->h0[7]; //h = h7
 
 		i = 0;
+		ft_printf("INIT VAL !!!!!!\n");
+		ft_printf("a[%d] is |%02x|\n", i, hash_v->a);
+		ft_printf("b[%d] is |%02x|\n", i, hash_v->b);
+		ft_printf("c[%d] is |%02x|\n", i, hash_v->c);
+		ft_printf("d[%d] is |%02x|\n", i, hash_v->d);
+		ft_printf("e[%d] is |%02x|\n", i, hash_v->e);
+		ft_printf("f[%d] is |%02x|\n", i, hash_v->f);
+		ft_printf("g[%d] is |%02x|\n", i, hash_v->g);
+		ft_printf("h[%d] is |%02x|\n", i, hash_v->h);
+
+		ft_printf("compresion block\n");
 		while(i < 64)
 		{
 			s1 = BSIG1(hash_v->e); //e
@@ -157,16 +161,24 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 			s0 = BSIG0(hash_v->a);
 			maj = MAJ(hash_v->a, hash_v->b, hash_v->c);
 			temp2 = s0 + maj;
-			
+
 			//set rotation hashes
 			hash_v->h = hash_v->g; // h = g
 			hash_v->g = hash_v->f; // g = f
 			hash_v->f = hash_v->e; // f = e
 			hash_v->e = hash_v->d + temp1; // e = d + temp1;
 			hash_v->d = hash_v->c; // d = c;
-			hash_v->c = hash_v->d; // c = b
+			hash_v->c = hash_v->b; // c = b
 			hash_v->b = hash_v->a; // b = a
 			hash_v->a = temp1 + temp2; // a = temp1 + temp2;
+			ft_printf("a[%d] is |%02x|\n", i, hash_v->a);
+			ft_printf("b[%d] is |%02x|\n", i, hash_v->b);
+			ft_printf("c[%d] is |%02x|\n", i, hash_v->c);
+			ft_printf("d[%d] is |%02x|\n", i, hash_v->d);
+			ft_printf("e[%d] is |%02x|\n", i, hash_v->e);
+			ft_printf("f[%d] is |%02x|\n", i, hash_v->f);
+			ft_printf("g[%d] is |%02x|\n", i, hash_v->g);
+			ft_printf("h[%d] is |%02x|\n", i, hash_v->h);
 			i++;
 		}
 		hash_v->h0[0] += hash_v->a; // h0 = h0 + a
@@ -177,7 +189,6 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		hash_v->h0[5] += hash_v->f; // h5 = h5 + f
 		hash_v->h0[6] += hash_v->g; // h6 = h6 + g
 		hash_v->h0[7] += hash_v->h; // h7 = h7 + h
-
 		//add the compressed chunk to the current hash value
 		chunks = chunks->next;
 	}
