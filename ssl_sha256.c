@@ -35,10 +35,7 @@ void	*ft_append_256bit(uint32_t *input)
 	uint32_t j;
 	i = -1;
 	while(++i < 8)
-	{
 		input[i] = swap_endian(input[i]);
-		// i++;
-	}
 	i = 0;
 	j = 0;
 	while (j < 32)
@@ -70,10 +67,13 @@ void	sha256_buff_init(t_hash **hash_v)
 	(*hash_v)->h0[7] = 0x5be0cd19;
 }
 
-uint32_t	*set_w_bf(uint32_t *words)
+uint32_t	*set_w_bf(uint8_t *chunk)
 {
-	int i;
-	uint32_t *w_bf;
+	int			i;
+	uint32_t	*w_bf;
+	uint32_t	*words;
+
+	words = (uint32_t*)(chunk);
 	i = 0;
 	w_bf = ft_memalloc(64);
 	while(i < 16)
@@ -81,6 +81,8 @@ uint32_t	*set_w_bf(uint32_t *words)
 		w_bf[i] = words[i];
 		i++;
 	}
+	for(int j = 0; j < 64; j++)
+			w_bf[j] = swap_endian(w_bf[j]);
 	return (w_bf);
 }
 
@@ -110,10 +112,10 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	while (chunks)
 	{
 		chunk = chunks->content;
-		words = (uint32_t*)(chunk);
-		w_bf = set_w_bf(words);
-		for(int j = 0; j < 64; j++)
-			w_bf[j] = swap_endian(w_bf[j]);
+		// words = (uint32_t*)(chunk);
+		w_bf = set_w_bf(chunk);
+		// for(int j = 0; j < 64; j++)
+		// 	w_bf[j] = swap_endian(w_bf[j]);
 		i = 16;
 		while(i < 64)
 		{
