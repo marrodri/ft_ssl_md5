@@ -16,6 +16,7 @@ uint8_t		*app_bitlen_sha256(uint8_t *chunk, int bytes, uint64_t bit_len)
 {
 	int i;
 	int dif;
+
 	i = bytes - 1;
 	dif = bytes - 8;
 	while (i >= dif)
@@ -49,8 +50,7 @@ uint8_t		*app_bitlen_md5(uint8_t *chunk, int bytes, uint64_t bit_len)
 	return (chunk);
 }
 
-
-uint8_t	*bitlen_tb(int input, uint8_t *chunk, int bytes, uint64_t bit_len)
+uint8_t		*bitlen_tb(int input, uint8_t *chunk, int bytes, uint64_t bit_len)
 {
 	t_bitlen_app *bitlen_algo[HS_SZ];
 

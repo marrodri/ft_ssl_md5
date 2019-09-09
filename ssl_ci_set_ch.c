@@ -66,8 +66,8 @@ int		ci_set(char **str, int lim, int *i, t_flag **flags)
 			break ;
 		}
 		*i += 1;
-		if(*i >= lim)
-			break;
+		if (*i >= lim)
+			break ;
 	}
 	if ((*flags)->ci_flags[1])
 		(*flags)->ci_flags[0] = 0;
