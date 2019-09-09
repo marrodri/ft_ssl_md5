@@ -12,9 +12,17 @@ uint32_t swap_endian(uint32_t num)
 
 int main()
 {
-	uint32_t a = 9;
-	uint32_t b;
-	printf("before %x\n", a);
-	b = swap_endian(a);
+	uint32_t a = 0x18;
+	uint32_t b = ROT_RIGHT(a, 17) ^ ROT_RIGHT(a, 19) ^ (a >> 10);
+	uint32_t b1 = ROT_RIGHT(a, 17);
+	uint32_t b2 = ROT_RIGHT(a, 19);
+	uint32_t b3 =(a >> 10);
+
+	printf("before |%08x|\n", a);
+
+	printf("b1 |%08x|\n", b1);
+	printf("b2 |%08x|\n", b2);
+	printf("b3 |%08x|\n", b3);
+	// b = swap_endian(a);
 	printf("after %x\n", b);
 }

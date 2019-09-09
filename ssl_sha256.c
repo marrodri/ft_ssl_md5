@@ -97,7 +97,7 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	uint8_t		*digest;
 	uint32_t	*words;
 	uint32_t	*w_bf;
-	uint32_t	i;
+	int			i;	
 	uint8_t		*chunk;
 
 
@@ -107,35 +107,37 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	uint32_t temp1;
 	uint32_t temp2;
 	uint32_t maj;
-
+	s0 = 0;
+	s1 = 0;
 	digest = NULL;
 	words = NULL;
 	sha256_buff_init(&hash_v);
 	chunk = NULL;
 	while (chunks)
 	{
-		i = 16;
 		chunk = chunks->content;
 		words = (uint32_t*)(chunk);
-		for(int j = 0; j < 16; j++)
-			words[j] = swap_endian(words[j]);
-		// for(int j = 0; j < 16; j++)
-		// 	ft_printf("32bit word[%d] |%02x|\n", j, words[j]);
 		w_bf = set_w_bf(words);
-		// for(int j = 0; j < 64; j++)
-		// 	ft_printf("w_bf[%d] |%02x|\n", j, w_bf[j]);
+		for(int j = 0; j < 64; j++)
+			w_bf[j] = swap_endian(w_bf[j]);
+		i = 16;
 		while(i < 64)
 		{
+			// ft_printf("~~~~~i%d~~~~\n", i);
 			s0 = SSIG0(w_bf[i - 15]);
-			s0 = swap_endian(s0);
-			s1 = SSIG0(w_bf[i - 2]);
-			s0 = swap_endian(s1);
+			// ft_printf("%d.-s0 is |%x|\n", i, s0);
+			// ft_printf("w_bf[%d-15] is |%x|\n", i, w_bf[i - 15]);
+			// s0 = swap_endian(s0);
+			s1 = SSIG1(w_bf[i - 2]);
+			// ft_printf("%d.-s1 is |%x|\n", i, s1);
+			// ft_printf("w_bf[%d-2] is |%x|\n", i, w_bf[i - 2]);
+			// s0 = swap_endian(s1);
 			w_bf[i] = w_bf[i - 16] + s0 + w_bf[i - 7] + s1;
 			i++;
 		}
-		// ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
-		// for(int j = 0; j < 64; j++)
-		// 	ft_printf("w_bf[%d] |%08x|\n", j, w_bf[j]);
+		ft_printf("!!!!!!!!!!!!w_bf fully set!!!!!!!\n");
+		for(int j = 0; j < 64; j++)
+			ft_printf("w_bf[%d] |%08x|\n", j, w_bf[j]);
 		//set  hash buffer 
 		hash_v->a = hash_v->h0[0]; //a = h0
 		hash_v->b = hash_v->h0[1]; //b = h1
@@ -179,10 +181,10 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		//add the compressed chunk to the current hash value
 		chunks = chunks->next;
 	}
-	// for(int j = 0; j < 8; j++)
-	// {
-	// 	ft_printf("h0[%d] is |%02x|\n", j, hash_v->h0[j]);
-	// }
+	for(int j = 0; j < 8; j++)
+	{
+		ft_printf("h0[%d] is |%02x|\n", j, hash_v->h0[j]);
+	}
 	//
 	digest = ft_append_256bit(hash_v->h0);
 
