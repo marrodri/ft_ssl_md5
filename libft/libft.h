@@ -105,4 +105,5 @@ long long int		ft_libaselen(long long int n, int base, int f_flag);
 long long int		ft_llideduct(long long int num);
 long long int		ft_power_of_lli(long long int n, long long int expo);
 char				*ft_ldtoa(long double ld_num, int prec);
+uint32_t			swap_endian(uint32_t num);
 #endif

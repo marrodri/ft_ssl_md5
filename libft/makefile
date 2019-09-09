@@ -33,7 +33,7 @@ SRC = ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c \
 	  ft_libaselen.c ft_lldeduct.c ft_power_of_lli.c ft_ldtoa.c \
 	  ft_printf.c format_str.c set_fflags.c field_man_flag.c char_form.c \
 	int_form.c set_form.c field_flags.c float_form.c prec_man_flag.c \
-	flag_checker.c
+	flag_checker.c ft_swap_endian.c
 
 HDR = ./includes/
 

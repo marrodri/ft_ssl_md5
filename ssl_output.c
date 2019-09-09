@@ -23,7 +23,7 @@ void	s_output(char **argv, t_flag **flags, t_hash **hash_v, t_app *app)
 		}
 		else if (!(*flags)->ci_flags[1])
 		{
-			ft_printf("%s (\"%s\") = ", ft_strupper(argv[1]), argv[app->i]);
+			ft_printf("%s(\"%s\")= ", ft_strupper(argv[1]), argv[app->i]);
 			put_hashmd(app->input, (*hash_v)->mssg_dig);
 			ft_printf("\n");
 		}
@@ -52,7 +52,7 @@ void	p_output(t_flag **flags, t_hash **hash_v, t_app *app)
 void	rq_output(char **argv, t_flag **flags, t_hash **hash_v, t_app *app)
 {
 	if (!(*flags)->ci_flags[0] && !(*flags)->ci_flags[1])
-		ft_printf("%s (%s) = ", ft_strupper(argv[1]), argv[app->i]);
+		ft_printf("%s(%s)= ", ft_strupper(argv[1]), argv[app->i]);
 	put_hashmd(app->input, (*hash_v)->mssg_dig);
 	if ((*flags)->ci_flags[0])
 		ft_printf(" %s", argv[app->i]);

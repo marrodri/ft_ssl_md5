@@ -96,11 +96,9 @@ uint8_t				*ft_append_bytes(uint8_t *chunk, int ret, int bytes);
 u_int8_t			*bitlen_tb(int input, uint8_t *chunk, int bytes, uint64_t bit_len);
 uint8_t				*app_bitlen_md5(uint8_t *chunk, int bytes, uint64_t bit_len);
 uint8_t				*app_bitlen_sha256(uint8_t *chunk, int bytes, uint64_t bit_len);
-uint32_t			ft_32bitpad(uint8_t *chunk, int *j);
 void				add_new_chunk(t_list **list, uint8_t *chunk, int bytes);
 void				ft_lstaddend(t_list **alst, t_list *new);
 void				free_list(t_list **list);
-uint32_t			*split_32bitwords(uint8_t *chunk);
 void				init_varlst(t_lstcon **lst_v, uint32_t bytes);
 int					ci_set(char **str, int lim, int *i, t_flag **flags);
 void				stdin_p_input(t_app *app, t_list *list,
