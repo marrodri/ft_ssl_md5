@@ -106,6 +106,31 @@ uint32_t	*init_val_sha256(t_hash *hash_v, uint32_t *w_bf)
 	return w_bf;
 }
 
+void	sha256_compr(t_hash **hash_v, uint32_t *w_bf)
+{
+	int i;
+
+	i = 0;
+	while(i < 64)
+	{
+		(*hash_v)->s1 = BSIG1((*hash_v)->e);
+		(*hash_v)->ch = CH((*hash_v)->e, (*hash_v)->f, (*hash_v)->g);
+		(*hash_v)->tmp1 = (*hash_v)->h + (*hash_v)->s1 + (*hash_v)->ch + g_sha256_key[i] + w_bf[i];
+		(*hash_v)->s0 = BSIG0((*hash_v)->a);
+		(*hash_v)->maj = MAJ((*hash_v)->a, (*hash_v)->b, (*hash_v)->c);
+		(*hash_v)->tmp2 = (*hash_v)->s0 + (*hash_v)->maj;
+		(*hash_v)->h = (*hash_v)->g;
+		(*hash_v)->g = (*hash_v)->f;
+		(*hash_v)->f = (*hash_v)->e;
+		(*hash_v)->e = (*hash_v)->d + (*hash_v)->tmp1;
+		(*hash_v)->d = (*hash_v)->c;
+		(*hash_v)->c = (*hash_v)->b;
+		(*hash_v)->b = (*hash_v)->a;
+		(*hash_v)->a = (*hash_v)->tmp1 + (*hash_v)->tmp2;
+		i++;
+	}
+}
+
 uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 {
 	uint8_t		*digest;
@@ -113,8 +138,6 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	uint32_t	*w_bf;
 	int			i;	
 	uint8_t		*chunk;
-
-
 
 	digest = NULL;
 	words = NULL;
@@ -125,14 +148,6 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		chunk = chunks->content;
 		w_bf = set_w_bf(chunk);
 		w_bf = init_val_sha256(hash_v, w_bf);
-		// i = 16;
-		// while(i < 64)
-		// {
-		// 	hash_v->s0 = SSIG0(w_bf[i - 15]);
-		// 	hash_v->s1 = SSIG1(w_bf[i - 2]);
-		// 	w_bf[i] = w_bf[i - 16] + hash_v->s0 + w_bf[i - 7] + hash_v->s1;
-		// 	i++;
-		// }
 		hash_v->a = hash_v->h0[0];
 		hash_v->b = hash_v->h0[1];
 		hash_v->c = hash_v->h0[2];
@@ -142,24 +157,25 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		hash_v->g = hash_v->h0[6];
 		hash_v->h = hash_v->h0[7];
 		i = 0;
-		while(i < 64)
-		{
-			hash_v->s1 = BSIG1(hash_v->e);
-			hash_v->ch = CH(hash_v->e, hash_v->f, hash_v->g);
-			hash_v->tmp1 = hash_v->h + hash_v->s1 + hash_v->ch + g_sha256_key[i] + w_bf[i];
-			hash_v->s0 = BSIG0(hash_v->a);
-			hash_v->maj = MAJ(hash_v->a, hash_v->b, hash_v->c);
-			hash_v->tmp2 = hash_v->s0 + hash_v->maj;
-			hash_v->h = hash_v->g;
-			hash_v->g = hash_v->f;
-			hash_v->f = hash_v->e;
-			hash_v->e = hash_v->d + hash_v->tmp1;
-			hash_v->d = hash_v->c;
-			hash_v->c = hash_v->b;
-			hash_v->b = hash_v->a;
-			hash_v->a = hash_v->tmp1 + hash_v->tmp2;
-			i++;
-		}
+		// while(i < 64)
+		// {
+		// 	hash_v->s1 = BSIG1(hash_v->e);
+		// 	hash_v->ch = CH(hash_v->e, hash_v->f, hash_v->g);
+		// 	hash_v->tmp1 = hash_v->h + hash_v->s1 + hash_v->ch + g_sha256_key[i] + w_bf[i];
+		// 	hash_v->s0 = BSIG0(hash_v->a);
+		// 	hash_v->maj = MAJ(hash_v->a, hash_v->b, hash_v->c);
+		// 	hash_v->tmp2 = hash_v->s0 + hash_v->maj;
+		// 	hash_v->h = hash_v->g;
+		// 	hash_v->g = hash_v->f;
+		// 	hash_v->f = hash_v->e;
+		// 	hash_v->e = hash_v->d + hash_v->tmp1;
+		// 	hash_v->d = hash_v->c;
+		// 	hash_v->c = hash_v->b;
+		// 	hash_v->b = hash_v->a;
+		// 	hash_v->a = hash_v->tmp1 + hash_v->tmp2;
+		// 	i++;
+		// }
+		sha256_compr(&hash_v, w_bf);
 		hash_v->h0[0] += hash_v->a;
 		hash_v->h0[1] += hash_v->b;
 		hash_v->h0[2] += hash_v->c;
