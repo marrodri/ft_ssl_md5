@@ -28,33 +28,7 @@ const uint32_t	g_sha256_key[64] =
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-void	*ft_append_256bit(uint32_t *input)
-{
-	static uint8_t output[32];
-	uint32_t i;
-	uint32_t j;
-	i = -1;
-	while(++i < 8)
-		input[i] = swap_endian(input[i]);
-	i = 0;
-	j = 0;
-	while (j < 32)
-	{
-		output[j] = (input[i] & 0xff); 
-		output[j + 1] = ((input[i] >> 8) & 0xff);
-		output[j + 2] = ((input[i] >> 16) & 0xff);
-		output[j + 3] = ((input[i] >> 24) & 0xff);
-		output[j + 4] = (input[i + 1] & 0xff);
-		output[j + 5] = ((input[i + 1] >> 8) & 0xff);
-		output[j + 6] = ((input[i + 1] >> 16) & 0xff);
-		output[j + 7] = ((input[i + 1] >> 24) & 0xff);
-		j += 8;
-		i += 2;
-	}
-	return (output);
-}
-
-void	sha256_buff_init(t_hash **hash_v)
+void		sha256_buff_init(t_hash **hash_v)
 {
 	(*hash_v)->h0 = (uint32_t*)malloc(8 * sizeof(uint32_t));
 	(*hash_v)->h0[0] = 0x6a09e667;
@@ -67,55 +41,44 @@ void	sha256_buff_init(t_hash **hash_v)
 	(*hash_v)->h0[7] = 0x5be0cd19;
 }
 
-uint32_t	*set_w_bf(uint8_t *chunk)
-{
-	int			i;
-	int			j;
-	uint32_t	*w_bf;
-	uint32_t	*words;
-
-	words = (uint32_t*)(chunk);
-	i = 0;
-	j = 0;
-	w_bf = ft_memalloc(64);
-	while(i < 16)
-	{
-		w_bf[i] = words[i];
-		i++;
-	}
-	while(j < 64)
-	{
-		w_bf[j] = swap_endian(w_bf[j]);
-		j++;
-	}
-	return (w_bf);
-}
-
 uint32_t	*init_val_sha256(t_hash *hash_v, uint32_t *w_bf)
 {
 	int i;
 
 	i = 16;
-	while(i < 64)
+	while (i < 64)
 	{
 		hash_v->s0 = SSIG0(w_bf[i - 15]);
 		hash_v->s1 = SSIG1(w_bf[i - 2]);
 		w_bf[i] = w_bf[i - 16] + hash_v->s0 + w_bf[i - 7] + hash_v->s1;
 		i++;
 	}
-	return w_bf;
+	return (w_bf);
 }
 
-void	sha256_compr(t_hash **hash_v, uint32_t *w_bf)
+void		sha256_setval(t_hash **hash_v)
+{
+	(*hash_v)->a = (*hash_v)->h0[0];
+	(*hash_v)->b = (*hash_v)->h0[1];
+	(*hash_v)->c = (*hash_v)->h0[2];
+	(*hash_v)->d = (*hash_v)->h0[3];
+	(*hash_v)->e = (*hash_v)->h0[4];
+	(*hash_v)->f = (*hash_v)->h0[5];
+	(*hash_v)->g = (*hash_v)->h0[6];
+	(*hash_v)->h = (*hash_v)->h0[7];
+}
+
+void		sha256_compr(t_hash **hash_v, uint32_t *w_bf)
 {
 	int i;
 
 	i = 0;
-	while(i < 64)
+	while (i < 64)
 	{
 		(*hash_v)->s1 = BSIG1((*hash_v)->e);
 		(*hash_v)->ch = CH((*hash_v)->e, (*hash_v)->f, (*hash_v)->g);
-		(*hash_v)->tmp1 = (*hash_v)->h + (*hash_v)->s1 + (*hash_v)->ch + g_sha256_key[i] + w_bf[i];
+		(*hash_v)->tmp1 = (*hash_v)->h + (*hash_v)->s1 + (*hash_v)->ch +
+			g_sha256_key[i] + w_bf[i];
 		(*hash_v)->s0 = BSIG0((*hash_v)->a);
 		(*hash_v)->maj = MAJ((*hash_v)->a, (*hash_v)->b, (*hash_v)->c);
 		(*hash_v)->tmp2 = (*hash_v)->s0 + (*hash_v)->maj;
@@ -131,50 +94,20 @@ void	sha256_compr(t_hash **hash_v, uint32_t *w_bf)
 	}
 }
 
-uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
+uint8_t		*sha256_hash(t_list *chunks, t_hash *hash_v)
 {
 	uint8_t		*digest;
-	uint32_t	*words;
 	uint32_t	*w_bf;
-	int			i;	
 	uint8_t		*chunk;
 
-	digest = NULL;
-	words = NULL;
-	sha256_buff_init(&hash_v);
 	chunk = NULL;
+	sha256_buff_init(&hash_v);
 	while (chunks)
 	{
 		chunk = chunks->content;
 		w_bf = set_w_bf(chunk);
 		w_bf = init_val_sha256(hash_v, w_bf);
-		hash_v->a = hash_v->h0[0];
-		hash_v->b = hash_v->h0[1];
-		hash_v->c = hash_v->h0[2];
-		hash_v->d = hash_v->h0[3];
-		hash_v->e = hash_v->h0[4];
-		hash_v->f = hash_v->h0[5];
-		hash_v->g = hash_v->h0[6];
-		hash_v->h = hash_v->h0[7];
-		i = 0;
-		// while(i < 64)
-		// {
-		// 	hash_v->s1 = BSIG1(hash_v->e);
-		// 	hash_v->ch = CH(hash_v->e, hash_v->f, hash_v->g);
-		// 	hash_v->tmp1 = hash_v->h + hash_v->s1 + hash_v->ch + g_sha256_key[i] + w_bf[i];
-		// 	hash_v->s0 = BSIG0(hash_v->a);
-		// 	hash_v->maj = MAJ(hash_v->a, hash_v->b, hash_v->c);
-		// 	hash_v->tmp2 = hash_v->s0 + hash_v->maj;
-		// 	hash_v->h = hash_v->g;
-		// 	hash_v->g = hash_v->f;
-		// 	hash_v->f = hash_v->e;
-		// 	hash_v->e = hash_v->d + hash_v->tmp1;
-		// 	hash_v->d = hash_v->c;
-		// 	hash_v->c = hash_v->b;
-		// 	hash_v->b = hash_v->a;
-		// 	hash_v->a = hash_v->tmp1 + hash_v->tmp2;
-		// 	i++;
-		// }
+		sha256_setval(&hash_v);
 		sha256_compr(&hash_v, w_bf);
 		hash_v->h0[0] += hash_v->a;
 		hash_v->h0[1] += hash_v->b;

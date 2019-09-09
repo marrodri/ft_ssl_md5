@@ -29,8 +29,8 @@
 # define ROT_LEFT(F,S) ((F << S) | (F >> (32 - S)))
 # define ROT_RIGHT(F,S) ((F >> S) | (F << (32 - S)))
 
-# define SSIG0(x) ((ROT_RIGHT(x, 7)) ^ (ROT_RIGHT(x, 18)) ^ (x >> 3)) 
-# define SSIG1(x) ((ROT_RIGHT(x, 17)) ^ (ROT_RIGHT(x, 19)) ^ (x >> 10)) 
+# define SSIG0(x) ((ROT_RIGHT(x, 7)) ^ (ROT_RIGHT(x, 18)) ^ (x >> 3))
+# define SSIG1(x) ((ROT_RIGHT(x, 17)) ^ (ROT_RIGHT(x, 19)) ^ (x >> 10))
 
 # define CH(E,F,G) ((E & F) ^ ((~E) & G))
 # define MAJ(A,B,C) ((A & B) ^ (A & C) ^ (B & C))
@@ -93,13 +93,18 @@ int					hash_checker(char *str);
 uint64_t			byte_length(uint64_t val);
 uint8_t				*md5_hash(t_list *chunks, t_hash *hash_v);
 uint8_t				*sha256_hash(t_list *list, t_hash *hash_v);
+uint32_t			*set_w_bf(uint8_t *chunk);
+void				*ft_append_256bit(uint32_t *input);
 void				set_bytes_fd(t_app *app, t_list **list, t_hash **hash_v);
 void				set_bytes_str(t_app *app, char *str, t_list **list);
 int					check_last8bytes(uint8_t *chunk, int bytes);
 uint8_t				*ft_append_bytes(uint8_t *chunk, int ret, int bytes);
-u_int8_t			*bitlen_tb(int input, uint8_t *chunk, int bytes, uint64_t bit_len);
-uint8_t				*app_bitlen_md5(uint8_t *chunk, int bytes, uint64_t bit_len);
-uint8_t				*app_bitlen_sha256(uint8_t *chunk, int bytes, uint64_t bit_len);
+u_int8_t			*bitlen_tb(int input, uint8_t *chunk,
+	int bytes, uint64_t bit_len);
+uint8_t				*app_bitlen_md5(uint8_t *chunk, int bytes,
+	uint64_t bit_len);
+uint8_t				*app_bitlen_sha256(uint8_t *chunk,
+	int bytes, uint64_t bit_len);
 void				add_new_chunk(t_list **list, uint8_t *chunk, int bytes);
 void				ft_lstaddend(t_list **alst, t_list *new);
 void				free_list(t_list **list);

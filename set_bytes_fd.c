@@ -22,6 +22,7 @@ void	append_last_chunk_fd(t_app *app, t_list **list, t_lstcon **lstv)
 	bit_len = (*lstv)->byte_len * 8;
 	(*lstv)->tmp = bitlen_tb(app->input, (*lstv)->tmp, app->bytes, bit_len);
 	add_new_chunk(list, (*lstv)->tmp, app->bytes);
+	free(*lstv);
 }
 
 void	append_new_chunk_fd(t_app *app, t_list **list, t_lstcon **lstv)
@@ -29,8 +30,10 @@ void	append_new_chunk_fd(t_app *app, t_list **list, t_lstcon **lstv)
 	add_new_chunk(list, (*lstv)->tmp, app->bytes);
 	(*lstv)->tmp = ft_memalloc(app->bytes);
 	ft_bzero((*lstv)->tmp, app->bytes);
-	(*lstv)->tmp = bitlen_tb(app->input, (*lstv)->tmp, app->bytes, (*lstv)->bit_len);
+	(*lstv)->tmp = bitlen_tb(app->input, (*lstv)->tmp,
+		app->bytes, (*lstv)->bit_len);
 	add_new_chunk(list, (*lstv)->tmp, app->bytes);
+	free(*lstv);
 }
 
 void	set_mssg_fd(t_hash **hash_v, char *tmp, char *buff)
@@ -66,15 +69,14 @@ void	set_bytes_fd(t_app *app, t_list **list, t_hash **hash_v)
 			if (!check_last8bytes(lstv->tmp, app->bytes))
 			{
 				append_new_chunk_fd(app, list, &lstv);
-				free(lstv);
 				return ;
 			}
 			else
-				lstv->tmp = bitlen_tb(app->input,lstv->tmp, app->bytes, lstv->bit_len);
+				lstv->tmp = bitlen_tb(app->input, lstv->tmp,
+					app->bytes, lstv->bit_len);
 		}
 		add_new_chunk(list, lstv->tmp, app->bytes);
 	}
 	if (lstv->byte_len % app->bytes == 0)
 		append_last_chunk_fd(app, list, &lstv);
-	free(lstv);
 }

@@ -22,9 +22,9 @@ HDR = ./Includes/
 
 SRC = ssl_main.c ssl_md5.c set_bytes_fd.c \
 	ft_lstaddend.c ssl_ci_set_ch.c ssl_bitlen.c\
-	ssl_hash_algo.c ssl_sha256.c ssl_output.c\
+	ssl_hash_algo.c ssl_sha256.c ssl_sha256ft.c\
 	set_bytes_str.c ssl_inputs.c ssl_list.c\
-	ssl_bit_op.c ssl_put_hash.c 
+	ssl_bit_op.c ssl_put_hash.c ssl_output.c
 
 OBJ = $(SRC:.c=.o)
 
