@@ -60,8 +60,8 @@ typedef struct		s_hash
 	uint32_t	h;
 	uint32_t	s0;
 	uint32_t	s1;
-	uint32_t	temp1;
-	uint32_t	temp2;
+	uint32_t	tmp1;
+	uint32_t	tmp2;
 	uint32_t	maj;
 	uint32_t	ch;
 }					t_hash;

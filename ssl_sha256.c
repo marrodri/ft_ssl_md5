@@ -70,23 +70,41 @@ void	sha256_buff_init(t_hash **hash_v)
 uint32_t	*set_w_bf(uint8_t *chunk)
 {
 	int			i;
+	int			j;
 	uint32_t	*w_bf;
 	uint32_t	*words;
 
 	words = (uint32_t*)(chunk);
 	i = 0;
+	j = 0;
 	w_bf = ft_memalloc(64);
 	while(i < 16)
 	{
 		w_bf[i] = words[i];
 		i++;
 	}
-	for(int j = 0; j < 64; j++)
-			w_bf[j] = swap_endian(w_bf[j]);
+	while(j < 64)
+	{
+		w_bf[j] = swap_endian(w_bf[j]);
+		j++;
+	}
 	return (w_bf);
 }
 
+uint32_t	*init_val_sha256(t_hash *hash_v, uint32_t *w_bf)
+{
+	int i;
 
+	i = 16;
+	while(i < 64)
+	{
+		hash_v->s0 = SSIG0(w_bf[i - 15]);
+		hash_v->s1 = SSIG1(w_bf[i - 2]);
+		w_bf[i] = w_bf[i - 16] + hash_v->s0 + w_bf[i - 7] + hash_v->s1;
+		i++;
+	}
+	return w_bf;
+}
 
 uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 {
@@ -97,14 +115,7 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	uint8_t		*chunk;
 
 
-	uint32_t s0;
-	uint32_t s1;
-	uint32_t ch;
-	uint32_t temp1;
-	uint32_t temp2;
-	uint32_t maj;
-	s0 = 0;
-	s1 = 0;
+
 	digest = NULL;
 	words = NULL;
 	sha256_buff_init(&hash_v);
@@ -112,18 +123,16 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 	while (chunks)
 	{
 		chunk = chunks->content;
-		// words = (uint32_t*)(chunk);
 		w_bf = set_w_bf(chunk);
-		// for(int j = 0; j < 64; j++)
-		// 	w_bf[j] = swap_endian(w_bf[j]);
-		i = 16;
-		while(i < 64)
-		{
-			s0 = SSIG0(w_bf[i - 15]);
-			s1 = SSIG1(w_bf[i - 2]);
-			w_bf[i] = w_bf[i - 16] + s0 + w_bf[i - 7] + s1;
-			i++;
-		}
+		w_bf = init_val_sha256(hash_v, w_bf);
+		// i = 16;
+		// while(i < 64)
+		// {
+		// 	hash_v->s0 = SSIG0(w_bf[i - 15]);
+		// 	hash_v->s1 = SSIG1(w_bf[i - 2]);
+		// 	w_bf[i] = w_bf[i - 16] + hash_v->s0 + w_bf[i - 7] + hash_v->s1;
+		// 	i++;
+		// }
 		hash_v->a = hash_v->h0[0];
 		hash_v->b = hash_v->h0[1];
 		hash_v->c = hash_v->h0[2];
@@ -135,20 +144,20 @@ uint8_t *sha256_hash(t_list *chunks, t_hash *hash_v)
 		i = 0;
 		while(i < 64)
 		{
-			s1 = BSIG1(hash_v->e);
-			ch = CH(hash_v->e, hash_v->f, hash_v->g);
-			temp1 = hash_v->h + s1 + ch + g_sha256_key[i] + w_bf[i];
-			s0 = BSIG0(hash_v->a);
-			maj = MAJ(hash_v->a, hash_v->b, hash_v->c);
-			temp2 = s0 + maj;
+			hash_v->s1 = BSIG1(hash_v->e);
+			hash_v->ch = CH(hash_v->e, hash_v->f, hash_v->g);
+			hash_v->tmp1 = hash_v->h + hash_v->s1 + hash_v->ch + g_sha256_key[i] + w_bf[i];
+			hash_v->s0 = BSIG0(hash_v->a);
+			hash_v->maj = MAJ(hash_v->a, hash_v->b, hash_v->c);
+			hash_v->tmp2 = hash_v->s0 + hash_v->maj;
 			hash_v->h = hash_v->g;
 			hash_v->g = hash_v->f;
 			hash_v->f = hash_v->e;
-			hash_v->e = hash_v->d + temp1;
+			hash_v->e = hash_v->d + hash_v->tmp1;
 			hash_v->d = hash_v->c;
 			hash_v->c = hash_v->b;
 			hash_v->b = hash_v->a;
-			hash_v->a = temp1 + temp2;
+			hash_v->a = hash_v->tmp1 + hash_v->tmp2;
 			i++;
 		}
 		hash_v->h0[0] += hash_v->a;
