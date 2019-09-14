@@ -39,6 +39,7 @@ void		sha256_buff_init(t_hash **hash_v)
 	(*hash_v)->h0[5] = 0x9b05688c; //sha224 0x68581511 sha256 0x9b05688c
 	(*hash_v)->h0[6] = 0x1f83d9ab; //sha224 0x64f98fa7 sha256 0x1f83d9ab
 	(*hash_v)->h0[7] = 0x5be0cd19; //sha224 0xbefa4fa4 sha256 0x5be0cd19
+
 }
 
 uint32_t	*init_val_sha256(t_hash *hash_v, uint32_t *w_bf)
