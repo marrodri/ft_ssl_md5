@@ -85,6 +85,15 @@ typedef	struct		s_lstcon
 	uint8_t		*tmp;
 }					t_lstcon;
 
+typedef	uint8_t *t_hash_ft(t_list *list, t_hash *hash_v);
+
+typedef	struct	s_table
+{
+	char		*hash_name;
+	t_hash_ft		*hash_ft;
+	uint32_t	bytes;
+}				t_table;
+
 typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);
 typedef uint8_t		*t_bitlen_app(uint8_t *chunk, int bytes, uint64_t bit_len);
 typedef int			*t_puthash(uint8_t *md);
@@ -124,4 +133,12 @@ void				s_output(char **argv, t_flag **flags,
 void				p_output(t_flag **flags, t_hash **hash_v, t_app *app);
 void				rq_output(char **argv, t_flag **flags,
 	t_hash **hash_v, t_app *app);
+
+// const t_table	data[] = {
+// 	//name, function, bytes;
+// 	{"md5", md5_hash, 64},
+// 	{"sha256", sha256_hash, 64},
+// 	{"sha224", sha224_hash, 64},
+// };
+
 #endif
