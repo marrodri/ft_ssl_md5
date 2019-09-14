@@ -18,8 +18,8 @@
 # include <stdint.h>
 # define MD5_BYTES		64
 # define CI_COM {'r','q','p','s'}
-# define HS_COM {"md5", "sha256"}
-# define HS_SZ 2
+# define HS_COM {"md5", "sha256", "sha224"}
+# define HS_SZ 3
 # define CI_SZ 4
 # define F_DIG(B,C,D) ((B & C) | ((~B) & D))
 # define G_DIG(B,C,D) ((B & D) | (C & (~D)))
@@ -93,6 +93,8 @@ int					hash_checker(char *str);
 uint64_t			byte_length(uint64_t val);
 uint8_t				*md5_hash(t_list *chunks, t_hash *hash_v);
 uint8_t				*sha256_hash(t_list *list, t_hash *hash_v);
+uint8_t				*sha224_hash(t_list *chunks, t_hash *hash_v);
+void				*ft_append_224bit(uint32_t *input);
 uint32_t			*set_w_bf(uint8_t *chunk);
 void				*ft_append_256bit(uint32_t *input);
 void				set_bytes_fd(t_app *app, t_list **list, t_hash **hash_v);

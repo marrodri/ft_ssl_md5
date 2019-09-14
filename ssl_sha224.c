@@ -99,9 +99,9 @@ uint8_t		*sha224_hash(t_list *chunks, t_hash *hash_v)
 	uint8_t		*digest;
 	uint32_t	*w_bf;
 	uint8_t		*chunk;
-
+	ft_printf("here?!!!!!!\n");
 	chunk = NULL;
-	sha256_buff_init(&hash_v);
+	sha224_buff_init(&hash_v);
 	while (chunks)
 	{
 		chunk = chunks->content;
@@ -120,5 +120,6 @@ uint8_t		*sha224_hash(t_list *chunks, t_hash *hash_v)
 		chunks = chunks->next;
 	}
 	digest = ft_append_224bit(hash_v->h0);
+	ft_printf("here?!!!!!!\n");
 	return (digest);
 }
