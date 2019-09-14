@@ -120,6 +120,9 @@ uint8_t		*sha224_hash(t_list *chunks, t_hash *hash_v)
 		chunks = chunks->next;
 	}
 	digest = ft_append_224bit(hash_v->h0);
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/backup/master
 	return (digest);
 }
