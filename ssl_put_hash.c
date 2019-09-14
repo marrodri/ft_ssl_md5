@@ -55,7 +55,7 @@ void	put_hashmd(int input, uint8_t *md)
 {
 	t_puthash	*pr_hash[HS_SZ];
 	int			*i;
-	ft_printf("here\n");
+
 	i = NULL;
 	pr_hash[0] = put_md5hash;
 	pr_hash[1] = put256hash;

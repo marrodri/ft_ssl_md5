@@ -6,7 +6,7 @@ void		*ft_append_224bit(uint32_t *input)
 	static uint8_t	output[32];
 	uint32_t		i;
 	uint32_t		j;
-	ft_printf("here?!!!!!!\n");
+
 	i = -1;
 	while (++i < 8)
 		input[i] = swap_endian(input[i]);

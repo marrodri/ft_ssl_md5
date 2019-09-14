@@ -33,7 +33,6 @@ int			hash_checker(char *str)
 uint8_t		*hash_func(int input, t_list *list, t_hash *hash_v)
 {
 	t_hash_algo *hash_arr[HS_SZ];
-	ft_printf("here?!!!!!!\n");
 
 	hash_arr[0] = md5_hash;
 	hash_arr[1] = sha256_hash;
