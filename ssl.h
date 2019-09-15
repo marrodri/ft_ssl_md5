@@ -18,7 +18,7 @@
 # include <stdint.h>
 # define MD5_BYTES		64
 # define CI_COM {'r','q','p','s'}
-# define HS_COM {"md5", "sha256", "sha224"}
+# define HS_COM {"md5", "sha256", "sha224", "sha1"}
 # define HS_SZ 3
 # define CI_SZ 4
 # define F_DIG(B,C,D) ((B & C) | ((~B) & D))
@@ -85,13 +85,15 @@ typedef	struct		s_lstcon
 	uint8_t		*tmp;
 }					t_lstcon;
 
-typedef	uint8_t *t_hash_ft(t_list *list, t_hash *hash_v);
+typedef	uint8_t 	*t_hash_ft(t_list *list, t_hash *hash_v);
+typedef uint8_t		*t_bitlen_ft(uint8_t *chunk, int bytes, uint64_t bit_len);
 
 typedef	struct	s_table
 {
-	char		*hash_name;
+	char			*hash_name;
 	t_hash_ft		*hash_ft;
-	uint32_t	bytes;
+	t_bitlen_ft		*bitlen_ft;
+	uint32_t		bytes;
 }				t_table;
 
 typedef	uint8_t		*t_hash_algo(t_list *list, t_hash *hash_v);
@@ -101,6 +103,7 @@ uint8_t				*hash_func(int input, t_list *list, t_hash *hash_v);
 int					hash_checker(char *str);
 uint64_t			byte_length(uint64_t val);
 uint8_t				*md5_hash(t_list *chunks, t_hash *hash_v);
+uint8_t				*sha1_hash(t_list *chunks, t_hash *hash_v);
 uint8_t				*sha256_hash(t_list *list, t_hash *hash_v);
 uint8_t				*sha224_hash(t_list *chunks, t_hash *hash_v);
 void				*ft_append_224bit(uint32_t *input);
@@ -136,9 +139,10 @@ void				rq_output(char **argv, t_flag **flags,
 
 // const t_table	data[] = {
 // 	//name, function, bytes;
-// 	{"md5", md5_hash, 64},
-// 	{"sha256", sha256_hash, 64},
-// 	{"sha224", sha224_hash, 64},
+// 	{"md5", md5_hash, app_bitlen_md5, 64},
+// 	{"sha256", sha256_hash, app_bitlen_sha256, 64},
+// 	{"sha224", sha224_hash, app_bitlen_sha256, 64},
+// 	{"sha1", sha1_hash, app_bitlen_sha256, 64},
 // };
 
 #endif

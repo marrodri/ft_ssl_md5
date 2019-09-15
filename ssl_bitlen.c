@@ -54,7 +54,7 @@ uint8_t		*bitlen_tb(int input, uint8_t *chunk, int bytes, uint64_t bit_len)
 {
 	t_bitlen_app *bitlen_algo[HS_SZ];
 
-	if (input == 2)
+	if (input == 2 || input == 3)
 		input = 1;
 	bitlen_algo[0] = app_bitlen_md5;
 	bitlen_algo[1] = app_bitlen_sha256;
