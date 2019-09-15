@@ -19,13 +19,13 @@
 # define MD5_BYTES		64
 # define CI_COM {'r','q','p','s'}
 # define HS_COM {"md5", "sha256", "sha224", "sha1"}
-# define HS_SZ 3
+# define HS_SZ 4
 # define CI_SZ 4
 # define F_DIG(B,C,D) ((B & C) | ((~B) & D))
 # define G_DIG(B,C,D) ((B & D) | (C & (~D)))
 # define H_DIG(B,C,D) (B ^ C ^ D)
 # define I_DIG(B,C,D) (C ^ (B | (~D)))
-
+# define J_DIG(B,C,D) ((B & C) | (B & D) | (C & D))
 # define ROT_LEFT(F,S) ((F << S) | (F >> (32 - S)))
 # define ROT_RIGHT(F,S) ((F >> S) | (F << (32 - S)))
 
@@ -58,6 +58,7 @@ typedef struct		s_hash
 	uint32_t	f;
 	uint32_t	g;
 	uint32_t	h;
+	uint32_t	k;
 	uint32_t	s0;
 	uint32_t	s1;
 	uint32_t	tmp1;

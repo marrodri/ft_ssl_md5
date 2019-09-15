@@ -37,5 +37,6 @@ uint8_t		*hash_func(int input, t_list *list, t_hash *hash_v)
 	hash_arr[0] = md5_hash;
 	hash_arr[1] = sha256_hash;
 	hash_arr[2] = sha224_hash;
+	hash_arr[3] = sha1_hash;
 	return (hash_arr[input](list, hash_v));
 }

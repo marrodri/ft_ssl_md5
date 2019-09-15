@@ -24,6 +24,30 @@ void sha1_buff_init(t_hash **hash_v)
 	(*hash_v)->h0[3] = 0x10325476; 
 	(*hash_v)->h0[4] = 0xc3d2e1f0; 
 }
+void		*ft_append_160bit(uint32_t *input)
+{
+	static uint8_t	output[20];
+	uint32_t		i;
+	uint32_t		j;
+
+	i = -1;
+	while (++i < 5)
+		input[i] = swap_endian(input[i]);
+	i = 0;
+	j = 0;
+	//put
+	while (j < 20)
+	{
+		output[j] = (input[i] & 0xff);
+		output[j + 1] = ((input[i] >> 8) & 0xff);
+		output[j + 2] = ((input[i] >> 16) & 0xff);
+		output[j + 3] = ((input[i] >> 24) & 0xff);
+		output[j + 4] = (input[i + 1] & 0xff);
+		j += 5;
+		i ++;
+	}
+	return (output);
+}
 
 uint32_t	*set_w_bf80(uint8_t *chunk)
 {
@@ -49,15 +73,52 @@ uint32_t	*set_w_bf80(uint8_t *chunk)
 	return (w_bf);
 }
 
-void	init_wrd_sha1(char **w_bf)
+uint32_t	*init_wrd_sha1(uint32_t *w_bf)
 {
 	int i;
 
 	i = 16;
 	while(i < 80)
 	{
-		*w_bf[i] = ROT_LEFT((*w_bf[i - 3] ^ *w_bf[i - 8] ^
-			*w_bf[i - 14] ^ *w_bf[i - 16]), 1);
+		w_bf[i] = ROT_LEFT((w_bf[i - 3] ^ w_bf[i - 8] ^
+			w_bf[i - 14] ^ w_bf[i - 16]), 1);
+		i++;
+	}
+	return w_bf;
+}
+
+void sha1_compr(t_hash **hash_v, uint32_t *w_bf)
+{
+	int			i;
+
+	i = 0;
+	while(i < 80)
+	{
+		if(i < 20)
+		{
+			(*hash_v)->f = F_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
+			(*hash_v)->k = 0x5a827999;
+		}
+		else if(i < 40)
+		{
+			(*hash_v)->f = H_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
+			(*hash_v)->k = 0x6ed9eba1;
+		}
+		else if(i < 60)
+		{
+			(*hash_v)->f = J_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
+			(*hash_v)->k = 0x8f1bbcdc;
+		}
+		else if(i < 80)
+		{
+			(*hash_v)->f = H_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
+			(*hash_v)->k = 0xca62c1d6;
+		}
+		(*hash_v)->tmp1 = ROT_LEFT((*hash_v)->a, 5) + (*hash_v)->f + (*hash_v)->e +(*hash_v)->k + w_bf[i];
+		(*hash_v)->e = (*hash_v)->d;
+		(*hash_v)->c = ROT_LEFT((*hash_v)->b, 30);
+		(*hash_v)->b = (*hash_v)->a;
+		(*hash_v)->a = (*hash_v)->tmp1;
 		i++;
 	}
 }
@@ -76,8 +137,6 @@ uint8_t *sha1_hash(t_list *chunks, t_hash *hash_v)
 	uint8_t *digest;
 	uint32_t *w_bf; //is 80 bytes the word_buff
 	uint8_t	*chunk;
-	int i;
-	int j;
 
 	chunk = NULL;
 	sha1_buff_init(&hash_v);
@@ -85,16 +144,16 @@ uint8_t *sha1_hash(t_list *chunks, t_hash *hash_v)
 	{
 		chunk = chunks->content;
 		w_bf = set_w_bf80(chunk);
-		init_wrd_sha1(&w_bf);
+		w_bf = init_wrd_sha1(w_bf);
 		init_val_sha1(&hash_v);
-		// hash_v->a = hash_v->h0[0];
-		// hash_v->b = hash_v->h0[1];
-		// hash_v->c = hash_v->h0[2];
-		// hash_v->d = hash_v->h0[4];
-		// hash_v->e = hash_v->h0[3];
-
+		sha1_compr(&hash_v,w_bf);
+		hash_v->h0[0] += hash_v->a;
+		hash_v->h0[1] += hash_v->b;
+		hash_v->h0[2] += hash_v->c;
+		hash_v->h0[4] += hash_v->d;
+		hash_v->h0[3] += hash_v->e;
 		chunks = chunks->next;
 	}
-	digest = ft_append_256bit(hash_v->h0);
+	digest = ft_append_160bit(hash_v->h0);
 	return digest;
 }
