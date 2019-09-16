@@ -59,7 +59,7 @@ void	fd_input(t_app *app, t_list *list, t_hash *hash_v, t_flag *flags)
 			argv[1], argv[i]);
 	else if (argv[i])
 	{
-		set_bytes_fd(app, &list, &hash_v); //rename to get_mssg_fd(app, &hash_v) list will be moved inside the hash functions
+		set_bytes_fd(app, &list, &hash_v);
 		hash_v->mssg_dig = hash_func(app->input, list, hash_v);
 		rq_output(argv, &flags, &hash_v, app);
 		free_list(&list);
