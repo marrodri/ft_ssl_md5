@@ -46,15 +46,15 @@ int		main(int argc, char **argv)
 			ci_set(argv, argc, &app->i, &flags))
 	{
 		//add something to prevent entering here when -s doesnt have a str!!!!
-		if (argc == 2 || flags->ci_flags[2] || !argv[app->i])
+		if (argc == 2 || flags->ci_flags[2] || (!argv[app->i] && argv[app->i - 1][1] != 's'))
 		{
-			ft_printf("i is %d\n", app->i);
-			if(argc == 2)
-				ft_printf("only 2 arguments found!\n");
-			else if(flags->ci_flags[2])
-				ft_printf("flag p is active!!!!!\n");
-			else if (!argv[app->i])
-				ft_printf("i is null in argv %d\n", app->i);
+			// ft_printf("i is %d\n", app->i);
+			// if(argc == 2)
+			// 	ft_printf("only 2 arguments found!\n");
+			// else if(flags->ci_flags[2])
+			// 	ft_printf("flag p is active!!!!!\n");
+			// else if (!argv[app->i])
+			// 	ft_printf("i is null in argv %d\n", app->i);
 
 			stdin_p_input(app, list, flags, hash_v);
 		}
