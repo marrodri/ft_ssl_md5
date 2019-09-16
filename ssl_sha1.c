@@ -35,7 +35,7 @@ void		*ft_append_160bit(uint32_t *input)
 		input[i] = swap_endian(input[i]);
 	i = 0;
 	j = 0;
-	//put
+
 	while (j < 20)
 	{
 		output[j] = (input[i] & 0xff);
@@ -51,7 +51,7 @@ void		*ft_append_160bit(uint32_t *input)
 
 uint32_t	*set_w_bf80(uint8_t *chunk)
 {
-		int			i;
+	int			i;
 	int			j;
 	uint32_t	*w_bf;
 	uint32_t	*words;
@@ -135,7 +135,7 @@ void	init_val_sha1(t_hash **hash_v)
 uint8_t *sha1_hash(t_list *chunks, t_hash *hash_v)
 {
 	uint8_t *digest;
-	uint32_t *w_bf; //is 80 bytes the word_buff
+	uint32_t *w_bf;
 	uint8_t	*chunk;
 
 	chunk = NULL;

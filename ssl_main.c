@@ -40,14 +40,24 @@ int		main(int argc, char **argv)
 	init_main(&flags, &hash_v, &app, argv);
 	init_input(&app, argc);
 	list = NULL;
-	
 	if (argc == 1)
 		ft_printf("usage: ft_ssl command [command opts] [command args]\n");
 	else if (((app->input = hash_checker(argv[1])) != -1) &&
 			ci_set(argv, argc, &app->i, &flags))
 	{
+		//add something to prevent entering here when -s doesnt have a str!!!!
 		if (argc == 2 || flags->ci_flags[2] || !argv[app->i])
+		{
+			ft_printf("i is %d\n", app->i);
+			if(argc == 2)
+				ft_printf("only 2 arguments found!\n");
+			else if(flags->ci_flags[2])
+				ft_printf("flag p is active!!!!!\n");
+			else if (!argv[app->i])
+				ft_printf("i is null in argv %d\n", app->i);
+
 			stdin_p_input(app, list, flags, hash_v);
+		}
 		while (app->i <= argc && argc != 2)
 		{
 			if (flags->ci_flags[3] == 1)
