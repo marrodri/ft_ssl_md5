@@ -31,7 +31,7 @@ const uint32_t	g_sha224_key[64] =
 void		sha224_buff_init(t_hash **hash_v)
 {
 	(*hash_v)->h0 = (uint32_t*)malloc(8 * sizeof(uint32_t));
-	(*hash_v)->h0[0] = 0xc1059ed8; 
+	(*hash_v)->h0[0] = 0xc1059ed8;
 	(*hash_v)->h0[1] = 0x367cd507;
 	(*hash_v)->h0[2] = 0x3070dd17;
 	(*hash_v)->h0[3] = 0xf70e5939;
@@ -68,18 +68,6 @@ void		sha224_setval(t_hash **hash_v)
 	(*hash_v)->h = (*hash_v)->h0[7];
 }
 
-void		hash_rot(t_hash **hash_v)
-{
-	(*hash_v)->h = (*hash_v)->g;
-	(*hash_v)->g = (*hash_v)->f;
-	(*hash_v)->f = (*hash_v)->e;
-	(*hash_v)->e = (*hash_v)->d + (*hash_v)->tmp1;
-	(*hash_v)->d = (*hash_v)->c;
-	(*hash_v)->c = (*hash_v)->b;
-	(*hash_v)->b = (*hash_v)->a;
-	(*hash_v)->a = (*hash_v)->tmp1 + (*hash_v)->tmp2;
-}
-
 void		sha224_compr(t_hash **hash_v, uint32_t *w_bf)
 {
 	int i;
@@ -94,22 +82,21 @@ void		sha224_compr(t_hash **hash_v, uint32_t *w_bf)
 		(*hash_v)->s0 = BSIG0((*hash_v)->a);
 		(*hash_v)->maj = MAJ((*hash_v)->a, (*hash_v)->b, (*hash_v)->c);
 		(*hash_v)->tmp2 = (*hash_v)->s0 + (*hash_v)->maj;
-		// (*hash_v)->h = (*hash_v)->g;
-		// (*hash_v)->g = (*hash_v)->f;
-		// (*hash_v)->f = (*hash_v)->e;
-		// (*hash_v)->e = (*hash_v)->d + (*hash_v)->tmp1;
-		// (*hash_v)->d = (*hash_v)->c;
-		// (*hash_v)->c = (*hash_v)->b;
-		// (*hash_v)->b = (*hash_v)->a;
-		// (*hash_v)->a = (*hash_v)->tmp1 + (*hash_v)->tmp2;
-		hash_rot(hash_v);
+		(*hash_v)->h = (*hash_v)->g;
+		(*hash_v)->g = (*hash_v)->f;
+		(*hash_v)->f = (*hash_v)->e;
+		(*hash_v)->e = (*hash_v)->d + (*hash_v)->tmp1;
+		(*hash_v)->d = (*hash_v)->c;
+		(*hash_v)->c = (*hash_v)->b;
+		(*hash_v)->b = (*hash_v)->a;
+		(*hash_v)->a = (*hash_v)->tmp1 + (*hash_v)->tmp2;
 		i++;
 	}
 }
 
 uint8_t		*sha224_hash(t_list *chunks, t_hash *hash_v)
 {
-	uint8_t		*digest;
+	// uint8_t		*digest;
 	uint32_t	*w_bf;
 	uint8_t		*chunk;
 
@@ -132,7 +119,7 @@ uint8_t		*sha224_hash(t_list *chunks, t_hash *hash_v)
 		hash_v->h0[7] += hash_v->h;
 		chunks = chunks->next;
 	}
-	digest = ft_append_256bit(hash_v->h0);
-	put224hash(digest);
-	return (digest);
+	// digest = ft_append_256bit(hash_v->h0);
+	put224hash(ft_append_256bit(hash_v->h0));
+	return 0;
 }
