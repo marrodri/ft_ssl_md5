@@ -44,7 +44,7 @@ void		*ft_append_160bit(uint32_t *input)
 		output[j + 3] = ((input[i] >> 24) & 0xff);
 		output[j + 4] = (input[i + 1] & 0xff);
 		j += 5;
-		i ++;
+		i++;
 	}
 	return (output);
 }
@@ -116,9 +116,15 @@ void sha1_compr(t_hash **hash_v, uint32_t *w_bf)
 		}
 		(*hash_v)->tmp1 = ROT_LEFT((*hash_v)->a, 5) + (*hash_v)->f + (*hash_v)->e +(*hash_v)->k + w_bf[i];
 		(*hash_v)->e = (*hash_v)->d;
+		(*hash_v)->d = (*hash_v)->c;
 		(*hash_v)->c = ROT_LEFT((*hash_v)->b, 30);
 		(*hash_v)->b = (*hash_v)->a;
 		(*hash_v)->a = (*hash_v)->tmp1;
+		// ft_printf("a[%d] |%08x|\n", i, (*hash_v)->a);
+		// ft_printf("b[%d] |%08x|\n", i, (*hash_v)->b);
+		// ft_printf("c[%d] |%08x|\n", i, (*hash_v)->c);
+		// ft_printf("d[%d] |%08x|\n", i, (*hash_v)->d);
+		// ft_printf("e[%d] |%08x|\n", i, (*hash_v)->e);
 		i++;
 	}
 }
@@ -128,8 +134,8 @@ void	init_val_sha1(t_hash **hash_v)
 		(*hash_v)->a = (*hash_v)->h0[0];
 		(*hash_v)->b = (*hash_v)->h0[1];
 		(*hash_v)->c = (*hash_v)->h0[2];
-		(*hash_v)->d = (*hash_v)->h0[4];
-		(*hash_v)->e = (*hash_v)->h0[3];	
+		(*hash_v)->d = (*hash_v)->h0[3];
+		(*hash_v)->e = (*hash_v)->h0[4];	
 }
 
 uint8_t *sha1_hash(t_list *chunks, t_hash *hash_v)
@@ -144,16 +150,35 @@ uint8_t *sha1_hash(t_list *chunks, t_hash *hash_v)
 	{
 		chunk = chunks->content;
 		w_bf = set_w_bf80(chunk);
+		
 		w_bf = init_wrd_sha1(w_bf);
+		// for(int i = 0; i < 80; i++)
+		// {
+		// 	ft_printf("w_bf[%d] is |%08x|\n", i, w_bf[i]);
+		// }
 		init_val_sha1(&hash_v);
+		// ft_printf("----------init values--------\n");
+		// ft_printf("a |%08x|\n", hash_v->a);
+		// ft_printf("b |%08x|\n", hash_v->b);
+		// ft_printf("c |%08x|\n", hash_v->c);
+		// ft_printf("d |%08x|\n", hash_v->d);
+		// ft_printf("e |%08x|\n", hash_v->e);
 		sha1_compr(&hash_v,w_bf);
+		// ft_printf("final buff VAL_______\n");
+		// ft_printf("a |%08x|\n", hash_v->a);
+		// ft_printf("b |%08x|\n", hash_v->b);
+		// ft_printf("c |%08x|\n", hash_v->c);
+		// ft_printf("d |%08x|\n", hash_v->d);
+		// ft_printf("e |%08x|\n", hash_v->e);
 		hash_v->h0[0] += hash_v->a;
 		hash_v->h0[1] += hash_v->b;
 		hash_v->h0[2] += hash_v->c;
-		hash_v->h0[4] += hash_v->d;
-		hash_v->h0[3] += hash_v->e;
+		hash_v->h0[3] += hash_v->d;
+		hash_v->h0[4] += hash_v->e;
 		chunks = chunks->next;
 	}
+	for(int i = 0; i < 5; i++)
+	ft_printf("h0[%d] |%08x|\n", i , hash_v->h0[i]);
 	digest = ft_append_160bit(hash_v->h0);
 	return digest;
 }
