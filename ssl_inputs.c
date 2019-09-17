@@ -19,7 +19,7 @@ void	stdin_p_input(t_app *app, t_list *list, t_flag *flags, t_hash *hash_v)
 	argv = app->av;
 	app->fd = 0;
 	set_bytes_fd(app, &list, &hash_v);
-	p_output(list ,&flags, &hash_v, app);
+	p_output(list, &flags, &hash_v, app);
 	free_list(&list);
 }
 
@@ -31,7 +31,7 @@ void	str_input(t_app *app, t_list *list, t_hash *hash_v, t_flag *flags)
 	i = app->i;
 	argv = app->av;
 	hash_v->mssg = argv[i];
-	if(!argv[i])
+	if (!argv[i])
 	{
 		ft_printf("%s: option requires an argument -- s\n", argv[1]);
 		ft_printf("usage: %s [-pqr] [-s string] [files ...]\n", argv[1]);

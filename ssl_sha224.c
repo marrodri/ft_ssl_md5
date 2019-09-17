@@ -68,6 +68,18 @@ void		sha224_setval(t_hash **hash_v)
 	(*hash_v)->h = (*hash_v)->h0[7];
 }
 
+void		hash_rot(t_hash **hash_v)
+{
+	(*hash_v)->h = (*hash_v)->g;
+	(*hash_v)->g = (*hash_v)->f;
+	(*hash_v)->f = (*hash_v)->e;
+	(*hash_v)->e = (*hash_v)->d + (*hash_v)->tmp1;
+	(*hash_v)->d = (*hash_v)->c;
+	(*hash_v)->c = (*hash_v)->b;
+	(*hash_v)->b = (*hash_v)->a;
+	(*hash_v)->a = (*hash_v)->tmp1 + (*hash_v)->tmp2;
+}
+
 void		sha224_compr(t_hash **hash_v, uint32_t *w_bf)
 {
 	int i;
@@ -82,14 +94,15 @@ void		sha224_compr(t_hash **hash_v, uint32_t *w_bf)
 		(*hash_v)->s0 = BSIG0((*hash_v)->a);
 		(*hash_v)->maj = MAJ((*hash_v)->a, (*hash_v)->b, (*hash_v)->c);
 		(*hash_v)->tmp2 = (*hash_v)->s0 + (*hash_v)->maj;
-		(*hash_v)->h = (*hash_v)->g;
-		(*hash_v)->g = (*hash_v)->f;
-		(*hash_v)->f = (*hash_v)->e;
-		(*hash_v)->e = (*hash_v)->d + (*hash_v)->tmp1;
-		(*hash_v)->d = (*hash_v)->c;
-		(*hash_v)->c = (*hash_v)->b;
-		(*hash_v)->b = (*hash_v)->a;
-		(*hash_v)->a = (*hash_v)->tmp1 + (*hash_v)->tmp2;
+		// (*hash_v)->h = (*hash_v)->g;
+		// (*hash_v)->g = (*hash_v)->f;
+		// (*hash_v)->f = (*hash_v)->e;
+		// (*hash_v)->e = (*hash_v)->d + (*hash_v)->tmp1;
+		// (*hash_v)->d = (*hash_v)->c;
+		// (*hash_v)->c = (*hash_v)->b;
+		// (*hash_v)->b = (*hash_v)->a;
+		// (*hash_v)->a = (*hash_v)->tmp1 + (*hash_v)->tmp2;
+		hash_rot(hash_v);
 		i++;
 	}
 }
