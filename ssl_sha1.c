@@ -24,6 +24,7 @@ void sha1_buff_init(t_hash **hash_v)
 	(*hash_v)->h0[3] = 0x10325476; 
 	(*hash_v)->h0[4] = 0xc3d2e1f0; 
 }
+
 void		*ft_append_160bit(uint32_t *input)
 {
 	static uint8_t	output[20];
@@ -42,7 +43,7 @@ void		*ft_append_160bit(uint32_t *input)
 		output[j + 1] = ((input[i] >> 8) & 0xff);
 		output[j + 2] = ((input[i] >> 16) & 0xff);
 		output[j + 3] = ((input[i] >> 24) & 0xff);
-		output[j + 4] = (input[i + 1] & 0xff);
+		// output[j + 4] = ((input[i] >> 28) & 0xff);
 		j += 5;
 		i++;
 	}
@@ -84,7 +85,7 @@ uint32_t	*init_wrd_sha1(uint32_t *w_bf)
 			w_bf[i - 14] ^ w_bf[i - 16]), 1);
 		i++;
 	}
-	return w_bf;
+	return (w_bf);
 }
 
 void sha1_compr(t_hash **hash_v, uint32_t *w_bf)
@@ -92,24 +93,24 @@ void sha1_compr(t_hash **hash_v, uint32_t *w_bf)
 	int			i;
 
 	i = 0;
-	while(i < 80)
+	while (i < 80)
 	{
-		if(i < 20)
+		if (i < 20)
 		{
 			(*hash_v)->f = F_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
 			(*hash_v)->k = 0x5a827999;
 		}
-		else if(i < 40)
+		else if (i < 40)
 		{
 			(*hash_v)->f = H_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
 			(*hash_v)->k = 0x6ed9eba1;
 		}
-		else if(i < 60)
+		else if (i < 60)
 		{
 			(*hash_v)->f = J_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
 			(*hash_v)->k = 0x8f1bbcdc;
 		}
-		else if(i < 80)
+		else if (i < 80)
 		{
 			(*hash_v)->f = H_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
 			(*hash_v)->k = 0xca62c1d6;

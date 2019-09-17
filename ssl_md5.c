@@ -136,5 +136,6 @@ uint8_t		*md5_hash(t_list *chunks, t_hash *hash_v)
 		chunks = chunks->next;
 	}
 	digest = ft_append_128bit(hash_v->h0);
+	put_md5hash(digest);
 	return (digest);
 }

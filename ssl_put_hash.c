@@ -12,7 +12,7 @@
 
 #include "ssl.h"
 
-int		*put_md5hash(uint8_t *md)
+void		put_md5hash(uint8_t *md)
 {
 	int i;
 
@@ -22,10 +22,10 @@ int		*put_md5hash(uint8_t *md)
 		ft_printf("%02x", md[i]);
 		i++;
 	}
-	return (0);
+	return ;
 }
 
-int		*put256hash(uint8_t *md)
+void		put256hash(uint8_t *md)
 {
 	int i;
 
@@ -35,10 +35,10 @@ int		*put256hash(uint8_t *md)
 		ft_printf("%02x", md[i]);
 		i++;
 	}
-	return (0);
+	return ;
 }
 
-int		*put224hash(uint8_t *md)
+void		put224hash(uint8_t *md)
 {
 	int i;
 
@@ -48,10 +48,10 @@ int		*put224hash(uint8_t *md)
 		ft_printf("%02x", md[i]);
 		i++;
 	}
-	return 0;
+	return ;
 }
 
-int		*put1hash(uint8_t *md)
+void		put1hash(uint8_t *md)
 {
 	int i;
 
@@ -61,18 +61,18 @@ int		*put1hash(uint8_t *md)
 		ft_printf("%02x", md[i]);
 		i++;
 	}
-	return 0;
+	return ;
 }
 
-void	put_hashmd(int input, uint8_t *md)
-{
-	t_puthash	*pr_hash[HS_SZ];
-	int			*i;
+// void	put_hashmd(int input, uint8_t *md)
+// {
+// 	t_puthash	*pr_hash[HS_SZ];
+// 	int			*i;
 
-	i = NULL;
-	pr_hash[0] = put_md5hash;
-	pr_hash[1] = put256hash;
-	pr_hash[2] = put224hash;
-	pr_hash[3] = put1hash;
-	i = pr_hash[input](md);
-}
+// 	i = NULL;
+// 	pr_hash[0] = put_md5hash;
+// 	pr_hash[1] = put256hash;
+// 	pr_hash[2] = put224hash;
+// 	pr_hash[3] = put1hash;
+// 	i = pr_hash[input](md);
+// }

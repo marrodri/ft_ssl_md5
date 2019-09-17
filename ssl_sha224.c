@@ -120,5 +120,6 @@ uint8_t		*sha224_hash(t_list *chunks, t_hash *hash_v)
 		chunks = chunks->next;
 	}
 	digest = ft_append_256bit(hash_v->h0);
+	put224hash(digest);
 	return (digest);
 }
