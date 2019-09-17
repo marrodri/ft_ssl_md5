@@ -139,7 +139,8 @@ void				s_output(t_list *list, t_flag **flags,
 	t_hash **hash_v, t_app *app);
 void				p_output(t_list *list, t_flag **flags, t_hash **hash_v, t_app *app);
 void				rq_output(t_list *list, t_flag **flags, t_hash **hash_v, t_app *app);
-
+uint32_t	*set_w_bf80(uint8_t *chunk);
+void sha1_buff_init(t_hash **hash_v);
 // const t_table	data[] = {
 // 	//name, function, bytes;
 // 	{"md5", md5_hash, app_bitlen_md5, 64},

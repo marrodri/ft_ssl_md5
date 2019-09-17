@@ -15,46 +15,12 @@
 const uint32_t g_sha1_key[4] =
 {0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6};
 
-void sha1_buff_init(t_hash **hash_v)
-{
-	(*hash_v)->h0 = (uint32_t*)malloc(5 * sizeof(uint32_t));
-	(*hash_v)->h0[0] = 0x67452301; 
-	(*hash_v)->h0[1] = 0xefcdab89; 
-	(*hash_v)->h0[2] = 0x98badcfe; 
-	(*hash_v)->h0[3] = 0x10325476; 
-	(*hash_v)->h0[4] = 0xc3d2e1f0; 
-}
-
-uint32_t	*set_w_bf80(uint8_t *chunk)
-{
-	int			i;
-	int			j;
-	uint32_t	*w_bf;
-	uint32_t	*words;
-
-	words = (uint32_t*)(chunk);
-	i = 0;
-	j = 0;
-	w_bf = ft_memalloc(80);
-	while (i < 16)
-	{
-		w_bf[i] = words[i];
-		i++;
-	}
-	while (j < 80)
-	{
-		w_bf[j] = swap_endian(w_bf[j]);
-		j++;
-	}
-	return (w_bf);
-}
-
 uint32_t	*init_wrd_sha1(uint32_t *w_bf)
 {
 	int i;
 
 	i = 16;
-	while(i < 80)
+	while (i < 80)
 	{
 		w_bf[i] = ROT_LEFT((w_bf[i - 3] ^ w_bf[i - 8] ^
 			w_bf[i - 14] ^ w_bf[i - 16]), 1);
@@ -63,67 +29,68 @@ uint32_t	*init_wrd_sha1(uint32_t *w_bf)
 	return (w_bf);
 }
 
-void sha1_compr(t_hash **hash_v, uint32_t *w_bf)
+void		sha1_hash_rot(t_hash **hash_v, uint32_t *w_bf, int i)
 {
-	int			i;
-
-	i = 0;
-	while (i < 80)
-	{
-		if (i < 20)
-		{
-			(*hash_v)->f = F_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
-			(*hash_v)->k = 0x5a827999;
-		}
-		else if (i < 40)
-		{
-			(*hash_v)->f = H_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
-			(*hash_v)->k = 0x6ed9eba1;
-		}
-		else if (i < 60)
-		{
-			(*hash_v)->f = J_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
-			(*hash_v)->k = 0x8f1bbcdc;
-		}
-		else if (i < 80)
-		{
-			(*hash_v)->f = H_DIG((*hash_v)->b,(*hash_v)->c,(*hash_v)->d);
-			(*hash_v)->k = 0xca62c1d6;
-		}
-		(*hash_v)->tmp1 = ROT_LEFT((*hash_v)->a, 5) + (*hash_v)->f + (*hash_v)->e +(*hash_v)->k + w_bf[i];
-		(*hash_v)->e = (*hash_v)->d;
-		(*hash_v)->d = (*hash_v)->c;
-		(*hash_v)->c = ROT_LEFT((*hash_v)->b, 30);
-		(*hash_v)->b = (*hash_v)->a;
-		(*hash_v)->a = (*hash_v)->tmp1;
-		i++;
-	}
+	(*hash_v)->tmp1 = ROT_LEFT((*hash_v)->a, 5) + (*hash_v)->f +
+		(*hash_v)->e + (*hash_v)->k + w_bf[i];
+	(*hash_v)->e = (*hash_v)->d;
+	(*hash_v)->d = (*hash_v)->c;
+	(*hash_v)->c = ROT_LEFT((*hash_v)->b, 30);
+	(*hash_v)->b = (*hash_v)->a;
+	(*hash_v)->a = (*hash_v)->tmp1;
 }
 
-void	init_val_sha1(t_hash **hash_v)
+void		sha1_compr(t_hash **hash_v, uint32_t *w_bf, int i)
+{
+	if (i < 20)
+	{
+		(*hash_v)->f = F_DIG((*hash_v)->b, (*hash_v)->c, (*hash_v)->d);
+		(*hash_v)->k = 0x5a827999;
+	}
+	else if (i < 40)
+	{
+		(*hash_v)->f = H_DIG((*hash_v)->b, (*hash_v)->c, (*hash_v)->d);
+		(*hash_v)->k = 0x6ed9eba1;
+	}
+	else if (i < 60)
+	{
+		(*hash_v)->f = J_DIG((*hash_v)->b, (*hash_v)->c, (*hash_v)->d);
+		(*hash_v)->k = 0x8f1bbcdc;
+	}
+	else if (i < 80)
+	{
+		(*hash_v)->f = H_DIG((*hash_v)->b, (*hash_v)->c, (*hash_v)->d);
+		(*hash_v)->k = 0xca62c1d6;
+	}
+	sha1_hash_rot(hash_v, w_bf, i);
+}
+
+void		init_val_sha1(t_hash **hash_v)
 {
 	(*hash_v)->a = (*hash_v)->h0[0];
 	(*hash_v)->b = (*hash_v)->h0[1];
 	(*hash_v)->c = (*hash_v)->h0[2];
 	(*hash_v)->d = (*hash_v)->h0[3];
-	(*hash_v)->e = (*hash_v)->h0[4];	
+	(*hash_v)->e = (*hash_v)->h0[4];
 }
 
-uint8_t *sha1_hash(t_list *chunks, t_hash *hash_v)
+uint8_t		*sha1_hash(t_list *chunks, t_hash *hash_v)
 {
-	uint32_t *w_bf;
-	uint8_t	*chunk;
+	uint32_t	*w_bf;
+	uint8_t		*chunk;
+	int			i;
 
 	chunk = NULL;
 	sha1_buff_init(&hash_v);
-	while(chunks)
+	while (chunks)
 	{
+		i = -1;
 		chunk = chunks->content;
 		w_bf = set_w_bf80(chunk);
-		
 		w_bf = init_wrd_sha1(w_bf);
 		init_val_sha1(&hash_v);
-		sha1_compr(&hash_v,w_bf);
+		while (++i < 80)
+			sha1_compr(&hash_v, w_bf, i);
 		hash_v->h0[0] += hash_v->a;
 		hash_v->h0[1] += hash_v->b;
 		hash_v->h0[2] += hash_v->c;
@@ -132,5 +99,5 @@ uint8_t *sha1_hash(t_list *chunks, t_hash *hash_v)
 		chunks = chunks->next;
 	}
 	put1hash(hash_v);
-	return 0;
+	return (0);
 }

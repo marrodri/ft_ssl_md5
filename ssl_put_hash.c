@@ -43,7 +43,7 @@ void		put224hash(uint8_t *md)
 	int i;
 
 	i = 0;
-	while(i < 28)
+	while (i < 28)
 	{
 		ft_printf("%02x", md[i]);
 		i++;

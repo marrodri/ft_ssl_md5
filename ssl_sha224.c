@@ -96,7 +96,6 @@ void		sha224_compr(t_hash **hash_v, uint32_t *w_bf)
 
 uint8_t		*sha224_hash(t_list *chunks, t_hash *hash_v)
 {
-	// uint8_t		*digest;
 	uint32_t	*w_bf;
 	uint8_t		*chunk;
 
@@ -119,7 +118,6 @@ uint8_t		*sha224_hash(t_list *chunks, t_hash *hash_v)
 		hash_v->h0[7] += hash_v->h;
 		chunks = chunks->next;
 	}
-	// digest = ft_append_256bit(hash_v->h0);
 	put224hash(ft_append_256bit(hash_v->h0));
-	return 0;
+	return (0);
 }

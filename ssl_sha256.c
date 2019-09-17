@@ -31,14 +31,14 @@ const uint32_t	g_sha256_key[64] =
 void		sha256_buff_init(t_hash **hash_v)
 {
 	(*hash_v)->h0 = (uint32_t*)malloc(8 * sizeof(uint32_t));
-	(*hash_v)->h0[0] = 0x6a09e667; //sha224 0xc1059ed8  sha256 0x6a09e667
-	(*hash_v)->h0[1] = 0xbb67ae85; //sha224 0x367cd507 sha256 0xbb67ae85
-	(*hash_v)->h0[2] = 0x3c6ef372; //sha224 0x3070dd17 sha256 0x3c6ef372
-	(*hash_v)->h0[3] = 0xa54ff53a; //sha224 0xf70e5939 sha256 0xa54ff53a
-	(*hash_v)->h0[4] = 0x510e527f; //sha224 0xffc00b31 sha256 0x510e527f
-	(*hash_v)->h0[5] = 0x9b05688c; //sha224 0x68581511 sha256 0x9b05688c
-	(*hash_v)->h0[6] = 0x1f83d9ab; //sha224 0x64f98fa7 sha256 0x1f83d9ab
-	(*hash_v)->h0[7] = 0x5be0cd19; //sha224 0xbefa4fa4 sha256 0x5be0cd19
+	(*hash_v)->h0[0] = 0x6a09e667;
+	(*hash_v)->h0[1] = 0xbb67ae85;
+	(*hash_v)->h0[2] = 0x3c6ef372;
+	(*hash_v)->h0[3] = 0xa54ff53a;
+	(*hash_v)->h0[4] = 0x510e527f;
+	(*hash_v)->h0[5] = 0x9b05688c;
+	(*hash_v)->h0[6] = 0x1f83d9ab;
+	(*hash_v)->h0[7] = 0x5be0cd19;
 }
 
 uint32_t	*init_val_sha256(t_hash *hash_v, uint32_t *w_bf)
@@ -96,7 +96,6 @@ void		sha256_compr(t_hash **hash_v, uint32_t *w_bf)
 
 uint8_t		*sha256_hash(t_list *chunks, t_hash *hash_v)
 {
-	uint8_t		*digest;
 	uint32_t	*w_bf;
 	uint8_t		*chunk;
 
@@ -119,7 +118,6 @@ uint8_t		*sha256_hash(t_list *chunks, t_hash *hash_v)
 		hash_v->h0[7] += hash_v->h;
 		chunks = chunks->next;
 	}
-	digest = ft_append_256bit(hash_v->h0);
-	put256hash(digest);
-	return (digest);
+	put256hash(ft_append_256bit(hash_v->h0));
+	return (0);
 }
