@@ -51,28 +51,15 @@ void		put224hash(uint8_t *md)
 	return ;
 }
 
-void		put1hash(uint8_t *md)
+void		put1hash(t_hash *hash_v)
 {
 	int i;
 
 	i = 0;
-	while(i < 20)
+	while (i < 5)
 	{
-		ft_printf("%02x", md[i]);
+		ft_printf("%02x", hash_v->h0[i]);
 		i++;
 	}
 	return ;
 }
-
-// void	put_hashmd(int input, uint8_t *md)
-// {
-// 	t_puthash	*pr_hash[HS_SZ];
-// 	int			*i;
-
-// 	i = NULL;
-// 	pr_hash[0] = put_md5hash;
-// 	pr_hash[1] = put256hash;
-// 	pr_hash[2] = put224hash;
-// 	pr_hash[3] = put1hash;
-// 	i = pr_hash[input](md);
-// }

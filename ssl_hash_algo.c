@@ -12,14 +12,6 @@
 
 #include "ssl.h"
 
-const t_table	data[] = {
-	//name, function, bytes;
-	{"md5", md5_hash, app_bitlen_md5, 64},
-	{"sha256", sha256_hash, app_bitlen_sha256, 64},
-	{"sha224", sha224_hash, app_bitlen_sha256, 64},
-	{"sha1", sha1_hash, app_bitlen_sha256, 64},
-};
-
 int			hash_checker(char *str)
 {
 	int			i;

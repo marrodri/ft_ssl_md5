@@ -131,10 +131,10 @@ void				str_input(t_app *app, t_list *list,
 	t_hash *hash_v, t_flag *flags);
 void				fd_input(t_app *app, t_list *list,
 	t_hash *hash_v, t_flag *flags);
-// void				put_hashmd(int input, uint8_t *md);
 void		put224hash(uint8_t *md);
 void		put256hash(uint8_t *md);
 void		put_md5hash(uint8_t *md);
+void		put1hash(t_hash *hash_v);
 void				s_output(t_list *list, t_flag **flags,
 	t_hash **hash_v, t_app *app);
 void				p_output(t_list *list, t_flag **flags, t_hash **hash_v, t_app *app);
